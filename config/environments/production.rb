@@ -32,7 +32,7 @@ Rails.application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = 'http://sattarshoppingmall.com'
+  config.action_controller.asset_host = 'http://armoiar.com'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
@@ -79,7 +79,7 @@ Rails.application.configure do
       enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = {:host => 'hebary.com'}
+  config.action_mailer.default_url_options = {:host => 'armoiar.com'}
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
