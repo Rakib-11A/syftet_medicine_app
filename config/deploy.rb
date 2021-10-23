@@ -1,8 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.12.0'
 
-set :application, 'hebary'
-set :repo_url, 'git@github.com:nazrulcse/hebary.git'
+set :application, 'armoiar'
+set :repo_url, 'git@github.com:nazrulcse/armoiar.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
@@ -24,7 +24,7 @@ set :rvm_ruby_version, '2.5.1'
 
 # Default value for :pty is false
 # set :pty, true
-server '144.91.124.138',
+server '173.212.248.182',
        :user => 'deployer',
        :roles => %w{web app db}
 
