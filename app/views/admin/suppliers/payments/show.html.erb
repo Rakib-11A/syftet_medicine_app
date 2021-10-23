@@ -1,0 +1,59 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:payments), admin_suppliers_payments_path %> /
+  <%= "Payments of #{@suppliers_payment.supplier.name}" %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+<div class="row">
+  <hr/>
+  <div class="col-sm-6">
+    <h3>
+      Payment
+    </h3>
+
+    <p>
+      <strong>Supplier:</strong>
+      <%= @suppliers_payment.supplier.name if @suppliers_payment.supplier.present? %>
+    </p>
+
+    <p>
+      <strong>Method:</strong>
+      <%= @suppliers_payment.method %>
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      <%= @suppliers_payment.amount %>
+    </p>
+
+    <p>
+      <strong>Paid by:</strong>
+      <%= @suppliers_payment.paid_by.name if @suppliers_payment.paid_by.present? %>
+    </p>
+
+    <p>
+      <strong>Paid to:</strong>
+      <%= @suppliers_payment.paid_to %>
+    </p>
+
+    <p>
+      <strong>Payment date:</strong>
+      <%= @suppliers_payment.payment_date %>
+    </p>
+  </div>
+
+</div>
+<div>
+  <%= link_to admin_suppliers_payments_path, :class => "btn btn-info" do %>
+    <i class="fa fa-mail-reply"></i> List
+  <% end if can? :index, Admin::Suppliers::Payment %>
+  <%= link_to edit_admin_suppliers_payment_path(@suppliers_payment), :class => "btn btn-info" do %>
+    <i class="fa fa-pencil"></i> Edit
+  <% end if can? :edit, Admin::Suppliers::Payment %>
+</div>

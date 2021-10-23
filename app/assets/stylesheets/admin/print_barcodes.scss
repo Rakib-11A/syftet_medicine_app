@@ -1,0 +1,136 @@
+// Place all the styles related to the Admin::PrintBarcodes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#print-label-container {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.print-label {
+  padding: 0 !important;
+  background: #c2b5a4;
+  //width: 10cm;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
+  display: inline-block;
+  position: relative;
+  font-family: 'sans-serif';
+  .product-price-label {
+    float: left;
+  }
+  .color-label {
+    background: #B92521;
+    width: 120px;
+    padding: 10px;
+    float: left;
+    min-height: 188px;
+  }
+
+  .info-label {
+    background: #C2B5A4;
+    padding: 5px 5px 0 5px;
+    min-height: 140px;
+  }
+
+  .head {
+    font-weight: bold;
+    color: #fdfdfd;
+    line-height: 30px;
+  }
+
+  .head1 {
+    font-size: 36px;
+  }
+
+  .head2 {
+    font-size: 24px;
+  }
+
+  .head3 {
+    font-size: 16px;
+  }
+
+  .product-info {
+    .name {
+      font-size: 18px;
+      color: #333;
+      line-height: 22px;
+      font-weight: bold;
+      margin-right: 50px;
+    }
+    text-align: left;
+  }
+
+  .price-info {
+    text-align: right;
+    margin-top: 8px;
+    .price {
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 22px;
+      color: #333;
+    }
+
+    .p-info {
+      color: #333;
+      font-size: 14px;
+    }
+  }
+
+  .barcode-info {
+    border-top: solid 1px #333333;
+    padding: 5px 10px;
+    .barcode {
+      //float: left;
+      margin-top: -2px;
+    }
+    .barcode-number {
+      //float: right;
+    }
+  }
+
+  .company-logo {
+    width: 50px;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+  }
+
+  .remove-label {
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    left: 1px;
+    position: absolute;
+    top: -3px;
+    z-index: 10;
+    display: none;
+  }
+  &:hover {
+    .remove-label {
+      display: block;
+    }
+    .save-label {
+      display: block;
+    }
+  }
+
+  .save-label {
+    color: #ccc;
+    display: none;
+    font-size: 17px;
+    font-weight: bold;
+    left: 1px;
+    position: absolute;
+    top: 18px;
+    z-index: 10;
+  }
+}
+
+.search-label {
+  margin-top: 25px;
+  padding: 20px;
+  ul {
+    list-style: none;
+  }
+}

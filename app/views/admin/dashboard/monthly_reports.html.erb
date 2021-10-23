@@ -1,0 +1,11 @@
+<% content_for :page_title do %>
+  <%= t(:reports) %>
+<% end %>
+<% content_for :page_tabs do %>
+  <li role="presentation" class="active" ><a  href="#">Overall Report</a></li>
+  <li role="presentation" ><a href="<%= admin_purchase_reports_path %>">Purchase Reports</a></li>
+  <li role="presentation"><a  href="<%= admin_sales_reports_path %>">Sales Reports</a></li>
+<% end %>
+<% content_for :content_top do %>
+  <p>Search</p>
+<% end %>

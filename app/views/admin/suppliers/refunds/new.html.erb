@@ -1,0 +1,49 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:refunds), admin_suppliers_refunds_path %> /
+  <%= "New Suppliers Refund" %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+<% if @invoice.present? %>
+  <div data-hook="admin_user_new_form_header">
+    <%= render :partial => 'admin/shared/error_messages', :locals => {:target => @refund} %>
+  </div>
+
+  <div data-hook="admin_user_new_form">
+    <%= form_for [:admin, @refund], url: admin_suppliers_refunds_url, method: :post do |f| %>
+      <%= render :partial => 'form', :locals => {:f => f} %>
+
+      <div data-hook="admin_user_new_form_buttons">
+        <%= render 'admin/shared/form_actions', record: f.object, cancel: admin_suppliers_refunds_path %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="col-sm-4">
+      <h4 style="margin: 0;"><b>Select Invoice</b></h4>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= select_tag :invoice_id, options_for_select(@invoices.collect { |inv| ["#{inv.supplier.name}(#{inv.no}/#{inv.amount})", inv.id] }, (@invoice ? @invoice.id : '') ), prompt: 'Select Supplier...', class: 'chosen form-control' %>
+      </div>
+    </div>
+  </div>
+  <%= render 'admin/shared/no_data_found', message: '<strong> Info: </strong> Select supplier invoice first for refund!' %>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $('#invoice_id').select2();
+        $('#invoice_id').change(function () {
+            window.location.href = '<%= new_admin_suppliers_refund_path %>?invoice_id=' + $(this).val();
+        });
+    });
+</script>

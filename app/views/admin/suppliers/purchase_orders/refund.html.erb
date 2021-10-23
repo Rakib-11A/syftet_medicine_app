@@ -1,0 +1,109 @@
+<% content_for :page_title do %>
+  <%= link_to 'Purchase Orders', admin_suppliers_purchase_orders_path %> /
+  <%= link_to @purchase.no, admin_suppliers_purchase_order_path(@purchase) %> /
+  Return
+<% end %>
+<div class="row">
+  <div class="col-sm-7">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4 class="panel-title title-padding-lg"><b>Supplier:</b></h4>
+          </div>
+          <div class="col-sm-6" style="margin-top: 8px;">
+          </div>
+        </div>
+      </div>
+      <% if @purchase.supplier.present? %>
+        <%= render 'admin/suppliers/supplier_info', supplier: @purchase.supplier %>
+      <% else %>
+        <p>Unknown Supplier</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-sm-5">
+    <%= render 'admin/suppliers/invoice_general_info', invoice: @purchase %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default jobs-board product-barcodes">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="panel-title title-padding-lg">Invoice Items</h4>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Image</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Ordered Qty</th>
+            <th>Received Qty</th>
+            <th>Returned Qty.</th>
+            <th colspan="2"></th>
+          </tr>
+          </thead>
+          <tbody id="purchase-order-products-tbody">
+          <% @purchase.items.each do |item| %>
+            <%= render 'refund_item_row', item: item %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default jobs-board product-barcodes">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="panel-title title-padding-lg">Refund Items</h4>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div>
+          <label>Refund Reason: </label>
+          <span class="refund-reason"><%= @refund.refund_reason if @refund.present? %></span>
+        </div>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Image</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Total Amount</th>
+            <th>Returned At</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="purchase-order-return-tbody">
+          <% if @refund.present? %>
+            <% @refund.items.each do |item| %>
+              <%= render 'admin/suppliers/refunded_item', item: item %>
+            <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= render 'admin/suppliers/invoice_summary', invoice: @purchase %>
+
+<%= render 'admin/shared/modal' %>

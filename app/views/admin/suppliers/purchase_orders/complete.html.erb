@@ -1,0 +1,23 @@
+<%= render 'admin/shared/purchase_tabs', current: :complete %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-sm-6">
+        <h4 class="panel-title title-padding-lg"><b>Supplier:</b></h4>
+      </div>
+      <div class="col-sm-6" style="margin-top: 8px;">
+      </div>
+    </div>
+  </div>
+  <% if @purchase.supplier.present? %>
+    <%= render 'admin/suppliers/supplier_info', supplier: @purchase.supplier %>
+  <% end %>
+</div>
+
+<%= render 'purchase_order_field' %>
+
+<div data-hook="admin_order_edit_form">
+  <div id="order-form-wrapper">
+    <%= render 'products_order', purchase: @purchase %>
+  </div>
+</div>

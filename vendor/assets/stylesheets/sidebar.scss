@@ -1,0 +1,271 @@
+#main-sidebar {
+  position: fixed;
+  top: 52px;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  z-index: 1000;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #fbfbfb;
+  border-right: 1px solid #e2e2e2;
+
+  ul.nav-sidebar > li {
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  a {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+  }
+
+  ul.nav-sidebar {
+    > li {
+      //border-bottom: 1px solid $gray-lighter;
+
+      > a {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 12px;
+        //font-weight: 500;
+        padding: 15px;
+        color: #636060;
+        font-weight: bold;
+
+        .glyphicon {
+          font-size: 18px;
+          vertical-align: bottom;
+          padding-right: 5px;
+        }
+
+        .glyphicon.pull-right {
+          font-size: 8px;
+          line-height: 2;
+          color: #cdcdcd;
+          position: absolute;
+          right: 5px;
+          top: 50%;
+          margin-top: -8px;
+        }
+      }
+    }
+  }
+
+  ul.nav.nav-pills {
+    background-color: white;
+    border-top: 1px solid #cdcdcd;
+
+    li {
+      a {
+        padding: 5px 15px;
+        font-size: 12px;
+
+        &:hover {
+          border-radius: 0;
+        }
+      }
+
+      &.selected {
+        a {
+          color: $brand-success
+        }
+      }
+    }
+  }
+}
+
+.sidebar-menu-item {
+  .text {
+    margin-left: 10px;
+    display: inline-block;
+  }
+}
+
+#wrapper.sidebar-minimized #main-sidebar {
+  width: 50px;
+  overflow: visible;
+
+  li {
+    &:hover, &.menu-active {
+      background-color: #cdcdcd;
+    }
+  }
+
+  .icon-link, [data-toggle="collapse"] {
+    text-align: center;
+
+    .icon {
+      padding: 0;
+    }
+
+    .text, .icon-chevron-left, .icon-chevron-down {
+      display: none;
+    }
+  }
+
+  ul.collapse.in {
+    display: none;
+  }
+
+  .submenu-active {
+    display: block !important;
+    height: auto !important;
+    position: fixed;
+    top: 20 + 2px;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    z-index: 1000;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    left: 50px;
+    min-width: 180px;
+    visibility: visible;
+    background-color: lighten(#cdcdcd, 5);
+    border-top: none;
+    border-right: 1px solid darken(#cdcdcd, 5);
+    padding-top: 5px;
+  }
+}
+
+#sidebar-toggle {
+  display: block;
+  border: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: 0;
+  margin-top: 11px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.navbar-inverse {
+  background-color: #162e40 !important;
+  border-color: #09131a !important;
+}
+
+#wrapper.sidebar-minimized {
+  #main-sidebar {
+    width: 50px;
+    overflow: visible;
+  }
+  .text {
+    display: none;
+  }
+}
+
+/* Right sideBar */
+/*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+* Get free snippets on bootpen.com
+*******************************/
+.modal.left .modal-dialog,
+.modal.right .modal-dialog {
+  position: fixed;
+  margin: auto;
+  width: 320px;
+  height: 100%;
+  -webkit-transform: translate3d(0%, 0, 0);
+  -ms-transform: translate3d(0%, 0, 0);
+  -o-transform: translate3d(0%, 0, 0);
+  transform: translate3d(0%, 0, 0);
+}
+
+.modal.left .modal-content,
+.modal.right .modal-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.modal.left .modal-body,
+.modal.right .modal-body {
+  padding: 15px 15px 80px;
+}
+
+/*Left*/
+.modal.left.fade .modal-dialog{
+  left: -320px;
+  -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+  transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+.modal.left.fade.in .modal-dialog{
+  left: 0;
+}
+
+/*Right*/
+.modal.right.fade .modal-dialog {
+  right: -320px;
+  -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+  transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.in .modal-dialog {
+  right: 0;
+}
+
+/* ----- MODAL STYLE ----- */
+.modal-content {
+  border-radius: 0;
+  border: none;
+}
+
+.modal-header {
+  border-bottom-color: #EEEEEE;
+  background-color: #FAFAFA;
+}
+
+/* ----- v CAN BE DELETED v ----- */
+.demo {
+  padding-top: 60px;
+  padding-bottom: 110px;
+}
+
+.btn-demo {
+  margin: 15px;
+  padding: 10px 15px;
+  border-radius: 0;
+  font-size: 16px;
+  background-color: #FFFFFF;
+}
+
+.btn-demo:focus {
+  outline: 0;
+}
+
+.demo-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background-color: #212121;
+  text-align: center;
+}
+
+.demo-footer > a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+}
+
+.right-side-bar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: fixed;
+  right: 35px;
+  bottom: 35px;
+}

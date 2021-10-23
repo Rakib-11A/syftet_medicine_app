@@ -1,0 +1,26 @@
+<tr data-invoice-id="<%= invoice.id %>">
+  <td> <%= link_to invoice.id, admin_suppliers_invoice_history_path(invoice), remote: true %> </td>
+  <td> <%= invoice.no %> </td>
+  <td> <%= invoice.created_at.strftime('%B %d, %Y') %> </td>
+  <td>
+    <%= link_to 'Cash', 'javascript:void(0);', data: {target: "#payment-method-#{invoice.id}", toggle: 'modal'}, class: "payment-method-#{invoice.id}" %>
+    <%= render 'payment_method', invoice: invoice %>
+  </td>
+  <td> <%= invoice.amount %> </td>
+  <td> <%= invoice.total_refund %> </td>
+  <td> <%= invoice.total_discount %> </td>
+  <td> <%= text_field_tag "invoice_commission[#{invoice.id}]",'', value: invoice.payments.sum(:commission), placeholder: '0.00',  class: 'commission-input' %> </td>
+  <td> <%= invoice.paid %> </td>
+  <td> <%= invoice.due_amount %> </td>
+  <td class="text-center">
+    <div class="checkbox reset-margin">
+      <label class="reset-padding">
+        <input type="checkbox" value="<%= invoice.due_amount %>" class="full-pay" id="invoice_pay_<%= invoice.id %>" name="invoice_pay[<%= invoice.id %>]">
+        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+      </label>
+    </div>
+  </td>
+  <td>
+    <%= text_field_tag "invoice_amount[#{invoice.id}]", '', placeholder: '0.00', data: {limit: invoice.due_amount}, class: 'table-input pay-amount' %>
+  </td>
+</tr>

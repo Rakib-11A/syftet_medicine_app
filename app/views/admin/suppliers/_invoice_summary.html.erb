@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="panel panel-default jobs-board product-barcodes">
+      <div class="panel-body">
+        <table class="table table-responsive borderless">
+          <tbody>
+          <tr>
+            <td><b>Order Item Count: </b></td>
+            <td id="item-count" class="text-right"><%= invoice.items.sum(:issued_quantity) %></td>
+          </tr>
+
+          <tr>
+            <td><b>Refund Item Count: </b></td>
+            <td id="refund-item-count" class="text-right"><%= invoice.order_refund.item_count if invoice.order_refund.present? %></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <label class="font-size"><b>Refund</b></label>
+        <table class="table table-responsive borderless">
+          <tr>
+            <td><b>Total Refund Amount: </b></td>
+            <td id="pos-sales-total-refund" class="text-right"><b><%= invoice.total_refund %></b></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="panel panel-default jobs-board product-barcodes">
+      <div class="panel-body">
+        <table class="table table-responsive borderless">
+          <tbody>
+          <tr>
+            <td><b>Subtotal: </b></td>
+            <td id="pos-sales-subtotal" class="text-right"><%= invoice.amount %></td>
+          </tr>
+          <tr>
+            <td><b>Total: </b></td>
+            <td id="pos-sales-total" class="text-right"><%= invoice.amount %></td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <%= render 'admin/suppliers/payments_summary', payments: invoice.payments %>
+
+  </div>
+</div>

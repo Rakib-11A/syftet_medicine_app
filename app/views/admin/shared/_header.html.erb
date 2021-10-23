@@ -1,0 +1,29 @@
+<% admin = current_user.admin? %>
+
+<header class="header <%= admin ? "logged-in" : "logged-out" %>">
+
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="navbar-header col-sm-3 col-md-2">
+          <%= link_to admin_path, class: 'logo navbar-brand' do %>
+              <%= image_tag('logo.png', id: 'logo') %>
+          <% end %>
+
+          <% if admin %>
+            <span id="sidebar-toggle">
+              <i class="fa fa-bars"></i>
+            </span>
+          <% end %>
+        </div>
+
+        <% if admin %>
+            <div class="col-sm-9 col-md-10">
+              <div class="navbar-right" data-hook="admin_login_navigation_bar"></div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+
+</header>

@@ -1,0 +1,86 @@
+<%= form_tag update_refund_admin_suppliers_refunds_path, method: :post do %>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4 class="panel-title title-padding-lg"><b>Supplier:</b></h4>
+            </div>
+            <div class="col-sm-6" style="margin-top: 8px;">
+              <%= hidden_field_tag :supplier_id, id: 'purchase_order_supplier_id' %>
+              <h5 class="text-right">To change supplier <%= link_to 'Cancel', refunds_admin_suppliers_purchase_orders_path %> the refund</h5>
+
+            </div>
+          </div>
+        </div>
+        <%= render 'admin/suppliers/supplier_info', supplier: @supplier %>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-body">
+          <table class="table borderless" style="margin-bottom: 0;">
+            <tbody>
+            <tr>
+              <td>
+                <b> Return Date: </b>
+              </td>
+              <td>
+                <%= date_field_tag :date, Date.today, class: "form-control"%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b> Return Reason: </b>
+              </td>
+              <td>
+                <%= text_field_tag :refund_reason, '', class: "form-control" %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default jobs-board product-barcodes">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="panel-title title-padding-lg">Invoice Items</h4>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Image</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Stock</th>
+              <th>Price</th>
+              <th>Ordered Qty</th>
+              <th>Received Qty</th>
+              <th>Returned Qty.</th>
+              <th colspan="2"></th>
+            </tr>
+            </thead>
+            <tbody id="purchase-order-products-tbody">
+            <% @purchases.each do |purchase| %>
+              <% purchase.items.each do |item| %>
+                <%= render 'refund_item_row', item: item %>
+              <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= submit_tag 'Add', class: 'btn btn-info' %>
+<% end %>

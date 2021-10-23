@@ -1,0 +1,30 @@
+<%= form_tag update_purchase_admin_suppliers_purchase_order_path, method: :post do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title title-padding-lg">  </h1>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6" style="padding-right: 0">
+          <%= label_tag 'Issue Date' %>
+          <%= date_field_tag :date, Date.today, class: 'form-control', :required => true %>
+        </div>
+        <div class="col-md-6" >
+          <%= label_tag 'Expected Delivery Date' %>
+          <%= date_field_tag :expected_date, Date.today, class: 'form-control', :required => true %>
+        </div>
+        <div class="col-md-6" style="padding-right: 0">
+          <%= label_tag 'Stock Location' %>
+          <%= select_tag :stock_location_id, options_for_select(@stock_locations.collect {|sp| [sp.name, sp.id]}, @stock_locations.default.id), {class: "form-control chosen", :required => true} %>
+        </div>
+        <div class="col-md-6" >
+          <%= label_tag 'Any Instruction?' %>
+          <%= text_area_tag :instruction,'', class: 'form-control' %>
+        </div>
+        <div class="actions" style="padding: 5px 5px">
+          <%= submit_tag "Add", class: "btn btn-primary pull-right" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

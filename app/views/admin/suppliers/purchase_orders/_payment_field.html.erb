@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-sm-6">
+    <table class="table borderless">
+      <tbody>
+      <tr>
+        <td><b>Sub Total:</b></td>
+        <td class="reset-padding">
+          <b> <%= @purchase.amount %></b>
+        </td>
+      </tr>
+
+      <tr>
+        <td><b>Total:</b></td>
+        <td class="reset-padding">
+          <b><%=  @purchase.total_receive_amount %></b>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Total Supplier Due</b></td>
+        <td>৳ <span id="total-supplier-due"><%= number_with_delimiter @supplier.due_balance + @purchase.amount, delimiter: ',' %></span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="col-sm-6 reset-padding">
+    <div class="panel panel-default ">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4 class="panel-title title-padding-lg">Payment </h4>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body ">
+        <%= render 'payment_form', purchase: @purchase %>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-right">
+  </div>
+</div>

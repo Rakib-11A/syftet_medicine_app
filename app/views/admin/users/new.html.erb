@@ -1,0 +1,29 @@
+<% content_for :page_title do %>
+  <% if params[:role] == User::ROLES[0] %>
+    <%= link_to t(:staffs), admin_users_url %> /
+    New Staff
+  <% elsif params[:role] == User::ROLES[2] %>
+    <%= link_to t(:customers), customer_admin_users_path %> /
+    New Customer
+  <% end %>
+<% end %>
+
+<div data-hook="admin_user_new_form_header">
+  <%= render :partial => 'admin/shared/error_messages', :locals => {:target => @user} %>
+</div>
+
+<div data-hook="admin_user_new_form">
+  <%= form_for [:admin, @user], url: admin_users_url, method: :post do |f| %>
+      <%= render :partial => 'form', :locals => {:f => f} %>
+
+      <div data-hook="admin_user_new_form_buttons">
+        <%= render 'admin/shared/form_actions', record: f.object,  cancel:
+            if params[:role] == User::ROLES[0]
+              admin_users_path
+            elsif params[:role] == User::ROLES[2]
+              customer_admin_users_path
+            end
+        %>
+      </div>
+  <% end %>
+</div>

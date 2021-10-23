@@ -1,0 +1,120 @@
+<section class="client-testimonial">
+  <div class="container">
+    <div class="row">
+
+      <div class="kc-row-container  kc-container">
+        <div class="kc-wrap-columns">
+          <div class="col-sm-7">
+            <div class="kc-col-container">
+
+              <div class="kc-title-wrap ">
+                <h3 class="public-title"><%= t(:what_say_people) %></h3>
+              </div>
+              <div class="testimonial-slider">
+                <!-- Wrapper for slides -->
+
+                <% @feedbacks.each do |feedback| %>
+                  <div class="owl-item active first">
+                    <div class="item">
+                      <div class="testimonials">
+                        <div class="testimonials-body">
+                          <div class="testimonials-avatar list-unstyled">
+                            <div class="avatar">
+
+                              <%= image_tag 'male-avater.png', class: 'img-responsive' %>
+                            </div>
+                          </div>
+                          <div class="testimonials-info">
+                            <h5 class="testimonials-name mb7">
+                              <%= feedback.name %>
+                            </h5>
+
+                            <div class="rating">
+                              <div class="star-rating" data-rating="<%= feedback.rate %>" title="Rate: <%= feedback.rate %>">
+                                ******
+                              </div>
+                            </div>
+
+                          </div>
+                          <p class="testimonials-description">
+                            <%= truncate(feedback.message, length: 200) %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-5">
+            <ul id="lightgallery" class="clearfix" data-responsive="galary/img1.jpg 375, galary/img2.jpg 480, galary/img3.jpg 757" style="margin-top: 77px">
+              <li class="loaded">
+                <%= link_to asset_path('galary/g1.jpg'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g1.jpg', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <li class="loaded">
+                <%= link_to asset_path('galary/g2.jpg'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g2.jpg', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <li class="loaded">
+                <%= link_to asset_path('galary/g3.jpg'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g3.jpg', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <li class="loaded">
+                <%= link_to asset_path('galary/g4.jpg'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g4.jpg', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <li class="loaded">
+                <%= link_to asset_path('galary/g5.jpg'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g5.jpg', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <li class="loaded">
+                <%= link_to asset_path('galary/g6.png'), class: 'btn-more' do %>
+                  <%= image_tag 'galary/g6.png', width: 150, height: 140 %>
+                <% end %>
+              </li>
+              <!--              <li class="loaded">-->
+              <%#= link_to asset_path('galary/g7.png'), class: 'btn-more' do %>
+              <%#= image_tag 'galary/g7.png', width: 150, height: 140 %>
+              <%# end %>
+              <!--              </li>-->
+              <!--              <li class="loaded">-->
+              <%#= link_to asset_path('galary/g1.jpg'), class: 'btn-more' do %>
+              <%#= image_tag 'galary/g1.jpg', width: 150, height: 140 %>
+              <%# end %>
+              <!--              </li>-->
+              <!--              <li class="loaded">-->
+              <%#= link_to asset_path('galary/g4.jpg'), class: 'btn-more' do %>
+              <%#= image_tag 'galary/g4.jpg', width: 150, height: 140 %>
+              <%# end %>
+              <!--              </li>-->
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        $('.testimonial-slider').slick({
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            dot: true
+        });
+
+        $("#lightgallery li").lightGallery();
+    });
+</script>

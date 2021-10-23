@@ -1,0 +1,6 @@
+<%= render "admin/suppliers/supplier_invoice" %>
+<%= link_to 'New Discount', new_admin_suppliers_discount_path, :class => "btn btn-info " if can? :create, Admin::Suppliers::Discount %>
+<%= link_to 'New Invoice', new_admin_suppliers_invoice_path, :class => "btn btn-info" if can? :create, Admin::Suppliers::Invoice %>
+<%= link_to 'New Payment', new_admin_suppliers_payment_path, :class => "btn btn-info" if can? :create, Admin::Suppliers::Payment %>
+<%= link_to 'New Refund', new_admin_suppliers_refund_path, :class => "btn btn-info " if can? :create, Admin::Suppliers::Refund %>
+<%= link_to 'Purchase List', "#", 'data-toggle' => "modal", class: 'btn btn-success', 'data-target' => "#purchasetlist" %>

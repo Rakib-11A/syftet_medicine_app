@@ -1,0 +1,104 @@
+<% content_for :page_title do %>
+  <%= t(:reports) %>
+<% end %>
+<% content_for :page_tabs do %>
+  <li role="presentation"  ><a  href="<%= admin_reports_path %>">Overall Report</a></li>
+  <li role="presentation" ><a href="<%= admin_purchase_reports_path %>">Purchase Reports</a></li>
+  <li role="presentation" class="active"><a  href="#">Sales Reports</a></li>
+<% end %>
+<% content_for :content_top do %>
+  <p>Search</p>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Order No</th>
+        <th>Ordered At</th>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Cost Price</th>
+        <th>Sale Price</th>
+        <th>Profit(%)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% total_qty = 0 %>
+      <% total_amount = 0 %>
+      <% total_cost = 0 %>
+      <% total_profit = 0 %>
+      <% @orders.each_with_index do |order, index| %>
+        <% if order.line_items.present? %>
+          <% order.line_items.each do |item| %>
+            <% total_qty += item.quantity %>
+            <% total_amount += (item.price * item.quantity) %>
+            <% product = item.product %>
+            <% if product.present? %>
+              <% total_cost += (product.cost_price * item.quantity) %>
+              <% total_profit += ((item.price * item.quantity )- (product.cost_price * item.quantity)) %>
+              <tr id="pos-sales-item-<%= item.id %>">
+                <td>
+                  <%= link_to item.order.number, edit_admin_order_path(item.order) %>
+                </td>
+                <td>
+                  <%= format_datetime_short(item.order.created_at) %>
+                </td>
+                <td>
+                  <%= item.order.user.present? ? (link_to item.order.user.name, edit_admin_user_path(item.order.user)) : item.order.email.present? ? item.order.email.split("@").first : "Unknown Customer" %>
+                </td>
+                <td>
+                  <%= link_to product.name, edit_admin_product_path(product)  %>
+                </td>
+                <td>
+                  <%= item.quantity %>
+                </td>
+                <td>
+                  <%= product.cost_price %>
+                </td>
+                <td>
+                  <%= item.price %>
+                </td>
+                <td>
+                  <%= item.sales_profit.round(2) %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" style="border: none" ></td>
+        <td colspan="2" ><b>Total Quantity</b></td>
+        <td><b><%= total_qty %></b></td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border: none" ></td>
+        <td colspan="2"><b>Total Amount</b></td>
+        <td><b><%= total_amount %></b></td>
+      </tr>
+
+      <tr>
+        <td colspan="5" style="border: none" ></td>
+        <td colspan="2"><b>Total Cost Price</b></td>
+        <td><b><%= total_cost %></b></td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border: none" ></td>
+        <td colspan="2"><b>Total Profit</b></td>
+        <td><b><%= total_profit %></b></td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border: none" ></td>
+        <td colspan="2"><b>Overall Profit(%)</b></td>
+        <td><b><%= "#{((total_profit * 100) / total_cost).round(2)}%" %></b></td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

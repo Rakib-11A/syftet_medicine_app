@@ -1,0 +1,36 @@
+<div class="panel panel-default jobs-board product-barcodes">
+  <div class="panel-body">
+    <table class="table table-responsive borderless">
+      <tbody>
+
+      <tr>
+        <td><b>Invoice NO: </b></td>
+        <td><%= invoice.no %></td>
+      </tr>
+
+      <tr>
+        <td><b>Ordered At: </b></td>
+        <td><%= invoice.created_at %></td>
+      </tr>
+
+      <tr>
+        <td><b>Issued By: </b></td>
+        <td><%= link_to invoice.issued_by.name, edit_admin_user_path(invoice.issued_by), target: '_blank' if invoice.issued_by.present? %></td>
+      </tr>
+      <tr>
+        <td><b> Stock Location: </b></td>
+        <td><%= link_to invoice.stock_location.name, admin_stock_location_path(invoice.stock_location_id), target: '_blank' if invoice.stock_location.present? %></td>
+      </tr>
+
+      <tr>
+        <td><b>Status: </b></td>
+        <% if invoice.is_received%>
+          <td><label class='label label-success pt5 pr10 pb5 pl10 br5'> Received </label></td>
+        <% else %>
+          <td><label class='label label-warning pt5 pr10 pb5 pl10 br5'> Pending </label></td>
+        <%end%>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

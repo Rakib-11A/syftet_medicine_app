@@ -1,0 +1,126 @@
+<% content_for :breadcrumb do %>
+    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Payment', '', '', {'checkout' => '/checkout', 'Shipping Address' => '/checkout/address', 'Delivery' => '/checkout/delivery'}) %>
+<% end %>
+
+<script type="text/javascript" asyc src='https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/3.0.0/jquery.payment.min.js'></script>
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-7 clearfix">
+
+
+      <div class="chose-payment-method border-bottom">
+        <h3 class="public-title text-left mb0"> CHOOSE PAYMENT OPTIONS </h3>
+
+        <div class="tabs-wrapper">
+          <ul class="nav nav-tabs">
+            <% PaymentMethod.all_active.each_with_index do |method, index| %>
+                <li class="<%= 'active' if index == 0 %>">
+                  <a data-toggle="tab" href="#<%= method.type_name.downcase %>">
+                    <i class="fa fa-<%= map_text_to_icon(method.type_name.downcase) %>"></i> <%= method.name %>
+                  </a>
+                </li>
+            <% end %>
+          </ul>
+
+          <div class="tab-content">
+            <% PaymentMethod.all_active.each_with_index do |method, index| %>
+                <%= render "checkout/payment_option/#{method.type_name.downcase}", index: index %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5 clearfix">
+      <%= render 'orders/summary' %>
+      <div class="border-bottom" style="margin-bottom: 20px; padding-bottom: 50px">
+        <h1 class="public-title text-left mt10 mb10"> Shipping address </h1>
+        <%= render 'checkout/shipping_address' %>
+        <h1 class="public-title text-left mt10 mb10"> Shipping method </h1>
+
+        <p>
+          <%= @order.shipment.shipping_method.name %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'shared/form_validation_script' %>
+
+<script type="text/javascript">
+    $(function () {
+        $('#same-billing-address').click(function () {
+            if ($(this).is(":checked")) {
+                $('#custom-billing-address').slideUp();
+            }
+            else {
+                $('#custom-billing-address').slideDown();
+            }
+        });
+        card = $('#_order_payments_attributes_number');
+        cvv = $('#_order_payments_attributes_cvv_response_code');
+        expire = $('#expiration-date');
+
+        card.payment('formatCardNumber');
+        cvv.payment('formatCardCVC');
+        expire.payment('formatCardExpiry');
+
+        $('input[type="submit"]').click(function (e) {
+            valid_card = $.payment.validateCardNumber(card.val());
+            valid_cvv = $.payment.validateCardCVC(cvv.val());
+            valid_expire = $.payment.cardExpiryVal(expire.val());
+
+            if (!valid_card) {
+                card.removeClass('valid');
+                card.parent().addClass('errored');
+                card.next().html("Your card number is invalid");
+            }
+
+            if (!valid_cvv) {
+                cvv.removeClass('valid');
+                cvv.parent().addClass('errored');
+                cvv.next().html("Your card cvc is invalid");
+            }
+
+            if (!valid_expire) {
+                expire.removeClass('valid');
+                expire.parent().addClass('errored');
+                expire.next().html("Your card expire is invalid");
+            }
+
+            if (valid_card && valid_cvv && valid_expire && check_valid_card_type(card)) {
+                console.log("Valid payment");
+            }
+            else {
+                console.log("Invalid payment credential");
+                firstErrorInput = $(".errored").find('.required').first();
+                if (firstErrorInput != '') {
+                    firstErrorInput.focus();
+                }
+                e.preventDefault();
+            }
+        });
+
+        card.keyup(function () {
+            check_valid_card_type($(this));
+        });
+
+        function check_valid_card_type(card) {
+            card_type = $.payment.cardType(card.val());
+            if (card_type == 'mastercard' || card_type == 'visa') {
+                $('.card-type-supported').html('');
+                return true;
+            }
+            else if (card_type != null) {
+                $('.card-type-supported').html("Only Master/Visa card accepting");
+                return false;
+            }
+            else {
+                $('.card-type-supported').html('');
+            }
+        }
+
+    });
+</script>

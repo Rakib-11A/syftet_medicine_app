@@ -1,0 +1,33 @@
+<% product = item.product %>
+<% if product.present? %>
+  <tr id="pos-sales-item-<%= item.id %>">
+    <td>
+      <%=  mini_image(product)  %>
+    </td>
+    <td>
+      <%= product.code %>
+    </td>
+    <td>
+      <%= product.name %>
+    </td>
+    <td class="pros-sales-product-stock">
+      <%= product.total_on_hand %>
+    </td>
+    <td class="pros-sales-product-price">
+      <%= item.cost_price %>
+    </td>
+    <td class="pros-sales-product-quantity">
+      <%= item.issued_quantity %>
+    </td>
+    <td class="pros-sales-product-total-price">
+      <%= item.received_quantity %>
+    </td>
+    <td class="pos-product-returned-quantity">
+      <%= item.return_item_count %>
+    </td>
+    <td>
+
+      <%= link_to 'Return', new_refund_items_admin_suppliers_purchase_orders_path(id: item.invoice_id, item_id: item.id), remote: true, id: 'pos-product-return-link' if item.return_item_count < item.received_quantity %>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,46 @@
+<%= form_tag add_item_admin_suppliers_purchase_order_path , method: :post do %>
+  <div id="add-line-item" data-hook class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title title-padding-lg"><%= t(:add_product) %></h1>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-12" style="padding-right: 0">
+          <div class="form-group">
+            <%= label_tag '', t(:product) %>
+            <%= select_tag :variant_id , options_for_select(Product.all.map{|p| [("#{p.name} | Stock: #{p.total_on_hand} | Cost Price: #{p.cost_price} | Sale Price: #{p.sale_price} "), p.id]}), { class: 'form-control', prompt: 'Select Product', :required => true, id: "select_product"} %>
+          </div>
+        </div>
+
+        <div class="col-md-6" style="padding-right: 0">
+          <div class="form-group">
+            <%= label_tag '',t(:vat) %>
+            <%= number_field_tag :vat, '', class: 'form-control', :required => true  %>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group" >
+            <%= label_tag :quantity, t(:quantity) %>
+            <div class="input-group">
+              <%= number_field_tag :quantity, 1, class: 'form-control', min: 0, :required => true %>
+              <span class="input-group-btn">
+                <%= submit_tag "Add", class: "btn btn-primary pull-right" %>
+              </span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div id="stock_details"></div>
+    </div>
+  </div>
+
+<% end %>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#select_product').select2();
+    });
+</script>

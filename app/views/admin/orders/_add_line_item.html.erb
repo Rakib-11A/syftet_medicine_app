@@ -1,0 +1,64 @@
+<%#= render partial: "admin/variants/autocomplete", formats: :js %>
+
+<%#= render partial: "admin/variants/autocomplete_line_items_stock", formats: :js %>
+<%= form_tag add_product_admin_order_path, method: :post do %>
+  <div id="add-line-item" data-hook class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title title-padding-lg"><%= t(:add_product) %></h1>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3" style="padding-right: 0">
+          <div class="form-group">
+            <%= label_tag 'Barcode / P-Code' %>
+            <%= text_field_tag :barcode_or_pcode, '', class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="col-md-6" style="padding-right: 0">
+          <div class="form-group">
+            <%= label_tag 'add_line_item_variant_id', t(:product) %>
+            <%#= select_tag :variant_id , options_from_collection_for_select(Product.all, :id, :name), { class: 'form-control', prompt: 'Select Product' } %>
+            <%= select_tag :variant_id , '', { class: 'form-control', prompt: 'Search for a product' } %>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group" >
+            <%= label_tag :quantity, t(:quantity) %>
+            <div class="input-group">
+              <%= number_field_tag :quantity, 1, class: 'form-control', min: 0 %>
+              <span class="input-group-btn">
+                <%= submit_tag "Add", class: "btn btn-primary pull-right" %>
+              </span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div id="stock_details"></div>
+    </div>
+  </div>
+
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+      $('#variant_id').select2({
+          ajax: {
+              url: '/admin/products/name_search',
+              dataType: 'json',
+              minimumInputLength: 2,
+              delay: 250,
+              data: function (params) {
+                  return {
+                      name: params.term, // search term
+                      page: params.page
+                  };
+              },
+          }
+      });
+  });
+</script>

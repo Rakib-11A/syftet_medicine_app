@@ -1,0 +1,67 @@
+<% if purchase.items.exists? %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <%= t(:order_items) %>
+      </h1>
+    </div>
+    <table class="table table-bordered line-items" data-hook="line-items">
+      <thead>
+      <th class="text-center"><%= t(:name) %></th>
+      <th class="text-center"><%= t(:psale_price) %></th>
+      <th class="text-center"><%= t(:purchase_price) %></th>
+      <th class="text-center"><%= t(:vat) %></th>
+      <th class="text-center"><%= t(:sale_price) %></th>
+      <th class="text-center"><%= t(:order_qty) %></th>
+      <th class="text-center"><%= t(:receive_qty) %></th>
+      <th class="text-center"><%= t(:total_price) %></th>
+      <th class="orders-actions text-center" data-hook="admin_order_form_line_items_header_actions"></th>
+      </thead>
+      <tbody>
+      <% purchase.items.each do |item| %>
+        <tr class="line-item" id="line-item-<%= item.id %>">
+          <td class="line-item-name text-center">
+            <%= item.product.name %><br>
+          </td>
+          <td class="line-item-price text-center">
+            <%= amount_with_currency(item.product.cost_price) %>
+          </td>
+          <%= form_tag update_receive_item_admin_suppliers_purchase_order_path, method: :post, class: 'update-line-item-form' do %>
+            <td class="line-item-price text-center">
+              <%= number_field_tag :cost_price, item.cost_price, min: 0, class: "line_item_quantity form-control", size: 5 %>
+              <%#= amount_with_currency(item.cost_price) %>
+            </td>
+            <%= hidden_field_tag :item_id, item.id %>
+            <td class="line-item-price text-center">
+              <%= number_field_tag :vat, item.vat, min: 0, class: "line_item_quantity form-control", size: 5 %>
+              <%#= amount_with_currency(item.vat) %>
+            </td>
+            <td class="line-item-price text-center">
+              <%= number_field_tag :sale_price, item.sale_price, min: 0, class: "line_item_quantity form-control", size: 5 %>
+              <%#= amount_with_currency(item.sale_price) %>
+            </td>
+            <td class="line-item-qty-show text-center">
+              <%=  item.issued_quantity %>
+            </td>
+            <td class="line-item-qty-show text-center">
+              <%= number_field_tag :quantity, (item.received_quantity ? item.received_quantity : item.issued_quantity ), min: 0, class: "line_item_quantity form-control", size: 5 %>
+              <%#=  item.received_quantity %>
+            </td>
+          <% end %>
+          <td class="line-item-total text-center">
+            <%= amount_with_currency((item.received_quantity ? (item.cost_price * item.received_quantity) : item.total)) %>
+          </td>
+          <td class="cart-line-item-delete actions actions-4 text-center" data-hook="cart_line_item_delete">
+            <% if can? :update, item %>
+              <%= link_to_with_icon 'check', 'Save', "javascript:void(0)", class: 'update-line-item btn btn-success btn-sm', data: {'line-item-id' => item.id}, no_text: true %>
+            <% end %>
+            <% if can? :update, item %>
+              <%= link_to_with_icon 'trash', 'Delete', remove_item_admin_suppliers_purchase_order_path(@purchase, item_id: item.id), method: :post, class: 'delete-line-item btn btn-danger btn-sm', data: { confirm: "Are you sure ?", 'line-item-id' => item.id, action: 'remove'}, title: t('delete'), no_text: true %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

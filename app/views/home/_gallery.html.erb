@@ -1,0 +1,40 @@
+<section class="client-testimonial">
+  <div class="container">
+    <div class="row">
+
+      <div class="kc-row-container  kc-container">
+        <div class="kc-wrap-columns">
+          <div class="col-sm-12">
+            <div class="kc-col-container">
+
+              <div class="kc-title-wrap ">
+                <h3 class="public-title">Service & Product Gallery</h3>
+              </div>
+              <div id="lightgallery">
+                <% @gallery_images.each do |gallery_image| %>
+                  <%= link_to gallery_image.image_url, class: 'btn-more' do %>
+                    <%= image_tag gallery_image.image_url, width: 150, height: 140 %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        $('.testimonial-slider').slick({
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            dot: true
+        });
+
+        $("#lightgallery").lightGallery();
+    });
+</script>

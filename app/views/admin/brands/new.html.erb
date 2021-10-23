@@ -1,0 +1,6 @@
+<% content_for :page_title do %>
+  <%= link_to "Brands", admin_brands_path %> /
+  New Brand
+<% end %>
+
+<%= render 'form', admin_brand: @admin_brand %>

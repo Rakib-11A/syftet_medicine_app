@@ -1,0 +1,86 @@
+<table class="table-striped table-hover table-bordered table text_size">
+  <thead>
+  <tr>
+    <th class="col-md-4"></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><b>Name:</b></td>
+    <td><%= @product.name %></td>
+  </tr>
+
+  <tr>
+    <td><b>Code:</b></td>
+    <td><%= @product.code %></td>
+  </tr>
+
+  <tr>
+    <td><b>Price:</b></td>
+    <td><%= " #{@product.price} tk" %></td>
+  </tr>
+
+  <% if @product.brand.present? %>
+    <tr>
+      <td><b>Brand: </b></td>
+      <td><%= @product.brand.name %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><b>Colors: </b></td>
+    <td>
+      <% if @product.product.present? %>
+        <%= link_to @product.product.color_name, product_path(@product.product) if @product.product.color_name.present? %>,
+      <% end %>
+      <%= link_to @product.color_name, product_path(@product) if @product.color_name.present? %>
+      <% if @product.variants.present? %>
+        <% @product.variants.each do |product| %>
+          , <%= link_to product.color_name, product_path(product) if product.color_name.present? %>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+
+  <% if @product.size.present? %>
+    <tr>
+      <td><b>Size: </b></td>
+      <td><%= @product.size %></td>
+    </tr>
+  <% end %>
+
+  <% if @product.weight.present? %>
+    <tr>
+      <td><b> Weight: </b></td>
+      <td><%= @product.weight %></td>
+    </tr>
+  <% end %>
+
+  <% if @product.height.present? %>
+  <tr>
+    <td><b>Height: </b></td>
+    <td><%= @product.height %></td>
+  </tr>
+  <% end %>
+
+  <%if @product.width.present? %>
+  <tr>
+    <td><b>Width</b></td>
+    <td><%= @product.width %></td>
+  </tr>
+  <% end %>
+
+  <% if @product.origin.present? %>
+    <tr>
+      <td><b>Origin: </b></td>
+      <td><%= @product.origin %></td>
+    </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  </tfoot>
+</table>

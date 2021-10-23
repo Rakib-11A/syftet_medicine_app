@@ -1,0 +1,26 @@
+<% product = item.product.present? ? item.product : item.invoice_item.product %>
+<% if product.present? %>
+  <tr id="pos-sales-return-item-<%= item.id %>">
+    <td>
+      <%= mini_image(product) %>
+    </td>
+    <td>
+      <%= product.code %>
+    </td>
+    <td>
+      <%= product.name %>
+    </td>
+    <td>
+      <%= item.quantity %>
+    </td>
+    <td>
+      <%= item.amount %>
+    </td>
+    <td>
+      <%= item.created_at %>
+    </td>
+    <td>
+      <%#= link_to '', remove_refund_item_admin_suppliers_refunds_path(item_id: item.id, id: @refund.id), method: :delete, data: {confirm: "Are You Want to Remove this item"}, class: 'btn btn-danger fa fa-times' %>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,33 @@
+<% product = item.product %>
+<% if product.present? %>
+  <tr id="pos-sales-item-<%= item.id %>">
+    <td>
+      <%= mini_image(product) %>
+    </td>
+    <td>
+      <%= product.code %>
+    </td>
+    <td>
+      <%= product.name %>
+    </td>
+    <td class="pros-sales-product-stock">
+      <%= product.total_on_hand %>
+    </td>
+    <td class="pros-sales-product-price">
+      <%= item.cost_price %>
+    </td>
+    <td class="pros-sales-product-quantity">
+      <%= item.issued_quantity %>
+    </td>
+    <td class="">
+      <%= item.received_quantity if item.invoice.is_received %>
+    </td>
+    <td class="pros-sales-product-vat">
+      <%= item.vat %>
+    </td>
+    <td>
+      <%= item.received_quantity.present? ? item.received_quantity * item.cost_price : item.issued_quantity * item.cost_price  %>
+    </td>
+    <td></td>
+  </tr>
+<% end %>

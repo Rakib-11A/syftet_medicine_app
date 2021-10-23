@@ -1,0 +1,33 @@
+<%= render 'order_actions', order: @order, events: @order_events %>
+
+<%= render 'admin/shared/order_tabs', current: :shipments %>
+
+<% content_for :page_title do %>
+    / <%= plural_resource_name(Shipment) %>
+<% end %>
+
+<div data-hook="admin_order_edit_header">
+  <%= render 'admin/shared/error_messages', target: @order %>
+</div>
+
+<%= render 'add_product' if @order.shipment_state != 'shipped' && can?(:update, @order) %>
+
+<% if @order.line_items.empty? %>
+    <div class="alert alert-warning">
+      Your order is empty add product
+    </div>
+<% end %>
+
+<%= render 'order_status' if @order.approved? %>
+
+<div data-hook="admin_order_edit_form">
+  <div id="order-form-wrapper">
+    <%= render partial: 'form', locals: {order: @order} %>
+  </div>
+</div>
+
+<% content_for :head do %>
+    <%= javascript_tag 'var expand_variants = true;' %>
+<% end %>
+
+<%= render 'admin/shared/order_summary' %>

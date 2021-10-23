@@ -1,0 +1,31 @@
+<%= render partial: 'admin/shared/order_tabs', locals: { current: :customer_returns } %>
+
+<% content_for :page_title do %>
+  / <%= t(:new_customer_return) %>
+<% end %>
+
+
+  <%= render partial: 'admin/shared/error_messages', locals: { target: @customer_return } %>
+
+  <%= form_for [:admin, @order, @customer_return] do |f| %>
+    <fieldset class="no-border-top">
+      <div data-hook="admin_customer_return_form_fields">
+        <fieldset>
+          <legend><%= t(:items_in_rmas) %></legend>
+            <%= render partial: 'return_item_selection', locals: {f: f} %>
+        </fieldset>
+
+        <%= f.field_container :stock_location, class: ['form-group'] do %>
+          <%= f.label :stock_location, t(:stock_location) %>
+          <%= f.select :stock_location_id, StockLocation.order_default.active.to_a.collect{|l|[l.name.humanize, l.id]}, {include_blank: true}, {class: 'select2', "data-placeholder" => t(:select_a_stock_location)} %>
+          <%= f.error_message_on :stock_location_id %>
+        <% end %>
+      </div>
+
+      <div class="form-actions" data-hook="buttons">
+        <%= button t(:create), 'save' %>
+        <span class="or"><%= t(:or) %></span>
+        <%= button_link_to t('actions.cancel'), admin_order_customer_returns_url(@order), icon: 'delete' %>
+      </div>
+    </fieldset>
+  <% end %>

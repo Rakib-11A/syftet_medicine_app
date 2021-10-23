@@ -1,0 +1,123 @@
+<% if can? :admin, Order %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('DashBoard', admin_path, 'dashboard') %>
+    </ul>
+<% end %>
+
+<% if can? :admin, Order %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Orders', admin_orders_path, 'list') %>
+    </ul>
+<% end %>
+
+<%# if can? :admin, Order %>
+<!--    <ul class="nav nav-sidebar">-->
+      <%#= main_menu_item('Reports', admin_reports_path , 'list') %>
+<!--    </ul>-->
+<%# end %>
+
+<ul class="nav nav-sidebar">
+  <%= main_menu_item('Categories', admin_categories_path, 'book') %>
+</ul>
+
+<% if can? :admin, User %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Staffs', admin_users_path, 'user') %>
+  </ul>
+
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Customer', customer_admin_users_path, 'user') %>
+  </ul>
+
+<!--  <ul class="nav nav-sidebar">-->
+  <%#= main_menu_item('Supplier', admin_suppliers_path, 'user') %>
+  <!--  </ul>-->
+<% end %>
+
+<% if can? :admin, Product %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Products', admin_products_path, 'product-hunt') %>
+    </ul>
+<% end %>
+
+<% if can? :admin, PrintBarcode %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Print Barcode', admin_print_barcodes_path, 'product-hunt') %>
+    </ul>
+<% end %>
+
+<% if can? :admin, Product %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Inventory', inventory_admin_products_path, 'linode') %>
+    </ul>
+<% end %>
+
+<% if can? :admin, Admin::Brand %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Brands', admin_brands_path, 'bandcamp') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, StockLocation) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Stock Locations', admin_stock_locations_path, 'archive') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, StockTransfer) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Stock Transfers', admin_stock_transfers_path, 'exchange') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, ShippingMethod) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Shipping Method', admin_shipping_methods_path, 'ship') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, PaymentMethod) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Payment Method', admin_payment_methods_path, 'money') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, Feedback) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Feedbacks', admin_feedbacks_path, 'comment') %>
+  </ul>
+<% end %>
+
+<% if can?(:admin, Contact) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Customers Query', admin_contacts_path, 'envelope') %>
+  </ul>
+<% end %>
+
+<% if can?(:admin, NewsletterSubscription) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Subscribers', admin_subscribers_path, 'user') %>
+  </ul>
+<% end %>
+
+<% if can?(:admin, User) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Slider', admin_home_sliders_path, 'picture-o') %>
+    </ul>
+<% end %>
+
+<% if can?(:admin, Admin::GalleryImage) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Gallery Image', admin_gallery_images_path, 'picture-o') %>
+  </ul>
+<% end %>
+
+<% if can?(:admin, Blog) %>
+    <ul class="nav nav-sidebar">
+      <%= main_menu_item('Blog', admin_blogs_path, 'pencil') %>
+    </ul>
+<% end %>
+
+<ul class="nav nav-sidebar">
+  <%= destroy_session_link('Logout', destroy_user_session_path, 'sign-out') %>
+</ul>

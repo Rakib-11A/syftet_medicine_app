@@ -1,0 +1,23 @@
+<div data-hook="admin_order_form_fields">
+
+  <% if purchase.items.exists? %>
+    <div class="alert alert-success row" id="order-total" data-hook="order_details_total">
+      <div class="col-md-6">
+        Total Item Count : <strong class="order-total"><%= purchase.items.count %></strong><br>
+        Total Ordered Quantity : <strong class="order-total"><%= purchase.items.sum(:issued_quantity) %></strong>
+      </div>
+      <div class="col-md-6">
+        Purchase Total: <strong class="order-total"><%= amount_with_currency(purchase.amount) %></strong>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render "admin/suppliers/purchase_items", purchase: purchase %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).off('click', '.update-line-item').on('click', '.update-line-item', function () {
+        console.log($(this).data('line-item-id'));
+        console.log($(this).parent().parent().find('.update-line-item-form').submit());
+    });
+</script>

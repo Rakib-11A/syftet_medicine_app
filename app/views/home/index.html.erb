@@ -1,0 +1,125 @@
+<% content_for :slider do %>
+  <%= render 'shared/top_slider' %>
+<% end %>
+
+<div class="slugan-items">
+  <div class="row">
+    <div class="col-sm-3">
+      <%= image_tag 'quality.png', class: 'img-fluid' %>
+
+      <p>High Quality + Reasonable Price</p>
+    </div>
+
+    <div class="col-sm-3">
+      <%= image_tag 'own-factory.png', class: 'img-fluid' %>
+
+      <p>Imported Product</p>
+    </div>
+
+    <div class="col-sm-3">
+      <%= image_tag 'money-refund.png', class: 'img-fluid' %>
+
+      <p>100% Money Refund</p>
+    </div>
+
+    <div class="col-sm-3">
+      <%= image_tag 'truck.png', class: 'img-fluid' %>
+
+      <p>Custom Order & Fast Delivery</p>
+    </div>
+  </div>
+</div>
+
+<section class="featured-products">
+  <div class="view-more-products">
+    <div class="overlay-bg">
+      <h3> Now Quality And Service Is On Your Hand! </h3>
+      <h5> Freedom to make a custom servicing and repairing. </h5>
+      <p>
+        Don't let it late. Quality, Price & Time are our concern to serve you.
+      </p>
+      <%= link_to products_path, class: 'btn-more btn btn-warning' do %>
+        <%= t(:view_more) %> <i class="fa fa-plus"></i>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <%= render 'top_category_promo' %>
+
+  <section class="featured-products">
+    <h3 class="title public-title">
+      <%= t(:featured_products) %>
+    </h3>
+
+    <div class="product-lists clearfix">
+      <% @featured_products.each do |product| %>
+        <div class="product-wrapper product col-sm-6 col-md-3">
+          <%= render 'products/product', product: product %>
+        </div>
+      <% end %>
+    </div>
+    <div class="text-center">
+      <%= link_to products_path, class: 'btn-more' do %>
+        <%= t(:view_more) %> <i class="fa fa-plus"></i>
+      <% end %>
+    </div>
+  </section>
+
+</div>
+<section class="row featured-banner">
+  <div class="hidden-xs">
+    <div class="effect-v3x" style="text-align: center">
+      <a href="/producsts">
+        <%= image_tag('trends.jpg', style: "width: 100%") %>
+      </a>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <%= render 'home/new_arrival' %>
+</div>
+<section class="we-love-landing clearfix">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="wrapper clearfix">
+        <div class="col-sm-6">
+          <div class="col-inner-container row">
+            <div class="call-to-action">
+              <div class="cta-desc">
+                <h2>Do you love quality product?</h2>
+
+                <div class="cta-text">A professional-looking tote for your everyday needs! This Wilsons Leather
+                  tote has a canvas look with genuine leather trim and a structured silhouette. Its shiny gold-tone
+                  hardware and two-tone design give it extra fashionable flair.
+                </div>
+              </div>
+              <div class="cta-button">
+                <a href="/products">
+                  discover <i class="fa fa-plus"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="single-image-fluid effect-v1">
+              <a href="/products" title="" target="_self">
+                <%= image_tag('best_lips.jpg', style: 'width: 100%;') %>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render 'brands' if @brands.present? %>
+
+<%= render 'gallery' if @gallery_images.present? %>
+
+<%= render 'blogs' if @blogs.present? %>

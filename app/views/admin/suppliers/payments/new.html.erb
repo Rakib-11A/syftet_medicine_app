@@ -1,0 +1,156 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<div class="row">
+  <% content_for :page_title do %>
+    <%= link_to t(:suppliers), admin_suppliers_path %> /
+    <%= link_to t(:payments), admin_suppliers_payments_path %> /
+    <%= "New Payment" %>
+  <% end %>
+
+  <% content_for :page_actions do %>
+    <%= render "admin/shared/supplier_links"  %>
+  <% end %>
+  <div class="col-lg-12 process-supplier-invoice">
+    <%= form_tag admin_suppliers_process_invoice_path, id: 'supplier-batch-payment-form' do %>
+      <fieldset class="supplier-details-fieldset">
+        <legend> Supplier Details</legend>
+        <div class="col-sm-12 row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              Supplier: <br/>
+              <%= select_tag :supplier_id, options_for_select(User.suppliers.map { |sup| [sup.name, sup.id] }, params[:supplier_id]), {class: 'chosen', prompt: 'Select Supplier...', class:'form-control'} %>
+            </div>
+            <div class="form-group">
+              Received Date:
+              <%= date_field_tag :received_date, Date.today, require: true, class: 'form-control', style: 'width: 350px;' %>
+            </div>
+
+            <div class="form-group">
+              Paid To:
+              <%= text_field_tag :paid_to, '', class: 'form-control', style: 'width: 350px;' %>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <span class="credit-text"> Due Amount: </span>
+              <span class="color-red customer-due-amount"> 0.00 </span>
+            </div>
+            <div class="form-group">
+              <span class="credit-text"> Payable Amount: </span>
+              <span class="color-red payable-amount"> 0.00 </span>
+            </div>
+
+            <div class="form-group">
+              <span class="credit-text"> Last paid Amount: </span>
+              <span class="color-red last_paid_amount">  </span>
+            </div>
+
+            <div class="form-group">
+              <span class="credit-text"> Last Payment Date: </span>
+              <span class="color-red last_payment_date">  </span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="action-process-action pull-right">
+        <%= link_to :back, class: 'btn btn-warning' do %>
+          <i class="fa fa-times-circle"></i> Close
+        <% end %>
+        <button type="submit" class='btn btn-success payment-process-button'><i class="fa fa-cog"></i> Process</button>
+      </div>
+      <div class="supplier-invoice-list">
+
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="modal fade" id="customer-invoice-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"> Invoice Details </h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#supplier_id').select2();
+        $('.action-process-action').hide();
+        $('.process-supplier-invoice #supplier_id').change(function () {
+            var supplier_id = $(this).val();
+            if (supplier_id == '') {
+                $('.supplier-invoice-list').html('');
+            }
+            else {
+                customer_invoice(supplier_id);
+            }
+        });
+
+        $('.payment-process-button').click(function () {
+            $('.payment-process-button').prop("disabled", true);
+            $('#supplier-batch-payment-form').submit();
+        });
+
+
+
+        $(document).on('keyup', '.pay-amount', function () {
+            var due = $(this).attr('data-limit');
+            var amount = $(this).val();
+            if (parseFloat(due) < parseFloat(amount)) {
+                alert("Pay amount can't grater than due amount!");
+                $(this).val(due);
+            }
+            payable_amount();
+        });
+        if (<%= params[:supplier_id].present? %>) {
+            customer_invoice(<%= params[:supplier_id] %>)
+        }
+
+        $(document).on('click', '.full-pay', function () {
+            if ($(this).is(':checked')) {
+                $(this).parents('tr').find('.table-input').val($(this).val());
+            }
+            else {
+                $(this).parents('tr').find('.table-input').val('0.0');
+            }
+            payable_amount();
+        });
+    });
+
+    payable_amount = function () {
+        var payments = $('.table-input.pay-amount');
+        var pay_amount = 0.0;
+        for (var i = 0; i < payments.length; i++) {
+            var payment = $(payments[i]);
+            if (payment.val() != '') {
+                pay_amount += parseFloat(payment.val());
+            }
+        }
+        $('.payable-amount').text(pay_amount);
+    };
+
+    function customer_invoice(supplier_id) {
+        $.ajax({
+            type: 'get',
+            url: '/admin/' + '/suppliers/' + supplier_id + '/get_history',
+            dataType: 'script',
+            error: function (e) {
+                $('.customer-invoice-list').html(e);
+                $('.action-process-action').hide();
+            }
+        })
+    }
+</script>

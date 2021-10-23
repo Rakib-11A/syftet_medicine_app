@@ -1,0 +1,29 @@
+<div class="modal fade" id="purchasetlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Purchase List</h4>
+      </div>
+      <div class="modal-body">
+
+        <h5>Select Date</h5>
+
+        <%= form_tag(purchase_list_admin_suppliers_path, method: :get, id: "supplier-list", :class => "form-horizontal") do %>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= date_select :payment_date, :date, {start_year: 2014, end_year: Date.today.year}, {:class => "form-control date"} %>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="javascript: $('#supplier-list').submit();
+            $('#purchasetlist').modal('hide')">View Purchase</button>
+      </div>
+    </div>
+  </div>
+</div>

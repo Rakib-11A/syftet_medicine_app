@@ -1,0 +1,11 @@
+<%= render partial:'admin/categories/sidebar'  %>
+<% if @admin_category.category.present? %>
+  <% content_for :page_title do %>
+    <%= link_to @admin_category.category.name, admin_category_path(@admin_category.category)  %> /
+  <% end %>
+<% end %>
+<% content_for :page_title do %>
+  <%=  @admin_category.name %>
+<% end %>
+
+<%= render 'form', admin_category: @admin_category %>

@@ -1,0 +1,41 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  Purchase Refunds
+<% end %>
+<% content_for :page_actions do %>
+  <%= render partial: 'admin/suppliers/global_link' %>
+<% end %>
+<table class="table ">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Supplier</th>
+    <th>Order ID</th>
+    <th>Order No</th>
+    <th>Refund Amount</th>
+    <th>Refund Quantity</th>
+    <th>Date</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @refunds.each do |refund| %>
+    <tr>
+      <td>#<%=refund.id%></td>
+      <td><%= refund.supplier.name if refund.supplier.present? %> </td>
+      <td><%= refund.invoice.id if refund.invoice.present? %> </td>
+      <td><%= link_to refund.invoice.no, admin_suppliers_purchase_orders_path(invoice_id: refund.invoice.id) if refund.invoice.present? %> </td>
+      <td><%= refund.amount %> </td>
+      <td><%= refund.item_count %> </td>
+      <td><%= format_datetime_short refund.date %> </td>
+      <td class="actions">
+        <%= link_to 'Show', refund.invoice.present? ? refund_admin_suppliers_purchase_orders_path(id: refund.invoice.id) : admin_suppliers_refund_path(refund), class: 'btn info-color' %>
+        <%= link_to 'Edit', edit_refund_admin_suppliers_refunds_path(id: refund.id) , class: 'btn info-color' unless refund.invoice.present? %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= paginate @refunds, theme: 'twitter-bootstrap-4' %>

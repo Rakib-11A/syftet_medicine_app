@@ -1,0 +1,46 @@
+<% content_for :page_title do %>
+  <%= link_to 'Queries', admin_contacts_path %> /
+  <%= @contact.email %>
+<% end %>
+
+<p>
+  <strong>Inquiry By:</strong>
+  <%= @contact.full_name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @contact.email %>
+</p>
+
+<p>
+  <strong>Phone :</strong>
+  <%= @contact.phone %>
+</p>
+
+<p>
+  <strong>Inquiry Type:</strong>
+  <%= @contact.inquiry_type %>
+</p>
+
+<p>
+  <strong>Order Number:</strong>
+  <%= link_to "#{@contact.order_number}", check_order_admin_contacts_path(order_number: @contact.order_number)  %>
+</p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @contact.message %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+<td><%= @contact.is_checked == false ? (link_to 'Check', checked_query_admin_contact_path(@contact), method: :post, data: {confirm: 'Are you sure?'}) : "Checked" %></td>
+
+</p>
+
+<p>
+  <strong>Checked By:</strong>
+  <%=  @contact.checked_by ? (link_to @contact.checked_by.name,edit_admin_user_path(@contact.checked_by)) : "Not Checked Yet" %>
+</p>
+<%= link_to 'Back', admin_contacts_path, class: 'btn btn-success ' %>

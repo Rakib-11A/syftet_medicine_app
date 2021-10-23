@@ -1,0 +1,68 @@
+<%= render partial: 'admin/shared/order_tabs', locals: { current: :customer_returns } %>
+
+<% content_for :page_actions do %>
+    <% if @order.shipment.present? && can?(:create, CustomerReturn) %>
+        <%= button_link_to t(:new_customer_return), new_admin_order_customer_return_path(@order), icon: 'add', class: 'btn-success' %>
+    <% end %>
+<% end %>
+
+<% content_for :page_title do %>
+    / <%= plural_resource_name(CustomerReturn) %>
+<% end %>
+
+<% if @order.shipment.present? %>
+
+    <% if @customer_returns.present? %>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <% @customer_returns.each do |ret| %>
+              <div class="panel panel-default">
+                  <div class="panel-body">
+                    <table class="table">
+                      <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Date</th>
+                        <th>Resellable</th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <% ret.return_items.each do |item| %>
+                          <tr>
+                            <td><%= link_to item.line_item.product.name, edit_admin_product_path(item.line_item.product) %></td>
+                            <td><%= item.line_item.product.code %></td>
+                            <td><%= ret.created_at.strftime("%b %d, %Y" ) %></td>
+                            <td><%= item.resellable ? 'Yes' : 'No' %></td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+          <% end %>
+
+        </div><!-- panel-group -->
+    <% else %>
+        <div class="alert alert-info no-objects-found">
+          <%= t(:no_resource_found, resource: plural_resource_name(CustomerReturn)) %>,
+          <%= link_to(t(:add_one), new_admin_order_customer_return_path(@order)) if can?(:create, CustomerReturn) %>!
+        </div>
+    <% end %>
+<% else %>
+    <div data-hook="customer_return_cannot_create" class="alert alert-info no-objects-found">
+      <%= t(:cannot_create_customer_returns) %>
+    </div>
+<% end %>
+<%= paginate @customer_returns, theme: 'twitter-bootstrap-4' %>
+
+<script type="text/javascript">
+  function toggleIcon(e) {
+    $(e.target)
+        .prev('.panel-heading')
+        .find(".more-less")
+        .toggleClass('glyphicon-plus glyphicon-minus');
+  }
+  $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+  $('.panel-group').on('shown.bs.collapse', toggleIcon);
+</script>

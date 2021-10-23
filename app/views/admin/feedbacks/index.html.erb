@@ -1,0 +1,37 @@
+<% content_for :page_title do %>
+  Feedback Listing
+<% end %>
+<% if @feedbacks.any? %>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Customer Service</th>
+      <th>Details</th>
+      <th>Status</th>
+      <th>Checked By</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @feedbacks.each do |feedback| %>
+      <tr>
+        <td><%= feedback.name %></td>
+        <td><%= feedback.email %></td>
+        <td>
+          <%=  feedback.customer_service == '4' ? 'Very Good' :  feedback.customer_service == '3' ? 'Good' : feedback.customer_service == '2' ? 'Fair' : feedback.customer_service == '1' ? 'Poor' : 'No feedback'%>
+        </td>
+        <td><%= link_to 'Show', admin_feedback_path(feedback) %></td>
+        <td><%= feedback.is_checked == false ? (link_to 'Check', checked_feedback_admin_feedback_path(feedback), method: :post, data: {confirm: 'Are you sure?'}) : "Checked" %></td>
+        <td><%= feedback.checked_by ? (link_to feedback.checked_by.name,edit_admin_user_path(feedback.checked_by) ): "Not Checked Yet"   %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= t(:no_resource_found, resource: 'Products') %>
+  </div>
+<% end %>
+<%= paginate @feedbacks, theme: 'twitter-bootstrap-4' %>

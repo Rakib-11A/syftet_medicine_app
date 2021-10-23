@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Supplier:</strong>
+  <%= @admin_suppliers_text_message.supplier_id %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @admin_suppliers_text_message.employee_id %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @admin_suppliers_text_message.content %>
+</p>
+
+<p>
+  <strong>Direction:</strong>
+  <%= @admin_suppliers_text_message.direction %>
+</p>
+
+<p>
+  <strong>Read:</strong>
+  <%= @admin_suppliers_text_message.read %>
+</p>
+
+<%= link_to 'Edit', edit_admin_suppliers_text_message_path(@admin_suppliers_text_message) %> |
+<%= link_to 'Back', admin_suppliers_text_messages_path %>

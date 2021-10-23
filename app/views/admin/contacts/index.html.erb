@@ -1,0 +1,37 @@
+<% content_for :page_title do %>
+  Customer Inquiry List
+<% end %>
+<% if @contacts.any? %>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Inquiry Type</th>
+      <th>Order Number</th>
+      <th>Details</th>
+      <th>Status</th>
+      <th>Checked By</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @contacts.each do |contact| %>
+      <tr>
+        <td><%= contact.full_name %></td>
+        <td> <%= contact.phone %></td>
+        <td> <%= contact.inquiry_type %></td>
+        <td> <%= link_to "#{contact.order_number}", check_order_admin_contacts_path(order_number: contact.order_number)  %></td>
+        <td><%= link_to 'Show', admin_contact_path(contact) %></td>
+        <td><%= contact.is_checked == false ? (link_to 'Check', checked_query_admin_contact_path(contact), method: :post, data: {confirm: 'Are you sure?'}) : "Checked" %></td>
+        <td><%= contact.checked_by ? (link_to contact.checked_by.name,edit_admin_user_path(contact.checked_by)) : "Not Checked Yet"  %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= t(:no_resource_found, resource: 'Query') %>
+  </div>
+<% end %>
+<%= paginate @contacts, theme: 'twitter-bootstrap-4' %>

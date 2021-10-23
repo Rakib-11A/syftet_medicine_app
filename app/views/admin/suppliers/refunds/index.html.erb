@@ -1,0 +1,45 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  Refunds
+<% end %>
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Supplier</th>
+    <th>Invoice no</th>
+    <th>Amount</th>
+    <th>Refund by</th>
+    <th>Refund Reason</th>
+    <th>Date</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+  <% @refunds.each do |refund| %>
+    <tr>
+      <td><%= refund.supplier.name %></td>
+      <td><%= refund.invoice.no if refund.invoice.present? %></td>
+      <td><%= refund.amount %></td>
+      <td><%= refund.refund_by %></td>
+      <td><%= refund.refund_reason %></td>
+      <td><%= I18n.localize(refund.date, format: :long) %></td>
+      <td><%= link_to 'Show', refund %></td>
+      <td>
+        <% unless (refund.is_order && refund.invoice.present?) %>
+          <%= link_to 'Edit', refund.is_order ? edit_refund_admin_suppliers_refunds_path(id: refund.id) : edit_admin_suppliers_refund_path(refund) if can? :edit, refund %>
+        <% end %>
+      </td>
+      <td><%= link_to 'Destroy', refund,  method: :delete, data: { confirm: 'Are you sure?' }  %></td>
+    </tr>
+  <% end %>
+  <tbody>
+
+  </tbody>
+</table>
+<%= paginate @refunds, theme: 'twitter-bootstrap-4' %>

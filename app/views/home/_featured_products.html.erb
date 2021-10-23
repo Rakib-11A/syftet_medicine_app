@@ -1,0 +1,10 @@
+<div class="container">
+  <h3 class="public-title"> Featured Products </h3>
+  <div class="product-lists clearfix">
+    <% @featured_products.each do |product| %>
+      <div class="product-wrapper product col-sm-6 col-md-3">
+        <%= render 'products/product', product: product %>
+      </div>
+    <% end %>
+  </div>
+</div>

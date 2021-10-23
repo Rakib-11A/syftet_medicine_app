@@ -1,0 +1,59 @@
+page[size="A4"] {
+  background: white;
+  width: 21cm;
+  //height: 29.7cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding: 20px 15px 10px 15px;
+  margin-top: 15px;
+}
+
+page[size="Thermal"] {
+  background: white;
+  width: 80mm;
+  //height: 29.7cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding: 0px 5px 5px 50px;
+  margin-top: 15px;
+}
+
+@media screen {
+  div.page-footer {
+    //display: none;
+  }
+}
+
+@media print {
+  div.info, div#editStuff, .back-btn, .alert-success, .search, .btn, .btn-info, div#navigation, div#debug, .nav, .nav-pills, .nav-stacked, .nav-stacked, hr, .print-button {
+    display: none;
+  }
+
+  div.page-footer {
+    position: fixed;
+    bottom: 0;
+  }
+
+  div.print-page-header {
+    min-height: 100px;
+    background: #000;
+  }
+
+  body, page[size="A4"] {
+    margin: 0;
+    box-shadow: 0;
+  }
+
+  body, page[size="Thermal"] {
+    margin: 0;
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  }
+}

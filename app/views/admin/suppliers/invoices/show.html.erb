@@ -1,0 +1,46 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:invoices), admin_suppliers_invoices_path %> /
+  <%= @suppliers_invoice.no %>
+<% end %>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title title-padding-lg"> Supplier Invoice #<%= @suppliers_invoice.id %></h4>
+    </div>
+    <div class="panel-body">
+      <table class="table table-condensed table-striped">
+        <tbody>
+        <tr>
+          <td>Supplier Name:</td>
+          <td><%= link_to @suppliers_invoice.supplier.name, admin_supplier_path(@suppliers_invoice.supplier) if @suppliers_invoice.supplier.present? %></td>
+        </tr>
+        <tr>
+          <td>Invoice no:</td>
+          <td><%= @suppliers_invoice.no %></td>
+        </tr>
+        <tr>
+          <td>Amount:</td>
+          <td><%= @suppliers_invoice.amount %></td>
+        </tr>
+        <tr>
+          <td>Invoice date:</td>
+          <td><%= @suppliers_invoice.date %></td>
+        </tr>
+        </tbody>
+      </table>
+      <% @suppliers_invoice.attachments.each do |attach| %>
+        <%= link_to image_tag(attach.picture, width: 200), attach.picture_url, target: "_blank" %>
+        <br/><br/>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if @suppliers_invoice.is_order %>
+  <%= render 'details_of_order_invoice' %>
+<% end %>

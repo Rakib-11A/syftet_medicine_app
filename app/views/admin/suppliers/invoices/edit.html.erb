@@ -1,0 +1,24 @@
+
+<% content_for :page_title do %>
+  <%= link_to "Suppliers", admin_suppliers_path %> /
+  <%= link_to "Invoices", admin_suppliers_invoices_path %> /
+  <%= @suppliers_invoice.no %>
+<% end %>
+
+  <div class="panel-body">
+    <div data-hook="admin_user_edit_form_header">
+      <%= render partial: 'admin/shared/error_messages', locals: {target: @suppliers_invoice} %>
+    </div>
+
+    <div data-hook="admin_user_edit_form">
+      <%= form_for [:admin, @suppliers_invoice], url: admin_suppliers_invoice_path(@suppliers_invoice), method: :put do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+
+        <div data-hook="admin_user_edit_form_button">
+          <%= render 'admin/shared/form_actions', record: f.object, cancel: admin_suppliers_invoices_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+<%#= render 'admin/users/lifetime_stats' %>

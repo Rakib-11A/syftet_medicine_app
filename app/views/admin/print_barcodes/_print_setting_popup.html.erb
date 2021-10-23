@@ -1,0 +1,22 @@
+<div class="modal fade" id="print_settings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= render 'admin/shared/modal_header', modal_title: 'Barcode Print Settings' %>
+      <div class="modal-body">
+        <%= form_tag( preview_admin_print_barcodes_path, method: :get, class: 'form-horizontal') do %>
+          <div class="modal-body">
+            <%= render 'print_setting' %>
+
+
+          </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= submit_tag 'Submit', class: 'btn btn-success' %>
+          </div>
+        <% end %>
+
+        </div>
+  </div>
+</div>

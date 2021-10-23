@@ -1,0 +1,41 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  Discounts
+<% end %>
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Supplier</th>
+      <th>Invoice no</th>
+      <th>Amount</th>
+      <th>Discount by</th>
+      <th>Discount reason</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <% @discounts.each do |discount| %>
+  <tr>
+    <td><%= discount.supplier.name %></td>
+    <td><%= discount.invoice.no %></td>
+    <td><%= discount.amount %></td>
+    <td><%= discount.discount_by %></td>
+    <td><%= discount.discount_reason %></td>
+    <td><%= I18n.localize(discount.date, format: :long) %></td>
+    <td><%= link_to 'Show', discount %></td>
+    <td><%= link_to 'Edit', edit_admin_suppliers_discount_path(discount) %></td>
+    <td><%= link_to 'Destroy', discount,  method: :delete, data: { confirm: 'Are you sure?' }  %></td>
+  </tr>
+  <% end %>
+  <tbody>
+
+  </tbody>
+</table>
+<%= paginate @discounts, theme: 'twitter-bootstrap-4' %>

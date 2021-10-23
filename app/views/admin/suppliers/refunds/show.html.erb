@@ -1,0 +1,52 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:refunds), admin_suppliers_refunds_path %> /
+  <%= "Refunds to #{@refund.supplier.name}" %>
+<% end %>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      <strong>Supplier:</strong>
+      <%= @refund.supplier.name %>
+    </p>
+
+    <p>
+      <strong>Invoice no:</strong>
+      <%= @refund.invoice_no %>
+    </p>
+
+    <p>
+      <strong>Refund by:</strong>
+      <%= @refund.refund_by %>
+    </p>
+
+    <p>
+      <strong>Refund Reason:</strong>
+      <%= @refund.refund_reason %>
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      <%= @refund.amount %>
+    </p>
+
+    <p>
+      <strong>Date:</strong>
+      <%= @refund.date %>
+    </p>
+    <br/>
+    <% if @refund.is_order %>
+      <%= render 'refund_item' %>
+    <% end %>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= link_to 'Back', admin_suppliers_refunds_path, class: 'btn btn-success' %>
+        <%= link_to 'Edit', @refund.is_order ? edit_refund_admin_suppliers_refunds_path(id: @refund.id) : edit_admin_suppliers_refund_path(@refund), class: 'btn btn-success'  if can? :edit, @refund %>
+
+      </div>
+    </div>
+  </div>
+</div>

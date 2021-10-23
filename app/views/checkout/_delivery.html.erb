@@ -1,0 +1,78 @@
+<% content_for :breadcrumb do %>
+  <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Delivery', '', '', {'checkout' => '/checkout', 'Shipping Address' => '/checkout/address'}) %>
+<% end %>
+
+<div class="clearfix" id='shipping-method'>
+  <div class="col-lg-12">
+    <div class="row mb40">
+      <div class="col-md-7 pb20">
+        <div id="methods">
+          <div class="shipment unshippable">
+            <table class="table stock-contents">
+              <colgroup>
+                <col style="width: 10%;"/>
+                <col style="width: 60%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 20%;"/>
+              </colgroup>
+              <thead>
+              <th></th>
+              <th align='left'><%= t(:item) %></th>
+              <th><%= t(:qty) %></th>
+              <th><%= t(:price) %></th>
+              <th><%= t(:total) %></th>
+              </thead>
+              <tbody>
+              <% current_order.line_items.each do |item| %>
+                <tr class="stock-item">
+                  <td class="item-image"><%= mini_image(item.product) %></td>
+                  <td class="item-name"><%= item.product.name %></td>
+                  <td class="item-qty"><%= item.quantity %></td>
+                  <td class="item-price"><%= item.price %></td>
+                  <td class="item-price"><%= item.total %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="shipment unshippable">
+            <h3 class="panel panel-heading">
+              Shipping Methods
+            </h3>
+
+            <div>
+              <% ShippingMethod.all.each_with_index do |ship, index| %>
+                <label style="display: block">
+                  <%= form.radio_button :shipping_method, ship.id, checked: check_selected_shipment(form.object, ship.id) %> <%= ship.name %>
+                  (<%= ship.rate %>)
+                </label>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div id="minstrs" class="mb10">
+          <h5 class="mt20"><%= t(:shipping_instructions) %></h5>
+          <%= form.text_area :special_instructions, :cols => 40, :rows => 4, :class => "form-control reset-border-radius" %>
+        </div>
+      </div>
+      <div class="col-md-5 pb20">
+        <%= render 'orders/summary' %>
+        <h4 class="public-title text-left mb10"> Shipping address </h4>
+        <%= render 'checkout/shipping_address' %>
+        <%= submit_tag "Save & Continue", :class => 'btn-primo-thin continue-btn', disabled: true %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("input[name='order[shipping_method]']").click(function () {
+            $('.continue-btn').prop('disabled', false);
+            $('.collection-points').hide();
+            $('#order_collection_point').val('');
+            $(this).parent().find('.collection-points').show();
+        });
+    });
+</script>

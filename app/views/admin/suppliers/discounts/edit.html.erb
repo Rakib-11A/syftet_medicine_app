@@ -1,0 +1,25 @@
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:discounts), admin_suppliers_discounts_path %> /
+  <%= "Editing Discount" %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+
+<div class="panel-body">
+  <div data-hook="admin_user_edit_form_header">
+    <%= render :partial => 'admin/shared/error_messages', :locals => {:target => @discount} %>
+  </div>
+
+  <div data-hook="admin_user_edit_form">
+    <%= form_for [:admin, @discount], url: admin_suppliers_discount_url, method: :put do |f| %>
+      <%= render :partial => 'form', :locals => {:f => f} %>
+
+      <div data-hook="admin_user_new_form_buttons">
+        <%= render 'admin/shared/form_actions', record: f.object, cancel: admin_suppliers_discounts_path %>
+      </div>
+    <% end %>
+  </div>
+</div>

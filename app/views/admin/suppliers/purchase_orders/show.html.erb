@@ -1,0 +1,17 @@
+<% content_for :page_title do %>
+  <%= link_to 'Purchase Orders', admin_suppliers_purchase_orders_path %> /
+  <%= @purchase.no %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <% if @purchase.order_state.present? && @purchase.order_state == Admin::Suppliers::Invoice::ORDER_STATES[:complete][:data] %>
+    <%= link_to 'Receive Order', receive_admin_suppliers_purchase_order_path( @purchase), class: "btn btn-success", title: 'Receive Order' %>
+    <%= link_to 'Edit Order', cart_admin_suppliers_purchase_order_path( @purchase), class: "btn btn-success", title: 'Edit Order' %>
+  <% elsif @purchase.order_state.present? && @purchase.order_state == Admin::Suppliers::Invoice::ORDER_STATES[:received][:data] %>
+    <%= link_to 'Return Order', refund_admin_suppliers_purchase_orders_path(id: @purchase.id), class: 'btn btn-primary print-button-margin'  %>
+  <% else %>
+    <%= link_to 'Complete Order', cart_admin_suppliers_purchase_order_path( @purchase), class: 'btn btn-primary print-button-margin'  %>
+  <% end %>
+<% end %>
+
+<%= render 'invoice_details' %>

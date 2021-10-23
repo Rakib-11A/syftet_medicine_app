@@ -1,0 +1,33 @@
+<div class="panel panel-default jobs-board product-barcodes">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-md-12">
+        <h4 class="panel-title title-padding-lg">Refund Items</h4>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div>
+      <label>Refund Reason: </label>
+      <span class="refund-reason"><%= @refund.refund_reason if @refund.present? %></span>
+    </div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Image</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Return Date</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody id="purchase-order-return-tbody">
+      <% if @refund.present? %>
+        <% @refund.items.each do |item| %>
+          <%= render 'refunded_items', item: item %>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

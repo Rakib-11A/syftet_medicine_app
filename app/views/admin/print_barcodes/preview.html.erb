@@ -1,0 +1,36 @@
+<% @print_barcodes.each do |print_barcode| %>
+  <% (1..print_barcode.quantity).each do %>
+    <div class="print-label">
+      <div class="product-name text-center">
+        <%= print_barcode.product.name %>
+      </div>
+
+      <div class="product-code text-center">
+        <%= print_barcode.product.code %>
+      </div>
+
+      <div class="barcode-img-wrapper text-center">
+        <%= image_tag "data:image/png;base64,#{Rack::Utils.escape(@barcode_images[print_barcode.id])}" %>
+      </div>
+
+      <div class="product-barcode text-center">
+        <%= print_barcode.product.barcode.present? ? print_barcode.product.barcode : '' %>
+      </div>
+
+      <div class="product-price text-center">
+        Tk. <%= print_barcode.product.sale_price %> + VAT
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+
+
+        $('#print_page').click(function () {
+            $('#my-page').print({
+            });
+        });
+    });
+</script>

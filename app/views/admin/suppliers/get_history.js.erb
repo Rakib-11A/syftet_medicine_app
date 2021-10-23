@@ -1,0 +1,8 @@
+// $('.customer-history').html('') ;
+// $('.customer-history').append("<%#= j(render "customer_history", customer: @customer).html_safe %>");
+$('.supplier-invoice-list').html("<%= escape_javascript(render 'invoice_list', supplier: @supplier).html_safe %>");
+$('.action-process-action').show();
+$('.customer-due-amount').text("<%= @supplier.due_balance.abs %>");
+$('.last_payment_date').text("<%= @supplier.last_payment_date %>");
+$('.last_paid_amount').text("<%= @supplier.last_payment_amount %>");
+//$('.print-voucher').attr('href', "<%#= supplier_print_voucher_path(@supplier) %>");

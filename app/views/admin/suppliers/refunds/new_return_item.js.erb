@@ -1,0 +1,8 @@
+$('#purchase-order-return-tbody').append("<%= escape_javascript(render 'admin/suppliers/purchase_orders/refunded_item', item: @refund_item).html_safe %>");
+$('#refund-item-count').html("<%= @refund.item_count %>");
+$('#pos-sales-total-refund').html("<b><%= @purchase.total_refund %></b>");
+$("#pos-sales-item-<%= @invoice_item.id %>").find('.pos-product-returned-quantity').html("<%= @invoice_item.return_item_count %>");
+<% if @invoice_item.received_quantity == @invoice_item.return_item_count %>
+$("#pos-sales-item-<%= @invoice_item.id %>").find('#pos-product-return-link').remove();
+<% end %>
+$('#global-modal').modal('hide');

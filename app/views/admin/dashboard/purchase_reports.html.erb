@@ -1,0 +1,75 @@
+<% content_for :page_title do %>
+  <%= t(:reports) %>
+<% end %>
+<% content_for :page_tabs do %>
+  <li role="presentation"  ><a  href="<%= admin_reports_path %>">Overall Report</a></li>
+  <li role="presentation" class="active"><a href="#">Purchase Reports</a></li>
+  <li role="presentation" ><a  href="<%= admin_sales_reports_path %>">Sales Reports</a></li>
+<% end %>
+<% content_for :content_top do %>
+  <p>Search</p>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Invoice No</th>
+        <th>Ordered At</th>
+        <th>Supplier</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Cost Price</th>
+        <th>Total Cost</th>
+        <th>Profit(%)</th>
+        <th>Price For Sale</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% total_qty = 0 %>
+      <% total_cost = 0 %>
+      <% @purchases.each do |purchase| %>
+        <% purchase.items.each do |item| %>
+          <% product = item.product %>
+          <% if product.present? %>
+          <% total_qty += item.received_quantity %>
+          <% total_cost += (item.received_quantity * item.cost_price) %>
+            <tr>
+              <td><%= link_to item.invoice.no, admin_suppliers_purchase_order_path(item.invoice) if item.invoice.present? %></td>
+              <td><%= format_datetime_short(item.created_at) %></td>
+              <td><%= item.invoice.supplier.present? ? (link_to item.invoice.supplier.name, admin_supplier_path(item.invoice.supplier)) : "Unknown Supplier"   %></td>
+              <td><%= link_to product.name, edit_admin_product_path(product)  %></td>
+              <td><%= item.received_quantity %></td>
+              <td><%= item.cost_price %></td>
+              <td><%= item.cost_price * item.received_quantity %></td>
+              <td><%= item.vat  %></td>
+              <td><%= item.sale_price %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading"></div>
+    <div class="panel-body">
+      <table class="table">
+        <tbody>
+        <tr>
+          <td ><b>Total Quantity:</b></td>
+          <td><b><%= total_qty %></b></td>
+        </tr>
+        <tr>
+          <td ><b>Total Cost:</b></td>
+          <td><b><%= total_cost %></b></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

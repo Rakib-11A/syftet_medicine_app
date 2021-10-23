@@ -1,0 +1,241 @@
+<%= form_for @purchase, :url => admin_suppliers_purchase_orders_path(invoice_id: @purchase.id), html: {id: 'supplier-order-form'} do |f| %>
+
+  <%= hidden_field_tag :invoice_id, @purchase.persisted? ? @purchase.id : '', id: 'suppliers_invoice_invoice_id' %>
+  <%#= hidden_field_tag :save_only, true, id: 'save_only_field' %>
+  <%= f.hidden_field :order_state, value: Admin::Suppliers::Invoice::ORDER_STATES[:complete][:data] %>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4><b>Supplier:</b></h4>
+            </div>
+            <div class="col-sm-6" style="margin-top: 8px;">
+              <%= f.hidden_field :supplier_id, id: 'purchase_order_supplier_id' %>
+              <h5 class="text-right">To change supplier cancel the invoice</h5>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="table borderless" style="margin-bottom: 0;">
+            <tbody>
+            <tr>
+              <td><b>Id: </b></td>
+              <td>#<%= @supplier.id %></td>
+              <td><b>Due: </b></td>
+              <td>৳ <%= number_with_delimiter @supplier.due_balance, delimiter: ',' %></td>
+            </tr>
+
+            <tr>
+              <td><b> Name: </b></td>
+              <td><%= link_to @supplier.name, admin_supplier_path(@supplier), target: '_blank' %></td>
+              <td><b> Initial Balance: </b></td>
+              <td>৳ <%= number_with_delimiter (@supplier.initial_balance), delimiter: ',' %></td>
+            </tr>
+
+            <tr>
+              <td><b> Address: </b></td>
+              <!--              <td> <%#= @supplier.address %></td>-->
+              <td><b> Current Balance: </b></td>
+              <td>৳ <%= number_with_delimiter @supplier.total_invoice, delimiter: ',' %></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-body">
+          <table class="table borderless" style="margin-bottom: 0;">
+            <tbody>
+            <tr class="invoice-no-row <%= 'hidden' unless @purchase.persisted? %>">
+              <td>
+                <b> Invoice No: </b>
+              </td>
+              <td class="invoice-no">
+                <%= @purchase.no if @purchase.persisted? %>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <b> Issue Date: </b>
+              </td>
+              <td>
+                <%= f.date_field :date, class: 'form-control' %>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <b> Expected Delivery Date: </b>
+              </td>
+              <td>
+                <%= f.date_field :expected_delivery, class: 'form-control' %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row purchase-footer-container">
+    <div class="col-sm-12">
+      <div class="footer-wrapper clearfix">
+        <div class="col-sm-3">
+          <h4><b>Total Item Count : <span id="total-item-count">0</span></b></h4>
+
+          <h4><b>Total Order Quantity : <span id="total-order-quantity">0</span></b></h4>
+        </div>
+
+        <div class="col-sm-4 middle-section">
+
+          <div class="form-group">
+            <%= f.label :location, 'Stock Location' %>
+            <%= f.select :stock_location_id, options_for_select(@stock_locations.collect {|sp| [sp.name, sp.id]}, @stock_locations.default.ids), {}, {class: "form-control chosen"} %>
+          </div>
+          <div class="form-group">
+            <%= f.label :instruction, 'Any Instruction?' %>
+            <%= f.text_area :instruction, class: 'form-control note-height' %>
+          </div>
+        </div>
+
+        <div class="col-sm-5 amount-section">
+          <div class="col-sm-4 reset-padding total-text">
+            <h4><b>Total Cost: </b></h4>
+          </div>
+
+          <div class="col-sm-6 reset-padding amount-wrapper">
+            <b><%= f.text_field :amount, class: 'form-control subtotal reset-border-radius cross-color large-font text-right', readonly: 'readonly' %></b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12" style="margin-top: 30px">
+      <%= f.submit 'Save', class: 'btn btn-info pull-right' %>
+    </div>
+  </div>
+
+<% end %>
+<div class="modal fade" id="supplier-invoice_item-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="printBarcodeModalLabel"> Product Requirement</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <%= label_tag :product %>
+            </div>
+            <div class="col-sm-8">
+              <%= select_tag :product_id, options_for_select(@products.map {|p| [("#{p.name}| Stock #{p.total_on_hand}| Cost Price #{p.cost_price}"), p.id ]}), prompt: 'Select Product', class: 'form-control ' %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <%= label_tag :order_quantity %>
+            </div>
+
+            <div class="col-sm-8">
+              <%= number_field_tag :quantity, required: true, class: 'form-control ' %>
+            </div>
+
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <%= label_tag :purchase_price %>
+            </div>
+            <div class="col-sm-8">
+              <%= number_field_tag :cost_price, required: true, class: 'form-control ' %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <%= label_tag :vat %>
+            </div>
+            <div class="col-sm-8">
+              <%= number_field_tag :vat, required: true, class: 'form-control ' %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <%= label_tag :sale_price %>
+            </div>
+            <div class="col-sm-8">
+              <%= number_field_tag :sale_price, required: true, class: 'form-control ' %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <a class="suppliers-invoice-product btn btn-success" href="#"> Add </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="add_product_to_purchase" tabindex="-1" role="dialog" aria-labelledby="printBarcodeModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <%= form_tag add_item_admin_suppliers_purchase_orders_path , method: :post do %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="printBarcodeModalLabel"> Product Quantity</h4>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-12">
+            <%= label_tag :product, t(:product) %>
+            <%= select_tag :product_id, options_for_select(@products.map {|p| [("#{p.name}| Stock #{p.total_on_hand}| Cost Price #{p.cost_price}"), p.id ]}),{ prompt: 'Select Product', class: 'form-control '} %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :order_quantity, t(:order_quantity) %>
+            <%= number_field_tag :issued_quantity, required: true, class: 'form-control ' %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :sale_price, t(:sale_price) %>
+            <%= number_field_tag :sale_price, required: true, class: 'form-control ' %>
+          </div>
+          <%= hidden_field_tag :supplier_id,  @supplier.id %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    var invoiceId = $('#suppliers_invoice_invoice_id').val();
+    // $(function () {
+    //     $('.add-product').click(function (e) {
+    //         e.preventDefault();
+    //         $.ajax({
+    //             url: "/admin/suppliers/purchase_orders/create_order",
+    //             type: 'post',
+    //             dataType: 'html'
+    //         });
+    //     });
+    // });
+    // $(document).off('click', '.add-product').on('click', '.add-product', function () {
+    //     $.ajax({
+    //         url: "/admin/suppliers/purchase_orders/create_order",
+    //         type: 'post'
+    //     });
+    // });
+</script>

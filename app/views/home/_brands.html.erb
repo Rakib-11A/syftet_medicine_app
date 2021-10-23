@@ -1,0 +1,30 @@
+<div class="container">
+  <section class="popular_brands">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="box-shadow-v1">
+          <div class="title-wrap">
+            <h3 class="public-title">
+              Popular Brands
+            </h3>
+          </div>
+
+          <div class="brand_list">
+            <% @brands.each do |brand| %>
+              <div class="col-sm-3 brand_wrapper">
+                <%= link_to get_brand_url(brand.permalink) do %>
+                  <div class="brand_item">
+                    <%= image_tag brand.image_url(:mini), height: 70 %>
+                    <div class="brand_name">
+                      <%= brand.name %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

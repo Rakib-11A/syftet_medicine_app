@@ -1,0 +1,42 @@
+<%= form_tag received_purchase_admin_suppliers_purchase_order_path, method: :post do %>
+  <div class="col-sm-12">
+    <div class="form-group">
+      <div class="col-sm-6">
+        <strong>Payment Method</strong>
+      </div>
+      <% Admin::Suppliers::Payment::PAYMENT_METHODS.values.each do |payment_method| %>
+        <%= label_tag 'payment[regexp][method]', class:'btn btn-info btn-sm',  for: "suppliers_invoice_payments_attributes_regexp_method_#{payment_method[:value]}", style: "margin-right: 15px; background-color: #{payment_method[:color]}" do %>
+          <%= radio_button_tag :payment_method, payment_method[:value], payment_method[:value] == 'cash' %>
+          <%= payment_method[:value].upcase %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-12" >
+    <div class="form-group">
+      <div class="col-sm-3">
+        <strong>Amount</strong>
+      </div>
+      <div class="col-sm-9">
+        <%= number_field_tag :amount, '', class: 'form-control', :required => true  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12" style="margin-top: 5px" >
+    <div class="form-group">
+      <div class="col-sm-3">
+        <strong>Receive Date</strong>
+      </div>
+      <div class="col-sm-9">
+        <%= date_field_tag :date, Date.today, class: 'form-control'  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions col-sm-12" style="margin-top: 6px">
+    <%= submit_tag 'Pay', class: 'btn btn-success pull-right' %>
+  </div>
+
+<% end %>

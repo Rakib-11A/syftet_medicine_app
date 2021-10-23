@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-sm-12 pos-invoice-payment-wrapper">
+
+    <div class="panel panel-default jobs-board product-barcodes">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="panel-title title-padding-lg">Payments</h4>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <% payments.each_with_index do |payment, index| %>
+          <% if index > 0 %>
+            <hr/>
+          <% end %>
+          <table class="table table-responsive borderless pos-invoice-payment-table">
+
+            <tr>
+              <td><b>Payment Method:</b></td>
+              <td class="text-right"><b><%= payment.method %></b></td>
+            </tr>
+
+            <tr>
+              <td><b>Payment Status:</b></td>
+              <td class="text-right"><b><%= payment.status %></b></td>
+            </tr>
+
+            <%= render "admin/suppliers/#{payment.method}_payment_rows", payment: payment %>
+          </table>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>

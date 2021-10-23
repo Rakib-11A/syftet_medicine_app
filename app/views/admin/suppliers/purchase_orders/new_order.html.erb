@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-sm-6">
+    <h3 style="margin: 0">
+      <%= link_to 'Purchase Orders', admin_suppliers_purchases_path %> / New Purchase Order
+    </h3>
+  </div>
+  <div class="col-sm-6" align="right">
+    <%= link_to 'Cancel', admin_suppliers_purchases_path , class: 'btn btn-danger', onclick: 'checkBeforeDelete(this)' %>
+  </div>
+</div>
+
+<hr/>
+
+<% if @supplier.present? %>
+
+<% else %>
+  <div class="row">
+    <div class="col-sm-2">
+      <h4 style="margin: 0;"><b>Select Supplier</b></h4>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= select_tag :supplier_id, options_for_select(@suppliers.collect {|sp| [sp.name, sp.id]}, (@supplier ? @supplier.id : '')), prompt: 'Select Supplier...', class: 'chosen form-control' %>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'admin/shared/no_data_found', message: '<strong> Info: </strong> Select supplier first to create purchase order!' %>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $('#supplier_id').select2();
+        $('#supplier_id').change(function () {
+            window.location.href = '<%= new_order_admin_suppliers_purchase_orders_path %>?supplier_id=' + $(this).val();
+        });
+    });
+</script>

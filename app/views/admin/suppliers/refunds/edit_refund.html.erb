@@ -1,0 +1,147 @@
+<% content_for :page_title do %>
+  <%= link_to 'Purchase Refunds', refunds_admin_suppliers_purchase_orders_path %> /
+  <%= format_datetime_short(@refund.created_at) %> / Editing
+<% end %>
+
+
+<%= form_tag update_refund_admin_suppliers_refunds_path, method: :post do %>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4 class="panel-title title-padding-lg"><b>Supplier:</b></h4>
+            </div>
+          </div>
+        </div>
+        <%= render 'admin/suppliers/supplier_info', supplier: @supplier %>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-default jobs-board product-barcodes reset-border-radius">
+        <div class="panel-body">
+          <table class="table borderless" style="margin-bottom: 0;">
+            <tbody>
+            <tr>
+              <td>
+                <b> Refund Date: </b>
+              </td>
+              <td>
+                <%= date_field_tag :date, Date.today, class: "form-control"%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b> Refund Reason: </b>
+              </td>
+              <td>
+                <%= text_field_tag :refund_reason, '', class: "form-control" %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <%= hidden_field_tag :id, @refund.id %>
+
+          <%= submit_tag 'Update', class: 'btn btn-info pull-right' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default jobs-board product-barcodes">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="panel-title title-padding-lg">Invoice Items</h4>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <% if @purchases.present? %>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Image</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Ordered Qty</th>
+                <th>Received Qty</th>
+                <th>Returned Qty.</th>
+                <th colspan="2"></th>
+              </tr>
+              </thead>
+              <tbody id="purchase-order-products-tbody">
+
+              <% @purchases.each do |purchase| %>
+                <tr>
+                  <th><%=  link_to "Items of Invoice #{purchase.no}", admin_suppliers_invoice_path(purchase)  %></th>
+                </tr>
+                <% purchase.items.each do |item| %>
+                  <%= render 'refund_item_row', item: item %>
+                <% end %>
+              <% end %>
+
+              </tbody>
+            </table>
+          <% else %>
+            <div class="alert alert-info no-objects-found">
+              <%= t(:no_resource_found, resource: 'Purchase Order') %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default jobs-board product-barcodes">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="panel-title title-padding-lg">Refund Items</h4>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <% if @refund.present? %>
+            <% if @refund.items.present? %>
+              <div>
+                <label>Refund Reason: </label>
+                <span class="refund-reason"><%= @refund.refund_reason if @refund.present? %></span>
+              </div>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Total Amount</th>
+                  <th>Returned At</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody id="purchase-order-return-tbody">
+                <% @refund.items.each do |item| %>
+                  <%= render 'refunded_items', item: item %>
+                <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <div class="alert alert-info no-objects-found">
+                <%= t(:no_resource_found, resource: 'Refund Items') %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<% end %>
+<%= render 'admin/shared/modal' %>

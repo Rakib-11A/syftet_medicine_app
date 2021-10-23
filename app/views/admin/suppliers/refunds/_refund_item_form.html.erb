@@ -1,0 +1,54 @@
+<%= render 'admin/shared/modal_header', modal_title: 'Are you sure you want to add this product into refund?' %>
+<%= form_tag new_return_item_admin_suppliers_refunds_path, remote: true, multipart: true  do %>
+  <div class="modal-body" id="return-item-modal-body">
+    <%= hidden_field_tag :id, params[:id] %>
+    <%= hidden_field_tag :invoice_id, params[:invoice_id] %>
+    <%= hidden_field_tag :invoice_item_id, params[:invoice_item_id] %>
+    <%= hidden_field_tag :product_id, @product.id %>
+
+    <% if @product.present? %>
+      <div class="form-group">
+        <table class="table table-responsive table-striped">
+          <tr>
+            <td><b>Product Image:</b></td>
+            <td><%= mini_image(@product) %></td>
+          </tr>
+
+          <tr>
+            <td><b>Product Code:</b></td>
+            <td><%= @product.code %></td>
+          </tr>
+
+          <tr>
+            <td><b>Product Name:</b></td>
+            <td><%= @product.name %></td>
+          </tr>
+        </table>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= label_tag 'Quantity' %>
+      <%= number_field_tag :quantity, 1, min: 0, class: 'form-control reset-border-radius', id: 'return-quantity-field', oninput: 'quantityCheckup()' %>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="pull-right">
+      <%= submit_tag 'Return', class: 'btn btn-primary' %>
+      <div class="btn btn-default" data-dismiss='modal'>Cancel</div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    var maxQuantity = parseInt("<%= @max_quantity %>");
+
+    function quantityCheckup() {
+        var entered_quantity = $('#return-quantity-field').val();
+        if(entered_quantity > maxQuantity) {
+            $('#return-quantity-field').val(maxQuantity);
+        }
+    }
+</script>

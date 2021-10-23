@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Maruf Hasan Bulbul">
+  <title>Sattarshoppingmall Administration</title>
+  <!-- Latest compiled and minified CSS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <%= javascript_include_tag 'jQuery.print' %>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+
+  <%= csrf_meta_tags %>
+</head>
+<body style="background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0; margin-bottom: 10px">
+
+<div class="container-fluid">
+  <div class="print-button " style="text-align: center; margin-top: 10px;">
+    <%= link_to 'Back', :back, class: 'btn btn-default print-button' %>
+    <%= link_to 'Print This', '#', class: 'btn btn-success print-button', id: 'print_page' %>
+  </div>
+  <page size="A4" id="my-page">
+    <%#= render 'shared/print_header.html.erb' %>
+    <%= yield %>
+    <!--    <div class="page-footer">-->
+    <%#= image_tag('print_footer.jpg', style: 'width: 100%;') %>
+    <!--    </div>-->
+  </page>
+</div>
+</body>
+</html>

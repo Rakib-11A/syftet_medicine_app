@@ -1,0 +1,27 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">
+      <%= t(:shipping_methods) %>
+    </h1>
+  </div>
+  <div class="panel-body">
+    <%= form_tag  shipment_admin_order_path, method: :post do %>
+      <div class="col-md-6">
+        <% ShippingMethod.all.each_with_index do |ship, index| %>
+          <label style="display: block">
+            <%= radio_button_tag :shipping_method, ship.id%> <%= ship.name %>(<%= ship.rate %>)
+          </label>
+        <% end %>
+      </div>
+      <div id="minstrs" class="mb10 col-md-6">
+        <h5 class="mt20"><%= t(:shipping_instructions) %></h5>
+        <%= text_area_tag :special_instructions,"", :class => "form-control reset-border-radius" %>
+      </div>
+
+      <div class="actions">
+        <%= submit_tag 'Add', class: ' btn btn-success pull-right ' %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to "Purchase Orders", admin_suppliers_purchases_path %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= render partial: 'admin/suppliers/global_link' %>
+<% end %>
+<table class="table">
+
+  <thead>
+  <tr>
+    <th>Issued Date</th>
+    <th>Order ID</th>
+    <th>Supplier</th>
+    <th>Issued By</th>
+    <th>Order Quantity</th>
+    <th>Received Quantity</th>
+    <th>Received By</th>
+    <th>Amount</th>
+    <th>Received Date</th>
+    <th>Status</th>
+    <th>Refunded?</th>
+    <th colspan="1"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @purchases.each do |purchase| %>
+    <tr class="<%= 'cart-state' if purchase.order_state == Admin::Suppliers::Invoice::ORDER_STATES[:hold][:data] %>">
+      <td><%=  purchase.date %> </td>
+      <td> <%= purchase.id %> </td>
+      <td><%= link_to purchase.supplier.name, edit_admin_supplier_path(purchase.supplier) if purchase.supplier.present? %> </td>
+      <td><%= link_to purchase.issued_by.name, edit_admin_user_path(purchase.issued_by) if purchase.issued_by.present? %> </td>
+      <td align="center"><%= purchase.items.sum(:issued_quantity) %> </td>
+      <td align="center"><%= purchase.items.sum(:received_quantity) if purchase.is_received %> </td>
+      <td><%= link_to  purchase.received_by.name, edit_admin_user_path(purchase.received_by) if purchase.is_received && purchase.received_by.present? %> </td>
+      <td><%= purchase.amount %> </td>
+      <td><%= purchase.receive_date %> </td>
+      <td>
+        <% if purchase.order_state.present? && purchase.order_state == Admin::Suppliers::Invoice::ORDER_STATES[:complete][:data] %>
+          <%= link_to 'Pending', receive_admin_suppliers_purchase_order_path(id: purchase.id), class: "btn btn-success", title: 'Receive Order' %>
+        <% else %>
+         <p class='label label-success pt5 pr10 pb5 pl10 br5'> <%= purchase.order_state %> </p>
+        <% end %>
+      </td>
+      <td class="text-center">
+        <%= purchase.order_refund.present? ? 'Yes' : '' %>
+      </td>
+      <td>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default">Actions</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Show Order', admin_suppliers_purchase_order_path(purchase),  title: 'Show Order' %></li>
+            <% if purchase.is_received %>
+              <li><%= link_to 'Refund Order', refund_admin_suppliers_purchase_orders_path(id: purchase.id), title: 'Refund Order'  %></li>
+            <% else %>
+              <li><%= link_to 'Edit Order', cart_admin_suppliers_purchase_order_path(id: purchase.id), title: 'Edit Order' %></li>
+              <li><%= link_to 'Complete Order',cart_admin_suppliers_purchase_order_path(id: purchase.id) if purchase.order_state != 'complete'%></li>
+            <% end %>
+            <li><%= link_to 'Delete Order', admin_suppliers_purchase_order_path( purchase), method: :delete, data: {confirm: 'Are you sure?'},  title: 'Delete Order' %></li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+
+</table>
+<%= paginate @purchases, theme: 'twitter-bootstrap-4' %>

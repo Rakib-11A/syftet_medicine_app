@@ -1,0 +1,41 @@
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  <%= link_to t(:discounts), admin_suppliers_discounts_path %> /
+  <%= "Discounts of #{@discount.supplier.name}" %>
+<% end %>
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+<p>
+  <strong>Supplier:</strong>
+  <%= @discount.supplier.name %>
+</p>
+
+<p>
+  <strong>Invoice no:</strong>
+  <%= @discount.invoice.no %>
+</p>
+
+<p>
+  <strong>Discount by:</strong>
+  <%= @discount.discount_by %>
+</p>
+
+<p>
+  <strong>Discount reason:</strong>
+  <%= @discount.discount_reason %>
+</p>
+<p>
+  <strong>Amount:</strong>
+  <%= @discount.amount %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @discount.date %>
+</p>
+<%= link_to 'Edit', edit_admin_suppliers_discount_path(@discount), class: 'btn btn-success ' %> |
+<%= link_to 'Back', admin_suppliers_discounts_path, class: 'btn btn-success ' %>

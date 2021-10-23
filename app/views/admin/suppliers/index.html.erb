@@ -1,0 +1,78 @@
+
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  Supplier Listing
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+  <%= link_to 'New Supplier',  new_admin_supplier_path(role: User::ROLES[3]), class: 'btn btn-info' %>
+<% end %>
+<% content_for :table_filter do %>
+  <div data-hook="admin_users_index_search">
+    <%= form_for [:admin, @search], method: :get, url: admin_suppliers_url do |f| %>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label 'Email' %>
+            <%= f.text_field :email, class: "form-control js-quick-search-target" %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label 'Name' %>
+            <%= f.text_field :name, :class => 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_users_index_search_buttons" class="form-actions">
+        <%= button_tag 'Search', class: 'btn btn-primary ' do %>
+          <i class="fa fa-search"></i> Search
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Mobile</th>
+    <th>Company</th>
+    <th>Balance</th>
+    <th>Balance Due</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+  <% @suppliers.each do |supplier| %>
+    <tr>
+      <td>
+        <%= link_to supplier.name, edit_admin_supplier_path(supplier) %>
+      </td>
+      <td><%= supplier.email %></td>
+      <td><%= supplier.mobile %></td>
+      <td> <%= supplier.company %> </td>
+      <td>
+        ৳ <%= number_with_delimiter supplier.total_invoice, delimiter: ',' %>
+      </td>
+      <td>
+        ৳ <%= number_with_delimiter supplier.due_balance, delimiter: ',' %>
+      </td>
+      <td>
+        <%= link_to 'Show', admin_supplier_path(supplier) %>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_admin_supplier_path(supplier) %>
+      </td>
+      <td><%= link_to 'Destroy', admin_supplier_path(supplier), method: :delete, data: {confirm: 'Are you sure?'} %></td>
+    </tr>
+  <% end %>
+  <tbody>
+
+  </tbody>
+</table>
+<%= paginate @suppliers, theme: 'twitter-bootstrap-4' %>

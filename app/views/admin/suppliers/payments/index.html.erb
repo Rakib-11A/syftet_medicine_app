@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  Payments
+<% end %>
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Supplier</th>
+    <th>Paid By</th>
+    <th>Method</th>
+    <th>Amount</th>
+    <th>Commission</th>
+    <th>Payment date</th>
+    <th>Status</th>
+    <th colspan="4"></th>
+  </tr>
+  </thead>
+  <% @suppliers_payments.each do |payment| %>
+    <tr>
+      <td><%= link_to payment.supplier.name, edit_admin_supplier_path(payment.supplier) %></td>
+      <td><%= payment.paid_by.name if payment.paid_by.present? %></td>
+      <td><%= payment.method %></td>
+      <td><%= payment.amount %></td>
+      <td><%= payment.commission %></td>
+      <td><%= I18n.localize(payment.payment_date, format: :long) %></td>
+      <td><%= payment.status %></td>
+      <td>
+        <%= link_to 'Show', payment %>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_admin_suppliers_payment_path(payment) %>
+      </td>
+      <td>
+        <%= link_to 'Delete', payment, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+      <td>
+        <% if payment.method == 'cash' and !payment.complete? %>
+          <%= link_to 'Complete', complete_admin_suppliers_payment_path(payment), data: {confirm: 'Are you sure to complete?'} if can? :complete, payment %>
+        <% end %>
+
+      </td>
+    </tr>
+  <% end %>
+  <tbody>
+
+  </tbody>
+</table>
+<%= paginate @suppliers_payments, theme: 'twitter-bootstrap-4' %>

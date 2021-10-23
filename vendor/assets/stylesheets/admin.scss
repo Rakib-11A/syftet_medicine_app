@@ -1,0 +1,148 @@
+@import 'variables';
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *= require_tree .
+ *= require_self
+ */
+@import 'page_header';
+@import 'sidebar';
+@import 'spinner';
+@import 'tables';
+@import 'bootstrap_overwrites';
+@import 'pages';
+@import 'categories';
+@import 'users';
+@import 'filters';
+@import 'home_slider';
+@import 'blog';
+@import 'admin_label';
+@import "select2";
+@import "public";
+
+#main-part {
+  padding: 15px 35px 0;
+  top: 52px;
+  &.sidebar-collapsed {
+    padding-left: 85px;
+  }
+}
+
+#logo {
+  width: auto;
+  height: 20px;
+}
+
+.navbar-inverse {
+  background-color: #162e40;
+  border-color: #09131a;
+}
+
+.navbar-fixed-top {
+  top: 0;
+  border-width: 0 0 1px;
+}
+
+#progress {
+  display: none;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1001;
+}
+
+.public-header {
+  color: #555555;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0 0 10px 0;
+  border-bottom: solid 1px #efefef;
+}
+
+label {
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 1px;
+  color: #555555;
+  //font-weight: 500 !important;
+
+  input[type="radio"], input[type="checkbox"] {
+    margin-top: 2px;
+  }
+}
+
+.color-label {
+  display: inline-block;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.custom-title {
+  border-bottom: solid 1px #efefef;
+  margin-bottom: 20px;
+  .page-title {
+    color: #555555;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 0 0 10px 0;
+  }
+
+  .top-actions {
+    text-align: right;
+    padding: 0 0 10px 0;
+  }
+}
+
+.select2-container--default {
+  .select2-selection--single {
+    height: 38px !important;
+    line-height: 1.428571429 !important;
+    color: #555555 !important;
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 2px !important;
+    .select2-selection__rendered {
+      line-height: 36px !important;
+    }
+    .select2-selection__arrow {
+      height: 36px !important;
+    }
+  }
+
+  .select2-selection--multiple {
+    height: 38px !important;
+    color: #555555 !important;
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 2px !important;
+  }
+}
+
+.js-filter-select {
+  width: 60px;
+}
+
+.panel-title {
+  padding: 6px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.title-padding-lg {
+  padding: 10px 15px;
+}
+
+.mrgn-top {
+  margin-top: 13px;
+}

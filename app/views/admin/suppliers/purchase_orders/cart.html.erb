@@ -1,0 +1,33 @@
+<%= render 'admin/shared/purchase_tabs', current: :cart %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-sm-6">
+        <h4 class="panel-title title-padding-lg"><b>Supplier:</b></h4>
+      </div>
+      <div class="col-sm-6" style="margin-top: 8px;">
+      </div>
+    </div>
+  </div>
+  <% if @purchase.supplier.present? %>
+    <%= render 'admin/suppliers/supplier_info', supplier: @purchase.supplier %>
+  <% end %>
+</div>
+<%= render 'add_product' if can?(:update, @purchase) %>
+
+<% if @purchase.items.empty? %>
+  <div class="alert alert-warning">
+    <%= t(:your_purchase_is_empty) %>
+  </div>
+<% end %>
+
+
+<div data-hook="admin_order_edit_form">
+  <div id="order-form-wrapper">
+    <%= render 'products_order', purchase: @purchase %>
+  </div>
+</div>
+
+<% content_for :head do %>
+  <%= javascript_tag 'var expand_variants = true;' %>
+<% end %>

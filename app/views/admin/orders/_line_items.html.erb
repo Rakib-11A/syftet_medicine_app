@@ -1,0 +1,50 @@
+<% if order.line_items.exists? %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">
+          <%= t(:order_line_items) %>
+        </h1>
+      </div>
+      <table class="table table-bordered line-items" data-hook="line-items">
+        <thead>
+        <th colspan="2"><%= t(:name) %></th>
+        <th class="text-center"><%= t(:price) %></th>
+        <th class="text-center"><%= t(:quantity) %></th>
+        <th class="text-center"><%= t(:total_price) %></th>
+        <th class="orders-actions text-center" data-hook="admin_order_form_line_items_header_actions"></th>
+        </thead>
+        <tbody>
+        <% order.line_items.each do |item| %>
+            <tr class="line-item" id="line-item-<%= item.id %>">
+              <td class="line-item-image image text-center">
+                <%= mini_image(item.product) %>
+              </td>
+              <td class="line-item-name text-center">
+                <%= item.product.name %><br>
+              </td>
+              <td class="line-item-price text-center">
+                <%= amount_with_currency(item.product.price) %>
+              </td>
+              <td class="line-item-qty-show text-center">
+                <%= form_tag update_line_item_admin_order_path, method: :post, class: 'update-line-item-form' do %>
+                  <%= hidden_field_tag :line_item_id, item.id %>
+                  <%= number_field_tag :quantity, item.quantity, min: 0, class: "line_item_quantity form-control", size: 5 %>
+                <% end %>
+              </td>
+              <td class="line-item-total text-center">
+                <%= amount_with_currency(item.price * item.quantity) %>
+              </td>
+              <td class="cart-line-item-delete actions actions-4 text-center" data-hook="cart_line_item_delete">
+                <% if can? :update, item %>
+                  <%= link_to_with_icon 'check', 'Save', "javascript:void(0)", class: 'update-line-item btn btn-success btn-sm', data: {'line-item-id' => item.id, action: 'remove'}, title: t('delete'), no_text: true %>
+                <% end %>
+                <% if can? :update, item %>
+                    <%= link_to_with_icon 'trash', 'Delete', remove_line_item_admin_order_path(@order, line_item_id: item.id), method: :post, class: 'delete-line-item btn btn-danger btn-sm', data: {'line-item-id' => item.id, action: 'remove'}, title: t('delete'), no_text: true %>
+                <% end %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>

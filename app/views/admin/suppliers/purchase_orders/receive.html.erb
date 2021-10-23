@@ -1,0 +1,16 @@
+<% content_for :page_title do %>
+  <%= link_to 'Purchase Orders', admin_suppliers_purchase_orders_path %> /
+  Receive Purchase Order
+<% end %>
+<% content_for :page_actions do %>
+  <%= link_to 'Cancel', admin_suppliers_purchase_orders_path, class: "btn btn-danger" %>
+<% end %>
+<%= render 'purchase_receive_info' %>
+
+<div data-hook="admin_order_edit_form">
+  <div id="order-form-wrapper">
+    <%= render 'purchase_details', purchase: @purchase %>
+  </div>
+</div>
+
+<%= render 'payment_field' %>

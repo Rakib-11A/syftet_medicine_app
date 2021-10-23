@@ -1,0 +1,69 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-6">
+        <table class="table borderless">
+          <tbody>
+          <tr>
+            <td width="200px" class="reset-padding" style="vertical-align: middle">
+              <b> Supplier: </b>
+            </td>
+            <td style="font-size: 18px">
+              <%= @supplier.name %>
+            </td>
+          </tr>
+          <tr>
+            <td class="reset-padding" style="vertical-align: middle">
+              <b> Issue Date: </b>
+            </td>
+            <td class="pt5">
+              <%= @purchase.date %>
+            </td>
+          </tr>
+          <tr>
+            <td class="reset-padding" style="vertical-align: middle">
+              <b> Expected Delivery Date: </b>
+            </td>
+            <td class="pt5">
+              <%= @purchase.expected_delivery %>
+            </td>
+          </tr>
+          <tr>
+            <td class="reset-padding" style="vertical-align: middle">
+              <b> Stock Location : </b>
+            </td>
+            <td class="pt5">
+              <%= link_to @purchase.stock_location.name, admin_stock_location_path(@purchase.stock_location), target: '_blank' if  @purchase.stock_location.present? %>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-4">
+        <table class="table borderless">
+          <tbody>
+          <tr>
+            <td><b>Due: </b></td>
+            <td>৳ <%= number_with_delimiter @supplier.due_balance, delimiter: ',' %></td>
+          </tr>
+
+          <tr>
+            <td><b> Initial Balance: </b></td>
+            <td>৳ <%= number_with_delimiter (@supplier.initial_balance), delimiter: ',' %></td>
+          </tr>
+          <tr>
+            <td><b> Current Balance: </b></td>
+            <td>৳ <%= number_with_delimiter @supplier.total_invoice, delimiter: ',' %></td>
+          </tr>
+
+          <tr>
+            <td><b> Company: </b></td>
+            <td> <%= @supplier.company %></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

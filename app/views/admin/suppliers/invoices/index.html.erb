@@ -1,0 +1,45 @@
+<% content_for :page_title do %>
+  <%= render partial: 'admin/shared/suppliers_module', locals: {current: :account} %>
+<% end %>
+<% content_for :page_title do %>
+  <%= link_to t(:suppliers), admin_suppliers_path %> /
+  Invoices
+<% end %>
+<% content_for :page_actions do %>
+  <%= render "admin/shared/supplier_links"  %>
+<% end %>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Supplier</th>
+    <th>Invoice No</th>
+    <th>Amount</th>
+    <th>Transport_cost</th>
+    <th>Invoice Date</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+  <% @suppliers_invoices.each do |invoice| %>
+    <tr>
+      <td>
+        <%= link_to invoice.supplier.name, edit_admin_supplier_path(invoice.supplier) if invoice.supplier.present? %>
+      </td>
+      <td><%= invoice.no %></td>
+      <td><%= invoice.amount %></td>
+      <td> <%= invoice.transport_cost %> </td>
+      <td> <%= I18n.localize(invoice.date, format: :long) %>
+      </td>
+      <td>
+        <%= link_to 'Show', invoice %>
+      </td>
+      <td>
+        <%= link_to 'Edit',invoice.is_order ? cart_admin_suppliers_purchase_order_path(id: invoice.id) : edit_admin_suppliers_invoice_path(invoice) %>
+      </td>
+      <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' }  %></td>
+    </tr>
+  <% end %>
+  <tbody>
+
+  </tbody>
+</table>
+<%= paginate @suppliers_invoices, theme: 'twitter-bootstrap-4' %>

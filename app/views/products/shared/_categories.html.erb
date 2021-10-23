@@ -1,0 +1,32 @@
+<aside class="widget widget-product-categories">
+  <h3 class="widget-title">
+    <%= t(:categories) %>
+  </h3>
+  <ul class="product-categories">
+
+    <% @categories.each do |category| %>
+        <li class="menu-item">
+          <%= link_to categories_path(category.permalink) do %>
+              <%= category.name %>
+          <% end %>
+          <span data-ref="top-cat-taxm-<%= category.id %>" class='pull-right collapse-ref'> <i class='fa fa-plus'></i> </span>
+          <%= render partial: 'products/shared/sub_category', locals: { subcategories: category.sub_categories, category: category, selected: @category } if category.sub_categories.present? %>
+        </li>
+    <% end %>
+  </ul>
+</aside>
+
+<script type="text/javascript">
+    $(function () {
+        $.each($('.product-categories > li'), function (index, element) {
+            if ($(element).has('a.active').length > 0) {
+                $(element).addClass('top-active').find('i').toggleClass('fa-plus fa-minus');
+            }
+        });
+        $('.collapse-ref').click(function () {
+            ref = $(this).attr('data-ref');
+            $(this).find('i').toggleClass('fa-plus fa-minus');
+            $('#' + ref).toggle();
+        });
+    });
+</script>

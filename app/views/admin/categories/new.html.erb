@@ -1,0 +1,18 @@
+<%= render partial:'admin/categories/sidebar'  %>
+<% if @admin_category.category.present? %>
+  <% if @admin_category.category.parent_id.present? %>
+    <% content_for :page_title do %>
+      <%= link_to @admin_category.category.category.name, admin_category_path(@admin_category.category.category) %> /
+    <% end %>
+  <% end %>
+  <% content_for :page_title do %>
+      <%= link_to @admin_category.category.name, admin_category_path(@admin_category.category) %> / Add New Category
+  <% end %>
+<% else %>
+  <% content_for :page_title do %>
+     Add New Category
+  <% end %>
+<% end %>
+
+
+<%= render 'form', admin_category: @admin_category %>

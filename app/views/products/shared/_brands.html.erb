@@ -1,0 +1,18 @@
+<aside class="widget clearfix">
+  <div class="widget widget-off">
+
+  </div>
+  <h3 class="widget-title">
+    <%= t(:brands) %>
+  </h3>
+  <ul class="product-categories">
+
+    <% @brands.each do |brand| %>
+      <li class="menu-item">
+        <%= link_to brands_path(brand.permalink) do %>
+          <%= brand.name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</aside>

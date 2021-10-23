@@ -1,0 +1,63 @@
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" data-hover="dropdown">
+    Suppliers <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <% if can? :index, User %>
+      <li>
+        <%= link_to admin_suppliers_path do %>
+          <i class="fa fa-tasks"> </i> List
+        <% end %>
+      </li>
+    <% end %>
+
+    <li class="dropdown">
+      <a href="#">Purchase</a>
+      <ul class="dropdown-menu">
+        <li>
+          <%= link_to admin_suppliers_purchases_path do %>
+            <i class="fa fa-tablet"> </i> Order List
+          <% end %>
+        </li>
+
+        <li>
+          <%= link_to refunds_admin_suppliers_purchase_orders_path do %>
+            <i class="fa fa-tablet"> </i> Refund List
+          <% end %>
+        </li>
+      </ul>
+    </li>
+
+    <% if can? :index, Admin::Suppliers::Invoice %>
+      <li>
+        <%= link_to admin_suppliers_invoices_path do %>
+          <i class="fa fa-spotify"> </i> Invoices
+        <% end %>
+      </li>
+    <% end %>
+
+    <% if can? :index, Admin::Suppliers::Payment %>
+      <li>
+        <%= link_to admin_suppliers_payments_path do %>
+          <i class="fa fa-stack-overflow"> </i> Payments
+        <% end %>
+      </li>
+    <% end %>
+
+    <% if can? :index, Admin::Suppliers::Refund %>
+      <li>
+        <%= link_to admin_suppliers_refunds_path do %>
+          <i class="fa fa-star-half-full"> </i> Refunds
+        <% end %>
+      </li>
+    <% end %>
+
+    <% if can? :index, Admin::Suppliers::Discount %>
+      <li>
+        <%= link_to admin_suppliers_discounts_path do %>
+          <i class="fa fa-steam-square"> </i> Discounts
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

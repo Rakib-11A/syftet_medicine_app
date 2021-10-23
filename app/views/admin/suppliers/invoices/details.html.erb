@@ -1,0 +1,31 @@
+<div class="customer-invoice-details">
+  <table class="table table-borderless">
+    <thead class="panel-heading">
+    <tr>
+      <th colspan="2" class="success text-center"> Supplier Invoice Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td> Invoice No</td>
+      <td> <%= @invoice.id %> </td>
+    </tr>
+    <tr>
+      <td> Supplier</td>
+      <td> <%= link_to @invoice.supplier.name, admin_supplier_path(@invoice.supplier_id) %> </td>
+    </tr>
+    <tr>
+      <td> Amount</td>
+      <td> <%= @invoice.amount %> </td>
+    </tr>
+    <tr>
+      <td> Invoice Date</td>
+      <td> <%= @invoice.date.strftime('%B %d, %Y') %> </td>
+    </tr>
+    <tr>
+      <td> Due</td>
+      <td> <%= @invoice.due_amount %> </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

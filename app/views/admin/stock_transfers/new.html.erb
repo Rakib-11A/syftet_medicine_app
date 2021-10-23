@@ -1,0 +1,386 @@
+<% content_for :page_title do %>
+  <%= link_to t(:stock_transfers), admin_stock_transfers_url %> /
+  <%= t(:new_stock_transfer) %>
+<% end %>
+
+<%= form_tag admin_stock_transfers_path, :method => :post do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <%= t(:transfer_stock) %>
+      </h1>
+    </div>
+
+    <div class="panel-body">
+      <div data-hook="admin_stock_movements_form_fields">
+        <div class="form-group" id="stock_movement_reference_field">
+          <%= label_tag 'reference', raw("#{t(:reference)} (#{t(:optional)})") %>
+          <%= text_field_tag :reference, '', class: 'form-control' %>
+        </div>
+        <div class="form-group" id="receive_stock_field">
+          <div class="checkbox">
+            <label for="transfer_receive_stock">
+              <%= check_box_tag :transfer_receive_stock %>
+              <%= t('receive_stock') %>
+            </label>
+          </div>
+        </div>
+        <div class="form-group" id="transfer_source_location_id_field">
+          <%= label_tag :transfer_source_location_id, t(:source) %>
+          <%= select_tag :transfer_source_location_id, {}, class: 'form-control' %>
+        </div>
+        <div class="form-group" id="transfer_destination_location_id_field">
+          <%= label_tag :transfer_destination_location_id, t(:destination) %>
+          <%= select_tag :transfer_destination_location_id, {}, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default" id="add-product-to-transfer">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <%= t(:add_product) %>
+      </h1>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group" id="stock_movement_product_id_field">
+            <%= label_tag 'product_id', t(:product) %>
+            <%#= hidden_field_tag 'transfer_product', {}, {class: 'fullwidth-input'} %>
+            <%= select_tag :transfer_product, {}, {class: 'form-control'} %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group" id="stock_movement_quantity_field">
+            <%= label_tag :transfer_product_quantity, t(:quantity) %>
+            <div class="input-group">
+              <%= number_field_tag :transfer_product_quantity, 1, class: 'form-control', min: 0 %>
+              <span class="input-group-btn">
+                <%= button t(:add), 'plus', 'submit', class: "transfer_add_product" %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info no-objects-found">
+    <%= t(:no_resource_found, resource: I18n.t(:other, scope: 'activerecord.models.spree/product')) %>.
+  </div>
+
+  <div id="transfer-products-table" style="display:none">
+    <table class="table table-bordered sortable">
+      <thead data-hook="transfer_products_header">
+      <th><%= t(:name) %></th>
+      <th class="text-center"><%= t(:quantity) %></th>
+      <th class="actions"></th>
+      </thead>
+      <tbody id="transfer_products_tbody">
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions" data-hook="buttons">
+    <%= submit_tag 'Transfer Stock', class: 'btn btn-primary transfer_transfer' %>
+    <%#= button t(:transfer_stock), 'plus transfer_transfer' %>
+  </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    var locations = [];
+    var products = [];
+    var source_element = $('#transfer_source_location_id');
+    var destination_element = $('#transfer_destination_location_id');
+    $(function () {
+        source_element.change(function () {
+            populate_destination();
+            clear_products();
+            refresh_products();
+        });
+
+        $('#transfer_receive_stock').change(function (event) {
+            receive_stock_change(event)
+        });
+
+        $.getJSON('/admin/stock_locations', (function (data) {
+            var i, len, ref;
+            ref = data.stock_locations;
+            for (i = 0, len = ref.length; i < len; i++) {
+                locations.push(ref[i]);
+            }
+
+            if (locations.length < 2) {
+                force_receive_stock();
+            }
+            populate_source();
+            populate_destination();
+        }));
+
+        $('button.transfer_add_product').click(function (event) {
+            event.preventDefault();
+            if ($('#transfer_product').select2('data').length > 0) {
+                add_product();
+            } else {
+                alert('Please select a product first');
+            }
+
+        });
+
+        $('#transfer-products-table').on('click', '.transfer_remove_product', function (event) {
+            event.preventDefault();
+            remove_product($(event.target));
+        });
+
+        $('input.transfer_transfer').click(function () {
+            if (!(products.length > 0)) {
+                alert('no products to transfer');
+                return false;
+            }
+        });
+    });
+
+    function force_receive_stock() {
+        $('#receive_stock_field').hide();
+        $('#transfer_receive_stock').prop('checked', true);
+        toggle_source_location(true);
+    }
+
+    function is_source_location_hidden() {
+        return $('#transfer_source_location_id_field').css('visibility') === 'hidden';
+    }
+
+    function toggle_source_location(hide) {
+        if (hide == null) {
+            hide = false;
+        }
+        source_element.trigger('change');
+        if (is_source_location_hidden() && !hide) {
+            $('#transfer_source_location_id_field').css('visibility', 'visible');
+            $('#transfer_source_location_id_field').show();
+        } else {
+            $('#transfer_source_location_id_field').css('visibility', 'hidden');
+            $('#transfer_source_location_id_field').hide();
+        }
+    }
+
+    function receive_stock_change(event) {
+        toggle_source_location(event.target.checked);
+        populate_destination(!event.target.checked);
+    }
+
+    function populate_source() {
+        populate_select(source_element);
+        source_element.trigger('change');
+    }
+
+    function populate_destination(except_source) {
+        if (except_source == null) {
+            except_source = true;
+        }
+
+        if (is_source_location_hidden()) {
+            return this.populate_select(destination_element);
+        } else {
+            return this.populate_select(destination_element, parseInt(source_element.val()));
+        }
+    }
+
+    function populate_select(select, except) {
+        var i, len, location, ref;
+        if (except == null) {
+            except = 0;
+        }
+        select.children('option').remove();
+        ref = locations;
+        for (i = 0, len = ref.length; i < len; i++) {
+            location = ref[i];
+            if (location.id !== except) {
+                select.append($('<option></option>').text(location.name).attr('value', location.id));
+            }
+        }
+        select.select2();
+    }
+
+    function receiving_stock() {
+        return $("#transfer_receive_stock:checked").length > 0;
+    }
+
+    function refresh_products() {
+        if (receiving_stock()) {
+            _search_transfer_products();
+        } else {
+            _search_transfer_stock_items();
+        }
+    }
+
+    function _search_transfer_products() {
+        return build_select('/admin/products', 'product_name_or_sku_cont');
+    }
+
+    function _search_transfer_stock_items() {
+        var stock_location_id;
+        stock_location_id = $('#transfer_source_location_id').val();
+        return build_select(("/admin/stock_locations/" + stock_location_id + "/stock_items"), 'variant_product_name_or_variant_sku_cont');
+    }
+
+    // function format_product_result(result) {
+    //     return result.name + " - " + result.code;
+    // }
+
+    function build_select(url, query) {
+        $('#transfer_product').select2({
+            minimumInputLength: 3,
+            ajax: {
+                url: url,
+                dataType: "json",
+                data: function (term, page) {
+                    var query_object;
+                    query_object = {};
+                    query_object[query] = term;
+                    return {
+                        q: term
+                    };
+                },
+                processResults: function (data, page) {
+                    <%#= TODO: check for stock receive %>
+                    // var result;
+                    // result = data["products"] || data["stock_items"];
+                    // if (data["stock_items"] != null) {
+                    //     result = result.map(function(product) {
+                    //         return product.product;
+                    //     });
+                    // }
+                    // products = data;
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    }
+
+    function transfer_product(product) {
+        return {
+            product: product,
+            id: product.id,
+            name: product.name + " - " + product.code,
+            quantity: 0
+        }
+    }
+
+    function transfer_product_add_quantity(product, quantity) {
+        product.quantity += quantity;
+        return product;
+    }
+
+    function transfer_stock_item(stock_item) {
+        return {
+            stock_item: stock_item,
+            product: stock_item,
+            id: stock_item.id,
+            count_on_hand: stock_item.count_on_hand,
+            name: stock_item.name + " - " + stock_item.code + " (" + stock_item.count_on_hand + ")",
+            quantity: 0
+        }
+    }
+
+    function transfer_stock_item_add_quantity(stock_item, quantity) {
+        stock_item.quantity += quantity;
+        if (stock_item.quantity > stock_item.count_on_hand) {
+            stock_item.quantity = stock_item.count_on_hand;
+        }
+        return stock_item;
+    }
+
+    function add_product() {
+        var quantity, product;
+        product = $('#transfer_product').select2('data')[0];
+        quantity = parseInt($('#transfer_product_quantity').val());
+        product = find_or_add(product);
+        product = receiving_stock() ? transfer_product_add_quantity(product, quantity) : transfer_stock_item_add_quantity(product, quantity);
+        render();
+    }
+
+    function find_or_add(product) {
+        var existing;
+        if (existing = products.find(function (v) {
+            return v.id === product.id
+        })) {
+            return existing;
+        } else {
+            product =  receiving_stock() ? transfer_product(product) : transfer_stock_item(product);
+            products.push(product);
+            return product;
+        }
+    }
+
+    function remove_product(target) {
+        var v, product_id;
+        product_id = parseInt(target.data('productId'));
+        console.log(product_id);
+        var i, ref, results;
+        ref = products;
+        results = [];
+        for (i = 0; i < ref.length; i++) {
+            v = ref[i];
+            if (v.id != product_id) {
+                results.push(v);
+            }
+        }
+
+        products = results;
+        render();
+    }
+
+    function clear_products() {
+        products = [];
+        render();
+    }
+
+    function contains(id) {
+        for (var i = 0; i < products.length; i++) {
+            if (products[i].name === id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function render() {
+        var rendered;
+        $('#transfer_products_tbody').html('');
+        if (products.length === 0) {
+            $('#transfer-products-table').hide();
+            $('.no-objects-found').show();
+        } else {
+            $('#transfer-products-table').show();
+            $('.no-objects-found').hide();
+            var product, regexp;
+            for (var i = 0; i < products.length; i++) {
+                rendered = set_product_attributes(products[i]);
+                $('#transfer_products_tbody').append(rendered);
+            }
+        }
+    }
+
+    function set_product_attributes(product) {
+        var product_row;
+        product_row = "<%= escape_javascript(render 'transfer_product_row').html_safe %>";
+        product_row = replace_attr(product_row, 'product-name', product.name);
+        product_row = replace_attr(product_row, 'product-quantity', product.quantity);
+        product_row = replace_attr(product_row, 'product_id', product.id);
+        return product_row;
+    }
+
+    function replace_attr(html_string, attr, value) {
+        regexp = new RegExp(attr, 'g');
+        html_string = html_string.replace(regexp, value);
+        return html_string;
+    }
+</script>

@@ -1,0 +1,12 @@
+<%= form_for [:admin, @print_barcode] do |form| %>
+  <%= render partial: 'admin/shared/error_messages', locals: {target: @print_barcode} %>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="form-group field">
+        <%= form.label :barcode_quantity %>
+        <%= form.number_field :quantity %>
+      </div>
+    </div>
+  </div>
+  <%= render 'admin/shared/form_actions', cancel: admin_print_barcodes_path, record: form.object %>
+<% end %>

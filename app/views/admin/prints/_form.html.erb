@@ -1,0 +1,17 @@
+<%= form_with(model: print, local: true) do |form| %>
+  <% if print.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(print.errors.count, "error") %> prohibited this print from being saved:</h2>
+
+      <ul>
+      <% print.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

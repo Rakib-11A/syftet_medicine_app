@@ -1,0 +1,71 @@
+<% content_for :page_title do %>
+  <%= link_to "Products", admin_products_url %> /
+  <%= @product.name %>
+<% end %>
+<% content_for :content_top do %>
+  <div class="product-image">
+    <% get_additional_images(@product).each do |image| %>
+      <%= image_tag image.file_url(:small)  %>
+    <% end %>
+  </div>
+<% end %>
+
+
+<div class="product-detail mrgn-top blog-body">
+  <div>
+    <strong>Price: </strong>
+    <%= @product.sale_price %>
+  </div>
+  <div>
+    <strong>
+      In Stock:
+    </strong>
+    <%= @product.total_on_hand %>
+  </div>
+  <div>
+    <strong>
+      Description:
+    </strong>
+    <%= @product.description %>
+  </div>
+
+</div>
+
+<div>
+  <h4>Reviews</h4>
+</div>
+<div class="blog-comments-wrapper">
+  <div>
+    <h4> <%= pluralize(@product.reviews.count, 'review') %> for <%= @product.name %></h4>
+  </div>
+  <ul>
+    <% @product.reviews.each do |review| %>
+      <% if review.id %>
+        <li class="clearfix">
+          <div >
+            <strong>Reviewed by</strong>
+          </div>
+          <div class="avatar-wrapper">
+            <%= image_tag 'female-avater.png', class: 'single-image-fluid' %>
+          </div>
+          <div class="comments-wrapper">
+            <div class="author">
+              <%= review.name  %>
+              <%= link_to '', remove_review_admin_product_path(review_id: review.id), method: :delete , data: { confirm: 'Are you sure?' }, class: " btn btn-danger fa fa-trash pull-right"   %>
+              <% if review.is_approved == false %>
+                <%= link_to '', approved_admin_product_path(review_id: review.id), method: :put , data: { confirm: 'Are you sure?' }, class: " btn btn-info fa fa-check  pull-right"   %>
+              <% end %>
+            </div>
+            <div class="comment-author-admin">
+              <%= review.text %>
+              <%= review.created_at.strftime('%B %d, %Y at %H:%M %p') %>
+            </div>
+            <p>
+              <%= "Rating: #{review.rating}" %>
+            </p>
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

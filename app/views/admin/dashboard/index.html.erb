@@ -1,0 +1,275 @@
+<% content_for :page_title do %>
+  Dashboard
+<% end %>
+
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-dark grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= Order.all.complete.order(completed_at: :desc).count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= admin_orders_path %>" style="color: white">
+          <div class="fa fa-list counter-title">
+            New Orders
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-primary grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= User.customers.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= customer_admin_users_path %>" style="color: white">
+          <div class="fa fa-users counter-title">
+            Total Customers
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-warning grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= NewsletterSubscription.all.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= admin_subscribers_path %>" style="color: white">
+          <div class="fa fa-users counter-title">
+            Subscribers
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-danger grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= Contact.all.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= admin_contacts_path %>" style="color: white">
+          <div class="fa fa-envelope counter-title">
+            Customers Query
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-info grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= Feedback.all.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= admin_feedbacks_path %>" style="color: white">
+          <div class="fa fa-comment counter-title">
+            Feedbacks
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-dark grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= Product.all.active.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= admin_products_url %>" style="color: white">
+          <div class="fa fa-product-hunt counter-title">
+            Total Product
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 equel-grid">
+  <div class="grid">
+    <div class="bg-warning grid-body bg-inverse-secondary text-white">
+      <div class="justify-content-between text-center">
+        <p class="counter"><%= StockItem.all.count %></p>
+      </div>
+      <div class="text-center">
+        <a href="<%= inventory_admin_products_path %>" style="color: white">
+          <div class="fa fa-linode counter-title">
+            Total Stock Products
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12 no-padding-left" style="margin-top: 20px">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title title-padding-lg bg-success">
+        New Orders
+      </h3>
+    </div>
+
+    <% if @orders.any? %>
+      <table class="table" id="listing_orders" data-hook>
+        <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>
+            <%= @show_only_completed ? 'Completed At' : 'Created At' %>
+          </th>
+          <th> Number</th>
+          <th>Status</th>
+          <th> P.State</th>
+          <th> S.State</th>
+          <th> Email</th>
+          <th> Total</th>
+          <th class="actions"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @orders.each do |order| %>
+          <tr class="state-<%= order.state.downcase if order.state.present? %> <%= cycle('odd', 'even') %>">
+            <td title="Year: <%= order.created_at.strftime('%Y') %>">
+              <%= (@show_only_completed ? order.completed_at : order.created_at).strftime('%d %b %H:%M %p') %>
+            </td>
+            <td>
+              <%= link_to order.number, edit_admin_order_path(order) %>
+            </td>
+            <td>
+              <span class="label label-<%= order.state.downcase if order.state %>">
+                <%= order.state if order.state %>
+              </span>
+              <span class="icon icon-filter filterable js-add-filter" data-ransack-field="q_state_eq" data-ransack-value="<%= order.state %>"></span>
+            </td>
+            <td>
+              <% if order.payment_state %>
+                  <span class="label label-<%= order.payment_state %>">
+                    <%= link_to order.payment_state, admin_order_payments_path(order) %>
+                  </span>
+              <% end %>
+            </td>
+            <td>
+              <% if order.shipment_state %>
+                <span class="label label-<%= order.shipment_state %>"><%= t("shipment_states.#{order.shipment_state}") %></span>
+                <span class="icon icon-filter filterable js-add-filter" data-ransack-field="q_shipment_state_eq" data-ransack-value="<%= order.shipment_state %>"></span>
+              <% end %>
+            </td>
+
+            <td>
+              <% if order.user %>
+                <%= link_to order.user.email, edit_admin_user_path(order.user) %>
+              <% else %>
+                <%= mail_to order.email %>
+              <% end %>
+            </td>
+            <td>
+              <%= amount_with_currency(order.total) %>
+            </td>
+            <td class='actions actions-1'>
+              <%= link_to_edit_url edit_admin_order_path(order), :title => "admin_edit_#{dom_id(order)}", :no_text => true %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="alert alert-info no-objects-found">
+        No order found to show in Dashboard.
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+<!-- Right SideBar -->
+<!--<div class="container demo">-->
+
+
+<!--  <button type="button" class="right-side-bar-btn" data-toggle="modal" data-target="#myModal2">-->
+<!--    <span class="fa fa-plus"></span>-->
+<!--  </button>-->
+
+
+<!--  <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--      <div class="modal-content" style="border-radius: inherit">-->
+
+<!--        <div class="modal-header">-->
+<!--          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+<!--          <h4 class="modal-title" id="myModalLabel2">Right Sidebar</h4>-->
+<!--        </div>-->
+
+<!--        <div class="modal-body">-->
+
+<!--          <div class="sidebar">-->
+<!--            <ul class="nav nav-sidebar">-->
+<!--              <li class="sidebar-menu-item">-->
+<!--                <a href="#">-->
+<!--                  <span class="icon icon-dashboard"></span>-->
+<!--                  <i class="fa fa-dashboard"></i>-->
+<!--                  <span class="text">DashBoard</span>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--            <ul class="nav nav-sidebar">-->
+<!--              <li class="sidebar-menu-item">-->
+<!--                <a href="#">-->
+<!--                  <span class="icon icon-dashboard"></span>-->
+<!--                  <i class="fa fa-dashboard"></i>-->
+<!--                  <span class="text">DashBoard</span>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--            <ul class="nav nav-sidebar">-->
+<!--              <li class="sidebar-menu-item">-->
+<!--                <a href="#">-->
+<!--                  <span class="icon icon-dashboard"></span>-->
+<!--                  <i class="fa fa-dashboard"></i>-->
+<!--                  <span class="text">DashBoard</span>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--            <ul class="nav nav-sidebar">-->
+<!--              <li class="sidebar-menu-item">-->
+<!--                <a href="#">-->
+<!--                  <span class="icon icon-dashboard"></span>-->
+<!--                  <i class="fa fa-dashboard"></i>-->
+<!--                  <span class="text">DashBoard</span>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--</div>-->
+<!-- container -->
+

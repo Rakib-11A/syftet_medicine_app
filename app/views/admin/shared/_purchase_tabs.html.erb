@@ -1,0 +1,19 @@
+<% content_for :page_title do %>
+  <%= link_to 'Purchase Orders', admin_suppliers_purchase_orders_path %> /
+  <%= @purchase.no %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <ul class="nav nav-pills nav-stacked" data-hook="admin_order_tabs">
+    <% if can?(:update, @purchase) %>
+      <li<%== ' class="active"' if current == :cart %> data-hook='admin_order_tabs_cart_details'>
+        <%= link_to_with_icon 'edit', 'Cart', cart_admin_suppliers_purchase_order_path(@purchase) %>
+      </li>
+    <% end %>
+    <% if can?(:update, @purchase) %>
+      <li<%== ' class="active"' if current == :complete %> data-hook='admin_order_tabs_cart_details'>
+        <%= link_to_with_icon 'check', 'Complete', complete_admin_suppliers_purchase_order_path(@purchase) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

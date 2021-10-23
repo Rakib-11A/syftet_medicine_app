@@ -1,0 +1,7 @@
+<p id="notice"><%= notice %></p>
+<h2>Print Barcode</h2>
+<ul>
+  <% @print.print_barcodes.each do |barcode| %>
+    <li><%= barcode.quantity %> &times; <%= barcode.product.title %></li>
+  <% end %>
+</ul>

@@ -1,0 +1,34 @@
+<%= render partial:'admin/categories/sidebar'  %>
+<% if @admin_category.category.present? %>
+  <% content_for :page_title do %>
+    <%= link_to @admin_category.category.name, admin_category_path(@admin_category.category)  %> /
+  <% end %>
+<% end %>
+<% content_for :page_title do %>
+  <%= @admin_category.name %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= link_to new_admin_category_path(parent_id: @admin_category.id), class: 'btn btn-default pull-right' do %>
+    <i class="fa fa-plus"></i> Sub Category
+  <% end %>
+<% end %>
+
+<div class="gsc-result-info">
+  <div class="gs-result">
+    <h3 class="gs-title">
+      <%= link_to "#{@admin_category.name} - #{@admin_category.meta_title}", admin_category_path(@admin_category) %>
+    </h3>
+    <%= link_to get_page_url(@admin_category.permalink), get_page_url(@admin_category.permalink), class: 'gs-visibleUrl' %>
+    <div class="gs-snippet">
+      <span> <%= @admin_category.created_at.strftime('%b %d, %Y') %> </span> -
+      <span class="text">
+        <%= @admin_category.meta_desc %>
+      </span>
+    </div>
+  </div>
+</div>
+
+<h1 class="public-header"> Sub Categories of this current category </h1>
+<div class="sub-category-wrappers">
+  <%= render 'sub_category', subcategories: @admin_category.sub_categories, deep: false if @admin_category.sub_categories.present? %>
+</div>

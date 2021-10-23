@@ -1,0 +1,173 @@
+<div data-hook="admin_customer_detail_form_fields">
+
+  <div class="panel panel-default" data-hook="customer_guest">
+
+    <div class="panel-heading">
+      <h1 class="panel-title">Add Customer</h1>
+    </div>
+
+    <div class="panel-body">
+      <div data-hook="customer_fields" class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <strong><%= label_tag nil, t(:guest_checkout) %></strong>
+            <% guest = @order.user.nil? %>
+
+            <% if @order.completed? %>
+              <div>
+                <span class="badge">
+                  <%= guest ? t(:say_yes) : t(:say_no) %>
+                  <%= hidden_field_tag :guest_checkout, guest %>
+                </span>
+              </div>
+            <% else %>
+              <div class="radio no-margint">
+                <%= label_tag :guest_checkout_true do %>
+                  <%= radio_button_tag :guest_checkout, true, guest %>
+                  <%= t(:say_yes) %>
+                <% end %>
+              </div>
+              <div class="radio">
+                <%= label_tag :guest_checkout_false do %>
+                  <%= radio_button_tag :guest_checkout, false, !guest %>
+                  <%= t(:say_no) %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <% if @order.backdoor? %>
+            <div class="form-group" style="margin-top: 30px; margin-bottom: 0">
+              <div class="checkbox" style="margin-bottom: 0">
+                <%= label_tag :provide_ship_address, style: 'font-weight: 700' do %>
+                  <%= check_box_tag :provide_ship_address, false, @order.ship_address.present? && !@order.ship_address.not_provided? %> Provide Ship Address
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="col-md-8">
+          <div class="form-group guest-section">
+            <%= f.label :email, t(:email) %>
+            <% if can? :edit, @order.user %>
+                <%= f.email_field :email, class: 'form-control' %>
+            <% else %>
+                <p><%= @order.user.try(:email) || @order.email %></p>
+            <% end %>
+          </div>
+          <div class="form-group customer-section">
+            <%= f.label :customer, t(:customer) %>
+            <% if can? :edit, @order.user %>
+              <%= f.select :user_id,options_for_select(User.customers.map{|c|[c.name, c.id]}), {prompt: 'Search Customer'}, class: ' form-control' , id: 'customer_select'%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row ship-address-section">
+    <div class="col-md-12" data-hook="ship_address_wrapper">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title"><%= t(:shipping_address) %></h1>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit, @order.user %>
+              <%= f.fields_for :ship_address, (@order.ship_address || Address.new) do |sa_form| %>
+                  <%= render 'admin/shared/address_form', f: sa_form, type: 'shipping' %>
+              <% end %>
+          <% else %>
+              <%= render 'admin/shared/address', address: @order.ship_address %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if can? :edit, @order.user %>
+      <div class="form-actions" data-hook="buttons">
+        <%= button t('actions.update'), 'save' %>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#customer_select').select2();
+
+        <% if guest %>
+          view_guest_section();
+        <% else %>
+          view_customer_section();
+        <% end %>
+
+        $('#guest_checkout_true').change(function () {
+            if ($(this).prop("checked")) {
+                view_guest_section();
+                $('#customer_select').val('').trigger('change');
+            }
+        });
+
+        $('#guest_checkout_false').change(function () {
+            if ($(this).prop("checked")) {
+                view_customer_section();
+                $('#order_email').val('');
+            }
+        });
+
+        $('#provide_ship_address').change(function () {
+            if ($(this).prop("checked")) {
+                empty_ship_address();
+            }
+            else {
+                na_ship_address();
+            }
+        });
+
+        <% if @order.backdoor? && !@order.ship_address.present? %>
+          na_ship_address();
+        <% end %>
+
+        <% if @order.ship_address.present? && @order.ship_address.not_provided? %>
+          $('.ship-address-section').addClass('hidden');
+        <% end %>
+    });
+
+    function view_customer_section() {
+        $('.guest-section').addClass('hidden');
+        $('.customer-section').removeClass('hidden');
+    }
+
+    function view_guest_section() {
+        $('.guest-section').removeClass('hidden');
+        $('.customer-section').addClass('hidden');
+    }
+
+    function na_ship_address() {
+        $('.ship-address-section').addClass('hidden');
+        $('#order_ship_address_attributes_firstname').val('N/A');
+        $('#order_ship_address_attributes_lastname').val('N/A');
+        $('#order_ship_address_attributes_address').val('N/A');
+        $('#order_ship_address_attributes_city').val('N/A');
+        $('#order_ship_address_attributes_zipcode').val('N/A');
+        $('#order_ship_address_attributes_phone').val('N/A');
+        $('#order_ship_address_attributes_state').val('N/A');
+        $('#order_ship_address_attributes_company').val('N/A');
+        $('#order_ship_address_attributes_country').val('N/A');
+    }
+
+    function empty_ship_address() {
+        $('.ship-address-section').removeClass('hidden');
+        $('#order_ship_address_attributes_firstname').val('');
+        $('#order_ship_address_attributes_lastname').val('');
+        $('#order_ship_address_attributes_address').val('');
+        $('#order_ship_address_attributes_city').val('');
+        $('#order_ship_address_attributes_zipcode').val('');
+        $('#order_ship_address_attributes_phone').val('');
+        $('#order_ship_address_attributes_state').val('');
+        $('#order_ship_address_attributes_company').val('');
+        $('#order_ship_address_attributes_country').val('');
+    }
+</script>

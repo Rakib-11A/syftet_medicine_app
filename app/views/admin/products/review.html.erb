@@ -1,0 +1,79 @@
+<%= render partial: 'admin/products/sidebar', locals: {current: :review} %>
+<%= render partial: 'admin/shared/error_messages', locals: {target: @product} %>
+
+<% content_for :page_title do %>
+  <%= link_to @product.name, edit_admin_product_path(@product) %> /
+  Reviews(<%= pluralize(@product.reviews.count, 'review') %> for <%= @product.name %>)
+<% end %>
+<% if @product.reviews.any? %>
+  <div class="blog-comments-wrapper">
+    <div>
+      <h4 style="text-align: center"> Reviews for Approval: </h4>
+    </div>
+    <ul>
+      <% @product.reviews.each do |review| %>
+        <% if review.is_approved == false %>
+          <li class="clearfix">
+            <div >
+              <strong>Reviewed by</strong>
+            </div>
+            <div class="avatar-wrapper">
+              <%= image_tag 'female-avater.png', class: 'single-image-fluid' %>
+            </div>
+            <div class="comments-wrapper">
+              <div class="author">
+                <%= review.name  %>
+                <%= link_to '', remove_review_admin_product_path(review_id: review.id), method: :delete , data: { confirm: 'Are you sure?' }, class: " btn btn-danger fa fa-trash pull-right"   %>
+                <%= link_to '', approved_admin_product_path(review_id: review.id), method: :put , data: { confirm: 'Are you sure?' }, class: " btn btn-info fa fa-check pull-right"   %>
+              </div>
+              <div class="comment-author-admin">
+                <%= review.text %>
+                <%= review.created_at.strftime('%B %d, %Y at %H:%M %p') %>
+              </div>
+              <p>
+                <%= "Rating: #{review.rating}" %>
+              </p>
+            </div>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="blog-comments-wrapper">
+    <div>
+      <h4 style="text-align: center" >Approved Reviews: </h4>
+    </div>
+    <ul>
+      <% @product.reviews.each do |review| %>
+        <% if review.is_approved? %>
+          <li class="clearfix">
+            <div >
+              <strong>Reviewed by</strong>
+            </div>
+            <div class="avatar-wrapper">
+              <%= image_tag 'female-avater.png', class: 'single-image-fluid' %>
+            </div>
+            <div class="comments-wrapper">
+              <div class="author">
+                <%= review.name  %>
+                <%= link_to '', remove_review_admin_product_path(review_id: review.id), method: :delete , data: { confirm: 'Are you sure?' }, class: " btn btn-danger fa fa-trash pull-right"   %>
+              </div>
+              <div class="comment-author-admin">
+                <%= review.text %>
+                <%= review.created_at.strftime('%B %d, %Y at %H:%M %p') %>
+              </div>
+              <p>
+                <%= "Rating: #{review.rating}" %>
+              </p>
+            </div>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= t(:no_resource_found, resource: 'Reviews') %>
+  </div>
+<% end %>
