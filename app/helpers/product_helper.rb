@@ -1,7 +1,7 @@
 module ProductHelper
   def product_preview_image(product, url = false)
     if product.images.present?
-      image_url = product.images.first.file.url(:product)
+      image_url = product.images.first.file.url
     else
       image_url = no_image
     end
