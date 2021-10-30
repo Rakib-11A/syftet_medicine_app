@@ -45,6 +45,8 @@ class Product < ApplicationRecord
 
   attr_accessor :price
 
+  after_create :send_new_product_notification
+
   belongs_to :brand, class_name: 'Admin::Brand'
   belongs_to :product, foreign_key: :product_id
   has_many :product_categories, dependent: :destroy
@@ -185,6 +187,13 @@ class Product < ApplicationRecord
   end
 
   private
+
+  def send_new_product_notification
+    subscribers = NewsletterSubscription.all
+    subscribers.each do |subscriber|
+      ProductMailer.product_subscription(subscriber.email, self).deliver_now
+    end
+  end
 
   def create_stock_items
     StockLocation.where(propagate_all_variants: true).each do |stock_location|

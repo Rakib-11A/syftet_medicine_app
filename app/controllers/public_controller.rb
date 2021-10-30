@@ -29,8 +29,10 @@ class PublicController < ApplicationController
 
   def subscribe
     email = params[:newsletter_subscription][:email]
+    p email
     begin
       Mail::Address.new(email)
+      p Mail::Address.new(email)
       newsletter = NewsletterSubscription.find_or_initialize_by(email: email)
       p newsletter
       if newsletter.save!

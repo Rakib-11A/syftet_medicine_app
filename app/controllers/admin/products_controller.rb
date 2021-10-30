@@ -18,7 +18,7 @@ module Admin
       @product = Product.new(product_params)
       respond_to do |format|
         if @product.save
-          format.html { redirect_to edit_admin_product_path(@product), notice: 'Product created successfully.' }
+          format.html {redirect_to edit_admin_product_path(@product), notice: 'Product created successfully.' }
         else
           format.html { render :new }
         end

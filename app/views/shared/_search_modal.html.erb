@@ -12,11 +12,14 @@
             <form method="get" id="search_form" class="input-group search-category" action="<%= products_path %>">
               <input name="name" id="search-term-name" maxlength="60" class="form-control search-category-input" type="text" size="20" placeholder="Search Products" autocomplete="false">
 
-              <div class="input-group-addon search-category-container">
-                <div class="select">
-                  <%= select_tag :search_category, options_for_select(Admin::Category.all.collect { |cat| [cat.name, categories_path(cat.permalink)] }), {id: 'search-category', prompt: 'Select search category'} %>
-                </div>
-              </div>
+<!--              <div class="input-group-addon search-category-container">-->
+<!--                <div class="select">-->
+                  <%#= select_tag :search_category, options_for_select(Admin::Category.all.collect { |cat| [cat.name, categories_path(cat.permalink)] }), {id: 'search-category', prompt: 'Select search category'} %>
+                  <%#= select_tag, options_for_select(Admin::Category.all.collect { |cat| [cat.name, categories_path(cat.permalink)] }), {id: 'search-category', prompt: 'Select search category'} %>
+                  <%#=  %>
+<!--                </div>-->
+<!--              </div>-->
+
               <div class="input-group-btn">
                 <label class="btn btn-link btn-search submit-search">
                   <span class="title-search hidden">Search</span>
@@ -41,13 +44,13 @@
                 e.preventDefault();
                 return false
             }
-            action = $('#search-category').val();
-            document.getElementById('search-category').disabled = true;
-            if (action != '') {
-                e.preventDefault();
-                search_form.attr('action', action);
-                search_form.submit();
-            }
+            // action = $('#search-category').val();
+            // document.getElementById('search-category').disabled = true;
+            // if (action != '') {
+            //     e.preventDefault();
+            //     search_form.attr('action', action);
+            //     search_form.submit();
+            // }
         });
     })
 </script>
