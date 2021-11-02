@@ -45,7 +45,7 @@ class Product < ApplicationRecord
 
   attr_accessor :price
 
-  after_create :send_new_product_notification
+  # after_create :send_new_product_notification
 
   belongs_to :brand, class_name: 'Admin::Brand'
   belongs_to :product, foreign_key: :product_id

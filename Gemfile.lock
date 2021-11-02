@@ -147,6 +147,8 @@ GEM
     kaminari-core (1.1.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    lazyload-rails (0.5.0)
+      nokogiri (~> 1.5)
     letter_opener (1.7.0)
       launchy (~> 2.2)
     listen (3.1.5)
@@ -305,6 +307,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   kaminari
+  lazyload-rails
   letter_opener
   listen (>= 3.0.5, < 3.2)
   mini_magick
@@ -326,4 +329,5 @@ DEPENDENCIES
 RUBY VERSION
    ruby 2.5.1p57
 
-
+BUNDLED WITH
+   2.2.8

@@ -5,7 +5,7 @@ module ProductHelper
     else
       image_url = no_image
     end
-    url ? image_url : image_tag(image_url, class: 'image-hover product-image')
+    url ? image_url : image_tag(image_url, class: 'image-hover product-image lazy')
   end
 
   def mini_image(variant, size = 50)
