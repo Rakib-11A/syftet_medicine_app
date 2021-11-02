@@ -1,49 +1,49 @@
 <div>
-  <div style="align-items: center">
-    <%= email_image_tag "email_template_header.png", alt: "Product Pictures", height:"400px", width: "650px"%>
+  <div>
+    <%= email_image_tag "email_template_header.png", alt: "Product Pictures", height:"400px", width: "100%"%>
   </div>
   <div>
-    <p style="text-align: justify; font-size: 18px;">
-      We're thrilled to have you on board! We're ready yo work togehter to get you your clearest and healthiest skin.
+    <p style="text-align: center">
+      We're thrilled to have you on board! We're ready yo work together to get you your clearest and healthiest skin.
     </p>
   </div>
 
   <div style="text-align: center; margin-top: 10px">
-    <span style="width: 15px; height: 15px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
-    <span style="width: 15px; height: 15px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
-    <span style="width: 15px; height: 15px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
+    <span style="width: 10px; height: 10px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
+    <span style="width: 10px; height: 10px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
+    <span style="width: 10px; height: 10px; border-radius: 50%; background: green; display: inline-block; margin: 0 5px;"></span>
   </div>
 
-  <div style="margin: 25px 0px;">
-    <h2 align="center">DID YOU KNOW</h2>
-    <p align="center">As a Curology patient, you will receive: </p>
+  <div style="text-align: center; margin-bottom: 10px">
+    <h2>DID YOU KNOW</h2>
+    <p>As a Curology patient, you will receive: </p>
   </div>
 
-  <section>
-    <div style="float: left">
+  <section style="display: flex;padding-top: 10px;grid-gap: 20px;">
+    <div>
       <div>
-        <%= email_image_tag 'first_card.png', height:"200px", width:"200px" %>
+        <%= email_image_tag 'email_template_first_content.png', height:"200px", width:"200px" %>
       </div>
-      <div style="padding: 10px 0px;">
+      <div style="padding: 10px 2px;">
         <p>A Customized prescription medication made just for your skin</p>
       </div>
     </div>
 
     <div>
         <div>
-          <%= email_image_tag 'second_card.png', height:"200px", width:"200px" %>
+          <%= email_image_tag 'email_template_second_content.png', height:"200px", width:"200px" %>
         </div>
-        <div style="padding: 10px 0px;">
+        <div style="padding: 10px 2px;">
           <p>One-on-one skincare advice from your personal healthcare provider </p>
         </div>
     </div>
 
     <div>
         <div>
-          <%= email_image_tag 'third_card.png', height:"200px", width:"200px" %>
+          <%= email_image_tag 'email_template_third_content.png', height:"200px", width:"200px" %>
         </div>
-        <div style="padding: 10px 0px;">
-            unlimited fine-tuning of your formulation throughout your treatment.</p>
+        <div style="padding: 10px 2px;">
+            <p>unlimited fine-tuning of your formulation throughout your treatment.</p>
         </div>
     </div>
   </section>

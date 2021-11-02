@@ -6,7 +6,9 @@
 <% content_for :sidebar do %>
     <div class="col-md-3">
       <%= render :partial => 'products/shared/categories' %>
-      <%= render :partial => 'products/shared/brands' %>
+      <% if @brand.present? %>
+        <%= render :partial => 'products/shared/brands' %>
+      <% end %>
       <%= render :partial => 'products/shared/catalog' %>
     </div>
 <% end %>
