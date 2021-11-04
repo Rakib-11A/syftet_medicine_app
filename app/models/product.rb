@@ -58,14 +58,13 @@ class Product < ApplicationRecord
   has_many :stock_items
   has_many :wishlists
   has_many :print_barcodes
-  belongs_to :supplier , class_name: 'User', foreign_key: 'supplier_id'
+  belongs_to :supplier, class_name: 'User', foreign_key: 'supplier_id'
 
   accepts_nested_attributes_for :images,
                                 allow_destroy: true,
                                 reject_if: proc { |attributes|
                                   attributes.all? { |k, v| v.blank? }
                                 }
-
 
   validates_presence_of :name, :code, :cost_price, :sale_price, :is_active, :slug
   validates_uniqueness_of :code, :barcode
@@ -80,7 +79,7 @@ class Product < ApplicationRecord
   scope :in_stock, -> { joins(:stock_items).where('count_on_hand > ? OR track_inventory = ?', 0, false) }
   scope :featured, -> { master_active.where(is_featured: true) }
   scope :new_arrivals, -> { master_active.where('created_at >= ?', 15.days.ago) }
-  scope :stock_out_of_limit, -> { joins(:stock_items).where('count_on_hand <= min_stock')}
+  scope :stock_out_of_limit, -> { joins(:stock_items).where('count_on_hand <= min_stock') }
 
   def related_products
     category = self.categories.last
@@ -89,6 +88,7 @@ class Product < ApplicationRecord
       products
     end
   end
+
   def slug_candidates
     [:name, :name_and_sequence]
   end
@@ -167,7 +167,7 @@ class Product < ApplicationRecord
   def variants_total_on_hand
     sum = 0
     variants_with_master.each do |va|
-      sum =  sum + va.total_on_hand
+      sum = sum + va.total_on_hand
     end
     sum
   end
@@ -184,6 +184,10 @@ class Product < ApplicationRecord
 
   def is_favourite?(user_id)
     user_id.present? && wishlists.where(user_id: user_id).present?
+  end
+
+  def display_discount
+    is_amount ? "#{discount} TK DISCOUNT" : "#{discount}% OFF"
   end
 
   private
