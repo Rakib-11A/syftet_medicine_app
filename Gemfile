@@ -68,6 +68,8 @@ gem 'devise_token_auth'
 gem "cancan"
 gem 'friendly_id', '~> 5.1.0'
 #
+# gem 'sitemap_generator'
+
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'bootstrap-datepicker-rails'

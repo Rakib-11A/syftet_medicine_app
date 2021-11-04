@@ -7,7 +7,7 @@ class OrderMailer < ApplicationMailer
   def confirm_email(order, resend = false)
     @order = order.respond_to?(:id) ? order : Order.find(order)
     email = @order.user.present? ? @order.user.email : @order.email
-    mail(to: email, subject: 'Your Sattarshoppingmall Ltd Order Confirmation')
+    mail(to: email, subject: 'Your Armoiar Ltd Order Confirmation')
     #unless resend
     #mail(to: 'nazrulku07@gmail.com', subject: 'New order received from www.sattarshoppingmall.com') #, delivery_method_options: Order::ORDER_SMTP)
     #end
@@ -15,7 +15,7 @@ class OrderMailer < ApplicationMailer
 
   def update_order(order)
     @order = order
-    subject = "Your Sattarshoppingmall Ltd order status has been updated"
+    subject = "Your Armoiar Ltd order status has been updated"
     mail(to: @order.email, subject: subject, delivery_method_options: Order::ORDER_SMTP)
   end
 

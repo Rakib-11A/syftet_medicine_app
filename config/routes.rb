@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'home#index'
+  get '/sitemap', to: 'home#sitemap'
   get '/promo/:q/products', to: 'products#index', as: :promotion_products
   post :email_subscription, to: 'public#subscribe'
   resources :wishlists, only: [:index, :destroy]

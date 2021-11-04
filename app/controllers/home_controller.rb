@@ -8,4 +8,9 @@ class HomeController < ApplicationController
     @gallery_images = Admin::GalleryImage.all.order(:position).limit(20)
     @sliders = HomeSlider.all#.order(:position)
   end
+
+  def sitemap
+    @products = Product.all
+    @domain = "#{request.protocol}#{request.host_with_port}"
+  end
 end
