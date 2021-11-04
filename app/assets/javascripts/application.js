@@ -73,10 +73,14 @@ window.onscroll = function () {
 
 function scrollFunction() {
     if (document.body.scrollTop > 145 || document.documentElement.scrollTop > 145) {
-        document.getElementById("btn-scroll-top").style.display = "block";
+        if (document.getElementById("btn-scroll-top").length > 0) {
+            document.getElementById("btn-scroll-top").style.display = "block";
+        }
         $('.main-menu').addClass('sticky-nav');
     } else {
-        document.getElementById("btn-scroll-top").style.display = "none";
+        if (document.getElementById("btn-scroll-top").length > 0) {
+            document.getElementById("btn-scroll-top").style.display = "none";
+        }
         $('.main-menu').removeClass('sticky-nav');
     }
 }

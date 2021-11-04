@@ -28,8 +28,6 @@ server '173.212.248.182',
        :user => 'deployer',
        :roles => %w{web app db}
 
-set :rvm_ruby_version, '2.3.1'
-
 # Default value for :linked_files is []
 set :linked_files, %w{config/database.yml config/secrets.yml}
 
