@@ -35,13 +35,23 @@
     </div>
 <% end %>
 
-<%= form.fields_for :ship_address do |ship_form| %>
-    <div class="container">
-      <div class="clear"></div>
-      <div class="row mb40">
-        <div class="col-md-6 clearfix pb20">
-          <h1 class="public-title text-left mb15"> Your shipping address</h1>
+<div class="container">
+  <div class="clear"></div>
+    <div class="row mb40">
+      <div class="col-md-6 clearfix pb20">
+        <%= form.fields_for :coupon_code do |coupon_form| %>
+          <h1 class="public-title text-left mb15"> Your Coupon Code</h1>
+          <div class="checkout-form">
+            <div class="row">
+              <div class="col-md-12 shipping-address-form billing-form">
+                <%= render 'checkout/coupon', form_builder: coupon_form, address_type: 'Coupon' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
 
+        <%= form.fields_for :ship_address do |ship_form| %>
+          <h1 class="public-title text-left mb15"> Your shipping address</h1>
           <div class="checkout-form">
             <div class="row">
               <div class="col-md-12 shipping-address-form billing-form">
@@ -49,13 +59,15 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 clearfix pb20">
-          <%= render 'orders/summary' %>
-          <%= submit_tag 'Save and Continue', :class => 'btn-primo-thin' %>
-        </div>
+        <% end %>
+      </div>
+
+      <div class="col-md-6 clearfix pb20">
+        <%= render 'orders/summary' %>
+        <%= submit_tag 'Save and Continue', :class => 'btn-primo-thin' %>
       </div>
     </div>
-<% end %>
+  </div>
+</div>
 
 <%= render 'shared/form_validation_script' %>

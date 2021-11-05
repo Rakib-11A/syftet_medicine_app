@@ -50,18 +50,20 @@
       </div>
     </div>
 
-  </div>
-
-  <div class="row">
     <div class="col-md-4">
-      <div class="checkbox" data-hook="stock_location_active">
-        <%= label_tag :is_active, for: :product_is_active do %>
-          <%= form.check_box :is_active, id: :product_is_active %>
-          <%= t(:active) %>
-        <% end %>
+      <div class="form-group field">
+        <%= form.label :pre_order %> <br>
+        <div class = 'form-control'>
+          <%= form.radio_button :pre_order, 'yes', :checked => true %>
+          <%= label :pre_order_email, 'Yes' %>
+          <%= form.radio_button :pre_order, 'no' %>
+          <%= label :pre_order_sms, 'No' %>
+        </div>
       </div>
     </div>
+
   </div>
+
 
   <%= render 'admin/shared/form_actions', cancel: admin_products_path, record: form.object %>
 <% end %>

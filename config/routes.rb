@@ -196,6 +196,7 @@ Rails.application.routes.draw do
       resources :comments, only: [:destroy, :edit, :update]
     end
     resources :home_sliders
+    resources :coupons
     resources :shipping_methods
 
     resources :payment_methods
