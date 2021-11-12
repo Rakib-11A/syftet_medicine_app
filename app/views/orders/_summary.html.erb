@@ -5,7 +5,7 @@
       <tbody>
       <tr>
         <td> Order subtotal</td>
-        <td class="td-value">
+        <td class="td-value" id="sub_total">
           <b>
             <%= amount_with_currency(@order.total) %>
           </b>
@@ -14,7 +14,7 @@
       <%# if @order.promotions.present? %>
       <tr>
         <td> Discount / coupon</td>
-        <td> <%= amount_with_currency(@order.adjustment_total) %> </td>
+        <td id="discount_value"> <%= amount_with_currency(@order.adjustment_total_value) %> </td>
       </tr>
       <%# end %>
       <tr>
@@ -33,7 +33,7 @@
       </tr>
       <tr class="total-order">
         <td> Order total</td>
-        <td class="td-value">
+        <td class="td-value" id="net_total">
           <b>
             <%= amount_with_currency(@order.net_total) %>
           </b>

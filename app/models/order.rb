@@ -95,6 +95,8 @@ class Order < ApplicationRecord
   has_one :shipment
   has_many :payments
   has_many :customer_returns
+  belongs_to :admin_coupon, :class_name => 'Admin::Coupon'
+
 
   accepts_nested_attributes_for :line_items
   accepts_nested_attributes_for :ship_address
@@ -147,14 +149,20 @@ class Order < ApplicationRecord
 
   def net_total
     if shipment.present?
-      (total || 0) + (shipment.cost || 0)
+      ((total || 0) + (shipment.cost || 0)) - (adjustment_total || 0)
     else
-      total
+      if adjustment_total.present?
+        total - adjustment_total
+      else
+        total
+      end
     end
   end
 
-  def adjustment_total
-    0
+  def adjustment_total_value
+    if adjustment_total.present?
+      adjustment_total
+    end
   end
 
   def checkout_allowed?

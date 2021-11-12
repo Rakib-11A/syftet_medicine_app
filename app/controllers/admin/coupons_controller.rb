@@ -1,5 +1,5 @@
 module Admin
-  class CouponsController < Admin::BaseController
+  class CouponsController < BaseController
     before_action :set_admin_coupon, only: [:show, :edit, :update, :destroy]
 
     # GET /admin/coupons
@@ -26,6 +26,17 @@ module Admin
     # POST /admin/coupons.json
     def create
       @admin_coupon = Admin::Coupon.new(admin_coupon_params)
+
+      unless admin_coupon_params[:maximum_limit_count].present?
+        @admin_coupon.maximum_limit_count = 0
+      end
+
+      if params[:amount_type].present? && params[:amount_type] == 'Discount'
+        @admin_coupon.discount = @admin_coupon.percentage
+        @admin_coupon.percentage = 0
+      else
+        @admin_coupon.discount = 0
+      end
 
       respond_to do |format|
         if @admin_coupon.save

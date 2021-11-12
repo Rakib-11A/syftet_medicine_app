@@ -284,6 +284,8 @@ Rails.application.routes.draw do
   get '/cart', to: 'public#cart'
   get '/p_checkout', to: 'public#checkout'
   post '/email_subscription', to: 'public#subscribe'
+  post '/checkout', to: 'checkout#check_coupon_code'
+  post '/checkout/update_coupon_code', to: 'checkout#update_coupon_code'
 
   ##################### API ROUTES ######################
 

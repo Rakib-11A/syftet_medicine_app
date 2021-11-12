@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <%= link_to 'Admin Coupons', admin_coupons_path %> /
-  New Product
+  New Coupon
 <% end %>
 
 <%= form_with(model: admin_coupon, local: true) do |form| %>
@@ -33,23 +33,14 @@
 
     <div class="col-md-4">
       <div class="form-group field">
-        <%= form.label :discount %>
-        <%= form.text_field :discount, class: 'form-control' %>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="form-group field">
-        <%= form.label :percentage %>
-        <%= form.text_field :percentage, class: 'form-control' %>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="form-group field">
         <%= form.label :expiration %>
         <%= form.text_field :expiration, class: 'form-control' %>
       </div>
+    </div>
+
+    <div class="col-md-4">
+      <%= select_tag "amount_type", options_for_select([ "Persentage", "Discount" ], "Discount")  %>
+      <%= form.text_field :percentage, class: 'form-control' %>
     </div>
 
     <div class="col-md-4">

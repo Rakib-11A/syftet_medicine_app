@@ -39,18 +39,15 @@
   <div class="clear"></div>
     <div class="row mb40">
       <div class="col-md-6 clearfix pb20">
-        <%= form.fields_for :coupon_code do |coupon_form| %>
+        <%= form.fields_for :ship_address do |ship_form| %>
           <h1 class="public-title text-left mb15"> Your Coupon Code</h1>
           <div class="checkout-form">
             <div class="row">
               <div class="col-md-12 shipping-address-form billing-form">
-                <%= render 'checkout/coupon', form_builder: coupon_form, address_type: 'Coupon' %>
+                <%= render 'checkout/coupon' %>
               </div>
             </div>
           </div>
-        <% end %>
-
-        <%= form.fields_for :ship_address do |ship_form| %>
           <h1 class="public-title text-left mb15"> Your shipping address</h1>
           <div class="checkout-form">
             <div class="row">
@@ -71,3 +68,49 @@
 </div>
 
 <%= render 'shared/form_validation_script' %>
+
+<script type="text/javascript">
+    $(document).ready( function() {
+        $('#adjustment_amount').hide();
+        $('#error_message_form').hide();
+        $('#error_message').hide();
+        $('#checkCode').click( function() {
+            var code = $('#coupon_code').val();
+            console.log(code);
+            $.ajax({
+                type: "POST",
+                url: "#{checkout_check_coupon_code_path}",
+                data: { code: code },
+                dataType: "json",
+                success: function(response) {
+                    // alert(response.message);
+                    // alert(response.discount_coupon_amount);
+                    $('#discount_value').html('৳'+response.discount_coupon_amount);
+                    var sub_total = <%= @order.total %>
+                    var net_total = parseFloat(parseInt(sub_total) - parseInt(response.discount_coupon_amount))
+
+                    $('#net_total').html('৳'+net_total);
+                    $('#discount_form').hide();
+                    $('#adjustment_amount').show();
+
+                    $('#coupon').html(response.discount_coupon_code);
+                    $('#adjustment').html('৳'+response.discount_coupon_amount);
+                    $('#error_message').html(response.message);
+                    $('#error_message').show();
+                    $(".alert").alert();
+                    setTimeout(function(){$('.alert').alert('close')}, 3000);
+                },
+                 error: function(xhr, ajaxOptions, thrownError)
+                 {
+                     // alert("Wrong Coupon Code");
+                     $('#error_message_form').html("Wrong Coupon Code")
+                     $('#error_message_form').show();
+                     $(".alert").alert();
+                     setTimeout(function(){$('.alert').alert('close')}, 3000);
+                     // $('#error_message_form').alert('dispose');
+                 }
+                // error: function(xhr, ajaxOptions, thrownError) { alert(xhr.responseText); }
+            });
+        });
+    });
+</script>
