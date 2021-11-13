@@ -97,6 +97,7 @@
                     $('#adjustment').html('৳'+response.discount_coupon_amount);
                     $('#error_message').html(response.message);
                     $('#error_message').show();
+                    $("a[href='/checkout/update_coupon_code']").attr('href', `/checkout/update_coupon_code?code=${response.discount_coupon_code}`);
                     $(".alert").alert();
                     setTimeout(function(){$('.alert').alert('close')}, 3000);
                 },

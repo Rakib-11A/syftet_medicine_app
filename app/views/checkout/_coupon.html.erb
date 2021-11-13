@@ -5,27 +5,23 @@
         <thead>
         <tr>
           <th class="coupon-remove">&nbsp; &nbsp; &nbsp;</th>
-          <th class="coupon-discount">Coupon Code</th>
-          <th>
-            &nbsp;
-          </th>
-          <th>
-            &nbsp;
-          </th>
-          <th class="coupon-discount align-right">Discount</th>
+          <th class="coupon-discount" style="padding:0 50px 0 15px;">Coupon Code</th>
+          <th class="coupon-discount align-right" style="padding:0 50px 0 15px;">Discount</th>
         </tr>
         </thead>
         <tbody>
         <tr>
           <td>
-            <%= link_to '/checkout/update_coupon_code', class: 'remove', method: :post, confirm: 'Are you sure?' do %>
+            <a class="remove" confirm="Are you sure?" rel="nofollow" data-method="post" href="/checkout/update_coupon_code">
               <i class="fa fa-trash"></i>
-            <% end %>  &nbsp; &nbsp; &nbsp; &nbsp;
+            </a>
+<!--            <a href="/checkout/update_coupon_code" class="remove" method="post" confirm="Are you sure?"><i class="fa fa-trash"></i></a>-->
+            <%#= link_to checkout_update_coupon_code_path(code: @order.coupon_id), class: 'remove', method: :post, confirm: 'Are you sure?' do %>
+<!--              <i class="fa fa-trash"></i>-->
+<!--            <%# end %>  &nbsp; &nbsp; &nbsp; &nbsp;-->
           </td>
-          <td id="coupon"></td>
-          <td></td>
-          <td></td>
-          <td id="adjustment"><%= @order.adjustment_total %></td>
+          <td id="coupon" style="padding:0 50px 0 15px;"></td>
+          <td id="adjustment" style="padding:0 50px 0 15px;"><%= @order.adjustment_total %></td>
         </tr>
         </tbody>
       </table>

@@ -51,25 +51,36 @@ class CheckoutController < ApplicationController
     @order.state = params[:state] if params[:state]
   end
 
-  def check_coupon_code
+  def update_maximum_limit_count(value)
     admin_coupons = params[:code]
     result = Admin::Coupon.find_by(code: admin_coupons)
-    if(result.maximum_limit_count < result.maximun_limit) && (result.expiration > Date.today)
-      result.maximum_limit_count+=1
-
-      if result.discount > 0
-        @order.adjustment_total = result.discount.to_f
+    if result.present?
+      if value == 1
+        if(result.maximum_limit_count < result.maximun_limit) && (result.expiration > Date.today)
+          result.maximum_limit_count += value
+          @order.coupon_id = result.id
+        end
       else
-        @order.adjustment_total = (@order.item_total.to_f * result.percentage.to_f) / 100.0
+        result.maximum_limit_count += value
+        @order.coupon_id = nil
       end
+      @order.save
+      result.save
+    end
+    result
+  end
+
+  def check_coupon_code
+    result = update_maximum_limit_count(1)
+    if result.discount > 0
+      @order.adjustment_total = result.discount.to_f
+    else
+      @order.adjustment_total = (@order.item_total.to_f * result.percentage.to_f) / 100.0
     end
 
     if @order.save
       result.save
-      p "<<<<<<<<<<<<<<<<+++++++>>>>>>>>>>>>>>>"
-      p result.code
       @order.adjustment_total
-      # flash[:error] = "You get Offer"
     else
       "Sorry! You didn't get Offer"
     end
@@ -86,6 +97,8 @@ class CheckoutController < ApplicationController
   end
 
   def update_coupon_code
+    p update_maximum_limit_count(-1)
+
     @order.adjustment_total = 0
     @order.save
     respond_to do |format|
