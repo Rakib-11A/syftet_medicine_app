@@ -59,6 +59,7 @@ class Product < ApplicationRecord
   has_many :wishlists
   has_many :print_barcodes
   belongs_to :supplier , class_name: 'User', foreign_key: 'supplier_id'
+  has_many :orders
 
   accepts_nested_attributes_for :images,
                                 allow_destroy: true,

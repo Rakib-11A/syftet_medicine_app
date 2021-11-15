@@ -54,14 +54,13 @@
       <div class="form-group field">
         <%= form.label :pre_order %> <br>
         <div class = 'form-control'>
-          <%= form.radio_button :pre_order, 'yes', :checked => true %>
-          <%= label :pre_order_email, 'Yes' %>
-          <%= form.radio_button :pre_order, 'no' %>
-          <%= label :pre_order_sms, 'No' %>
+          <%= form.radio_button :pre_order, true %>
+          <%= form.label :pre_order, 'Yes', :value => "true" %>
+          <%= form.radio_button :pre_order, false, :checked => true %>
+          <%= form.label :pre_order, 'No', :value => "false" %>
         </div>
       </div>
     </div>
-
   </div>
 
 

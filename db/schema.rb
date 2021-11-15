@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_12_051604) do
+ActiveRecord::Schema.define(version: 2021_11_15_063129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 2021_11_12_051604) do
     t.decimal "tax_total", default: "0.0"
     t.integer "admin_id"
     t.integer "coupon_id"
+    t.boolean "pre_order"
   end
 
   create_table "payment_methods", force: :cascade do |t|

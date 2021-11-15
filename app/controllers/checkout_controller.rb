@@ -39,6 +39,18 @@ class CheckoutController < ApplicationController
   end
 
   def edit
+    line_items = @order.line_items
+    is_pre_order = false
+    line_items.each do |line_item|
+      product = Product.find_by(id: line_item.variant_id)
+      if product.min_stock < line_item.quantity && product.pre_order == true
+        is_pre_order = true
+      end
+    end
+    if is_pre_order == true
+      @order.pre_order = true
+      @order.save
+    end
     @results = Admin::Coupon.all
     if @order.state == 'address'
       @title = "Secure checkout SSL | Shipping Address - BrandCruz"

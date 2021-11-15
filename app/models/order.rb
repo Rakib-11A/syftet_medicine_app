@@ -96,6 +96,7 @@ class Order < ApplicationRecord
   has_many :payments
   has_many :customer_returns
   belongs_to :admin_coupon, :class_name => 'Admin::Coupon'
+  belongs_to :product, :class_name => 'Product'
 
 
   accepts_nested_attributes_for :line_items

@@ -19,7 +19,11 @@
             - <span class="count review-link-color"> <%= pluralize(@product.reviews.count, 'review') %> </span>
           </div>
 
-          <p class="stock in-stock">In Stock</p>
+          <% if @product.pre_order == true && @product.min_stock == 0 %>
+            <p class="stock in-stock">Pre Order</p>
+          <% else %>
+            <p class="stock in-stock">In Stock</p>
+          <% end %>
 
           <p class="price">
             <ins>

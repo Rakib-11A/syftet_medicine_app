@@ -3,9 +3,16 @@
       <%= radio_button_tag "[order][payments_attributes][payment_method_id]", payment_method('PaymentMethod::Cash'), true, id: 'payment-cash', class: 'hidden' %>
       <h3>Cash On Delivery</h3>
 
-      <p class="alert alert-warning">
-        Please pay <b> <%= @order.net_total %> </b> when received delivery.
-      </p>
+      <% if @order.pre_order == true %>
+        <p class="alert alert-warning">
+          Please pay <b> <%= amount_with_currency (((@order.net_total).round / 2).to_f) %> </b> advanced for pre-order.
+        </p>
+      <% else %>
+        <p class="alert alert-warning">
+          Please pay <b> <%= amount_with_currency(@order.net_total) %> </b> when received delivery.
+        </p>
+      <% end %>
+
 
       <p>
         <input type="submit" class="btn-primo-thin" value="Confirm & Place Order">
