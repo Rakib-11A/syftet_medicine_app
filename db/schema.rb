@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2021_11_15_063129) do
     t.integer "maximun_limit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "maximum_limit_count"
+    t.integer "maximum_limit_count", default: 0
   end
 
   create_table "admin_gallery_images", force: :cascade do |t|

@@ -12,6 +12,7 @@
 
 .featured-products {
   margin-bottom: 20px;
+
   h3.title {
     color: #363a42;
     text-transform: uppercase;
@@ -24,6 +25,7 @@
     display: inline-block;
     text-align: center;
     width: 100%;
+
     &:after {
       content: '';
       width: 100px;
@@ -32,6 +34,7 @@
       border-top: dotted 1px #cccccc;
     }
   }
+
   .view-more-products {
     width: 100%;
     background-image: image-url('home_bg.jpg');
@@ -41,22 +44,31 @@
     position: relative;
     color: #ffffff;
     text-align: center;
+
     h3 {
       text-transform: none;
       font-weight: bold;
       margin-bottom: 15px;
     }
+
     .overlay-bg {
       padding: 50px 0;
-      background: rgba(0,0,0, 0.6);
+      background: rgba(0, 0, 0, 0.6);
     }
-    .btn-more {
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      background: $primary_blue_fade;
-      border-color: $primary_blue_fade;
-      margin-top: 15px;
-    }
+  }
+}
+
+.btn-more {
+  background: linear-gradient(#00D1DF, #407297);
+  padding: 10px 40px;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #ffffff;
+  margin: 25px 0;
+  display: inline-block;
+
+  &:hover {
+    color: #f1f1f1;
   }
 }
 
@@ -68,9 +80,11 @@
   .wrapper {
     background: $primary_blue;
   }
+
   .call-to-action {
     text-align: center;
     padding: 0 10% 0 10%;
+
     .cta-desc {
       h2 {
         color: #ffffff;
@@ -81,6 +95,7 @@
         letter-spacing: 5px;
         position: relative;
         padding-bottom: 26px;
+
         &:after {
           position: absolute;
           content: "";
@@ -95,6 +110,7 @@
           right: 0;
         }
       }
+
       .cta-text {
         color: #dadfe9;
         font-size: 18px;
@@ -103,6 +119,7 @@
         margin-bottom: 54px;
       }
     }
+
     .cta-button a {
       font-size: 12px;
       color: #fff;
@@ -124,9 +141,11 @@
 .popular_brands {
   margin-bottom: 60px;
   margin-top: 40px;
+
   .brand_list {
     .brand_wrapper {
       padding-bottom: 30px;
+
       a {
         .brand_item {
           text-align: center;
@@ -140,6 +159,7 @@
             margin-top: 15px;
           }
         }
+
         &:hover {
           .brand_item {
             box-shadow: 2px 2px 5px 3px #d0d2d8;
@@ -152,6 +172,7 @@
 
 .from-our-blog {
   margin-bottom: 60px;
+
   .blog-post {
     .content-blog {
       .title-post {
@@ -163,8 +184,10 @@
         font-weight: 500;
         text-transform: capitalize;
         text-align: center;
+
         a {
           color: #363a42;
+
           &:hover {
             color: $primary_blue;
           }
@@ -186,6 +209,7 @@
           justify-content: center;
         }
       }
+
       .entry-date {
         position: relative;
         line-height: 20px;
@@ -194,14 +218,17 @@
         padding: 0 16px;
         text-transform: inherit;
       }
+
       .entry-comments {
         line-height: 20px;
         font-size: 12px;
         padding: 0 16px;
         color: $primary_blue;
+
         a {
           color: $primary_blue;
           cursor: pointer;
+
           &:hover {
             text-decoration: underline !important;
           }
@@ -215,12 +242,14 @@
   margin-bottom: 30px;
   background: #F8F8F8;
   padding: 30px 0 30px 10px;
+
   .testimonials-body {
     background-color: #6ac9bb;
     text-align: center;
     position: relative;
     margin-top: 40px;
     margin-bottom: 7px;
+
     .testimonials-avatar {
       position: absolute;
       top: -40px;
@@ -229,6 +258,7 @@
       left: 0;
       right: 0;
       margin: 0 auto;
+
       .avatar img {
         border: 0;
         height: auto;
@@ -241,6 +271,7 @@
         -o-border-radius: 50%;
       }
     }
+
     .testimonials-info {
       //display: flex;
       justify-content: center;
@@ -248,6 +279,7 @@
       text-transform: uppercase;
       color: #363a42;
       padding-top: 58px;
+
       .testimonials-name {
         font-weight: 700;
         text-transform: uppercase;
@@ -257,8 +289,10 @@
         line-height: 1.7;
         padding-right: 3px;
       }
+
       .text-muted {
         color: #363636;
+
         a {
           color: #363a42;
         }
@@ -277,15 +311,18 @@
 
   ul {
     padding: 0;
+
     li.loaded {
       display: inline-block;
       list-style: none;
       float: left;
+
       a {
         float: left;
         width: 100%;
         position: relative;
         padding: 15px;
+
         &:before {
           content: '';
           position: absolute;
@@ -298,6 +335,7 @@
           height: 100%;
           opacity: 0;
         }
+
         &:after {
           content: '\f067';
           font-family: FontAwesome;
@@ -308,6 +346,7 @@
           color: #ffffff;
           font-size: 18px;
         }
+
         &:hover {
           &:before, &:after {
             opacity: 1;
@@ -323,6 +362,7 @@
 
 .custom-dropdown {
   cursor: pointer;
+
   .custom-drp-content {
     padding: 10px;
     min-width: 170px;
