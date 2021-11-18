@@ -1,0 +1,49 @@
+<div class="input-group input-group-coupon w-100" id="adjustment_amount">
+  <div class="col-sm-8 mb15 panel panel-default w-100">
+    <div class="table-responsive panel-body">
+      <table class="cart-table" cellspacing="0" id="code-and-discount-section">
+        <thead>
+        <tr>
+          <th class="coupon-remove">&nbsp; &nbsp; &nbsp;</th>
+          <th class="coupon-discount" style="padding:0 50px 0 15px;">Coupon Code</th>
+          <th class="coupon-discount align-right" style="padding:0 50px 0 15px;">Discount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <a class="remove" confirm="Are you sure?" rel="nofollow" data-method="post" href="/checkout/update_coupon_code">
+              <i class="fa fa-trash"></i>
+            </a>
+<!--            <a href="/checkout/update_coupon_code" class="remove" method="post" confirm="Are you sure?"><i class="fa fa-trash"></i></a>-->
+            <%#= link_to checkout_update_coupon_code_path(code: @order.coupon_id), class: 'remove', method: :post, confirm: 'Are you sure?' do %>
+<!--              <i class="fa fa-trash"></i>-->
+<!--            <%# end %>  &nbsp; &nbsp; &nbsp; &nbsp;-->
+          </td>
+          <td id="coupon" style="padding:0 50px 0 15px;"></td>
+          <td id="adjustment" style="padding:0 50px 0 15px;"><%= @order.adjustment_total %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="error_message" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+
+<div id="discount_form">
+  <div class="input-group input-group-coupon w-100">
+    <input name="code" type="text" class="form-control" placeholder="your coupon code" id="coupon_code">
+    <div class="input-group-append btn-coupon-wrapper">
+      <button class="btn btn-outline-secondary btn-coupon" type="button" id="checkCode">Apply</button>
+    </div>
+  </div>
+  <div id="error_message_form" class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>

@@ -39,6 +39,19 @@ class CheckoutController < ApplicationController
   end
 
   def edit
+    line_items = @order.line_items
+    is_pre_order = false
+    line_items.each do |line_item|
+      product = Product.find_by(id: line_item.variant_id)
+      if product.min_stock < line_item.quantity && product.pre_order == true
+        is_pre_order = true
+      end
+    end
+    if is_pre_order == true
+      @order.pre_order = true
+      @order.save
+    end
+    @results = Admin::Coupon.all
     if @order.state == 'address'
       @title = "Secure checkout SSL | Shipping Address - BrandCruz"
     elsif @order.state == 'payment'
@@ -48,6 +61,62 @@ class CheckoutController < ApplicationController
       @order.state = 'payment'
     end
     @order.state = params[:state] if params[:state]
+  end
+
+  def update_maximum_limit_count(value)
+    admin_coupons = params[:code]
+    result = Admin::Coupon.find_by(code: admin_coupons)
+    if result.present?
+      if value == 1
+        if(result.maximum_limit_count < result.maximun_limit) && (result.expiration > Date.today)
+          result.maximum_limit_count += value
+          @order.coupon_id = result.id
+        end
+      else
+        result.maximum_limit_count += value
+        @order.coupon_id = nil
+      end
+      @order.save
+      result.save
+    end
+    result
+  end
+
+  def check_coupon_code
+    result = update_maximum_limit_count(1)
+    if result.discount > 0
+      @order.adjustment_total = result.discount.to_f
+    else
+      @order.adjustment_total = (@order.item_total.to_f * result.percentage.to_f) / 100.0
+    end
+
+    if @order.save
+      result.save
+      @order.adjustment_total
+    else
+      "Sorry! You didn't get Offer"
+    end
+
+    respond_to do |format|
+      if (result.present?) && (result.expiration > Date.today) && (result.maximum_limit_count < result.maximun_limit)
+        msg = { :status => "ok", :message => "Your coupon code work!", :discount_coupon_amount =>  @order.adjustment_total, :discount_coupon_code => result.code }
+        format.json  { render :json => msg } # don't do msg.to_json
+      else
+        msg = { :status => "ok", :message => "Sorry! Expiration date or Maximum limit cross.",  }
+        format.json  { render :json => msg }
+      end
+    end
+  end
+
+  def update_coupon_code
+    p update_maximum_limit_count(-1)
+
+    @order.adjustment_total = 0
+    @order.save
+    respond_to do |format|
+      format.html { redirect_to checkout_path, notice: 'Successfully Destroyed.' }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -142,6 +211,7 @@ class CheckoutController < ApplicationController
   end
 
   def ensure_order_not_completed
+    # redirect_to products_path if @order.completed?
     redirect_to products_path if @order.completed?
   end
 

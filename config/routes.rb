@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get '/b/*id', to: 'products#brand_show', as: :brands
 
   resources :carts
+  post '/checkout/update_coupon_code', to: 'checkout#update_coupon_code'
   get '/checkout', to: 'checkout#edit', as: :cart_checkout
   get '/checkout/:state', to: 'checkout#edit', as: :checkout_state
   patch '/checkout/update/:state', to: 'checkout#update', as: :update_checkout
@@ -196,6 +197,7 @@ Rails.application.routes.draw do
       resources :comments, only: [:destroy, :edit, :update]
     end
     resources :home_sliders
+    resources :coupons
     resources :shipping_methods
 
     resources :payment_methods
@@ -283,6 +285,7 @@ Rails.application.routes.draw do
   get '/cart', to: 'public#cart'
   get '/p_checkout', to: 'public#checkout'
   post '/email_subscription', to: 'public#subscribe'
+  post '/checkout', to: 'checkout#check_coupon_code'
 
   ##################### API ROUTES ######################
 

@@ -1,0 +1,17 @@
+.input-group-coupon {
+  margin-bottom: 20px;
+}
+
+.btn-coupon-wrapper {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  border: 0;
+
+  .btn-coupon {
+    padding: 7px 12px;
+    border: 1px solid transparent;
+    border-radius: 0;
+  }
+}

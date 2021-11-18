@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+  <%= link_to 'Admin Coupons', admin_coupons_path %> /
+  New Coupon
+<% end %>
+
+<%= form_with(model: admin_coupon, local: true) do |form| %>
+  <% if admin_coupon.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(admin_coupon.errors.count, "error") %> prohibited this admin_coupon from being saved:</h2>
+
+      <ul>
+      <% admin_coupon.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group field">
+        <%= form.label :code %>
+        <%= form.text_field :code, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group field">
+        <%= form.label :name %>
+        <%= form.text_field :name, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group field">
+        <%= form.label :expiration %>
+        <%= form.text_field :expiration, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <%= select_tag "amount_type", options_for_select([ "Persentage", "Discount" ], "Discount")  %>
+      <%= form.text_field :percentage, class: 'form-control' %>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group field">
+        <%= form.label :maximun_limit %>
+        <%= form.text_field :maximun_limit, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <%= render 'admin/shared/form_actions', cancel: admin_coupons_path, record: form.object %>
+<% end %>

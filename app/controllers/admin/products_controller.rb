@@ -112,7 +112,7 @@ module Admin
     end
 
     def product_params
-      params.require(:product).permit(:code, :name, :description, :origin,
+      params.require(:product).permit(:code, :name, :description, :origin, :pre_order,
                                       :slug, :meta_title, :meta_desc, :keywords,
                                       :brand_id, :is_featured, :is_active,
                                       :deleted_at, :product_id, :sale_price,

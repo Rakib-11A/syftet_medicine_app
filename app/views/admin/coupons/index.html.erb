@@ -1,0 +1,51 @@
+<% if content_for?(:head) %>
+  <%= yield(:head) %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= t(:coupons) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to t(:new_coupons), new_admin_coupon_path, :class => "btn-success", :icon => 'add', :id => 'admin_new_slider_link' %>
+<% end %>
+
+<% if @admin_coupons.any? %>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Discount</th>
+      <th>Percentage</th>
+      <th>Expiration</th>
+      <th>Maximum limit</th>
+      <th>Maximum limit Count </th>
+      <th colspan="2"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @admin_coupons.each do |admin_coupon| %>
+      <tr>
+        <td><%= admin_coupon.code %></td>
+        <td><%= link_to admin_coupon.name, edit_admin_coupon_path(admin_coupon) %></td>
+        <td><%= admin_coupon.discount %></td>
+        <td><%= admin_coupon.percentage %></td>
+        <td><%= admin_coupon.expiration %></td>
+        <td><%= admin_coupon.maximun_limit %></td>
+        <td><%= admin_coupon.maximum_limit_count %></td>
+        <td><%= link_to 'Edit', edit_admin_coupon_path(admin_coupon) %></td>
+        <td><%= link_to 'Destroy', admin_coupon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= t(:no_resource_found, resource: 'Products') %>,
+    <%= link_to t(:add_one), new_admin_coupon_path %>!
+  </div>
+<% end %>
+
+<%= paginate @admin_coupons, theme: 'twitter-bootstrap-4' %>

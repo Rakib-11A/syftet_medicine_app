@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_11_100828) do
+ActiveRecord::Schema.define(version: 2021_11_15_063129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,18 @@ ActiveRecord::Schema.define(version: 2020_05_11_100828) do
     t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "admin_coupons", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.integer "discount"
+    t.integer "percentage"
+    t.date "expiration"
+    t.integer "maximun_limit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "maximum_limit_count"
   end
 
   create_table "admin_gallery_images", force: :cascade do |t|
@@ -335,6 +347,8 @@ ActiveRecord::Schema.define(version: 2020_05_11_100828) do
     t.string "collection_point"
     t.decimal "tax_total", default: "0.0"
     t.integer "admin_id"
+    t.integer "coupon_id"
+    t.boolean "pre_order"
   end
 
   create_table "payment_methods", force: :cascade do |t|
@@ -433,6 +447,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_100828) do
     t.string "barcode"
     t.integer "supplier_id"
     t.integer "min_stock", default: 0
+    t.boolean "pre_order"
     t.index ["barcode"], name: "index_products_on_barcode", unique: true
     t.index ["brand_id"], name: "index_products_on_brand_id"
   end

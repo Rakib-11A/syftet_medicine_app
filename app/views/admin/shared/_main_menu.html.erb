@@ -118,6 +118,13 @@
     </ul>
 <% end %>
 
+<% if can?(:admin, Admin::Coupon) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_item('Coupons', admin_coupons_path, 'gift') %>
+<!--    tag-->
+  </ul>
+<% end %>
+
 <ul class="nav nav-sidebar">
   <%= destroy_session_link('Logout', destroy_user_session_path, 'sign-out') %>
 </ul>

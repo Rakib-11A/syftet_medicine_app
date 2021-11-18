@@ -59,6 +59,7 @@ class Product < ApplicationRecord
   has_many :wishlists
   has_many :print_barcodes
   belongs_to :supplier, class_name: 'User', foreign_key: 'supplier_id'
+  has_many :orders
 
   accepts_nested_attributes_for :images,
                                 allow_destroy: true,
@@ -78,7 +79,8 @@ class Product < ApplicationRecord
   scope :master_active, -> { where(is_active: true, product_id: nil) }
   scope :in_stock, -> { joins(:stock_items).where('count_on_hand > ? OR track_inventory = ?', 0, false) }
   scope :featured, -> { master_active.where(is_featured: true) }
-  scope :new_arrivals, -> { master_active.where('created_at >= ?', 15.days.ago) }
+  # scope :new_arrivals, -> { master_active.where('created_at >= ?', 15.days.ago) }
+  scope :new_arrivals, -> { master_active.where('created_at >= ?', 30.days.ago) }
   scope :stock_out_of_limit, -> { joins(:stock_items).where('count_on_hand <= min_stock') }
 
   def related_products
