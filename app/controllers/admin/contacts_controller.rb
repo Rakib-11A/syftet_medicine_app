@@ -1,6 +1,6 @@
 module Admin
   class ContactsController < BaseController
-    before_action :set_contact , only: [:show, :checked_query, :update, :destroy]
+    before_action :set_contact , only: [:show, :checked_query]
     def index
       @contacts = Contact.all.order(created_at: :desc).page(params[:page]).per(20)
     end
