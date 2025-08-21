@@ -49,6 +49,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_currency
+    'USD' # Default currency, can be made configurable
+  end
+
   protected
 
   def load_order

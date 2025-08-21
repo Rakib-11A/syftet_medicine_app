@@ -3,7 +3,6 @@ module Admin
     layout 'layouts/admin'
 
     before_action :authenticate_admin!
-    before_action :set_paper_trail_whodunnit
     before_action :set_locale
 
     helper_method :current_admin_order

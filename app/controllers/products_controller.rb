@@ -66,10 +66,11 @@ class ProductsController < ApplicationController
 
   def keyword_search
     term = params[:keyword]
-    search = Product.solr_search do |s|
-      s.keywords params[:keyword]
-      s.paginate :page => params[:page] || 1, :per_page => 30
-    end
+    
+    # Simple ActiveRecord search instead of Solr
+    @products = Product.where("name ILIKE ? OR code ILIKE ?", "%#{term}%", "%#{term}%")
+                      .page(params[:page] || 1)
+                      .per(30)
 
     if is_number?(term)
       product = Product.find_by_id(term.to_i)
@@ -77,9 +78,9 @@ class ProductsController < ApplicationController
         redirect_to "/p/#{product.slug}"
       end
     end
-    @products = search.results
+    
     @top_categories = get_filter_category(@products)
-    @title = "Search result for ‘#{term}''"
+    @title = "Search result for '#{term}'"
   end
 
   def review
@@ -105,7 +106,7 @@ class ProductsController < ApplicationController
   end
 
   def load_product
-    if try_spree_current_user.try(:has_spree_role?, "admin")
+    if current_user && current_user.admin?
       @products = Product.with_deleted
     else
       @products = Product.active(current_currency)

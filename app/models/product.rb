@@ -82,6 +82,13 @@ class Product < ApplicationRecord
   # scope :new_arrivals, -> { master_active.where('created_at >= ?', 15.days.ago) }
   scope :new_arrivals, -> { master_active.where('created_at >= ?', 30.days.ago) }
   scope :stock_out_of_limit, -> { joins(:stock_items).where('count_on_hand <= min_stock') }
+  
+  # Soft delete scopes
+  scope :with_deleted, -> { unscope(where: :deleted_at) }
+  scope :only_deleted, -> { where.not(deleted_at: nil) }
+  
+  # Override default scope to exclude soft deleted records
+  default_scope { where(deleted_at: nil) }
 
   def related_products
     category = self.categories.last

@@ -54,7 +54,7 @@ class User < ApplicationRecord
   has_many :reviews
   has_many :orders
   has_many :rewards_points
-  belongs_to :ship_address, class_name: 'Address'
+  belongs_to :ship_address, class_name: 'Address', optional: true
   has_many :print_barcodes
   has_many :products, foreign_key: 'supplier_id'
   has_many :invoices, dependent: :destroy, class_name: 'Admin::Suppliers::Invoice', foreign_key: 'supplier_id'
