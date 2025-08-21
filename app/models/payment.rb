@@ -3,17 +3,17 @@
 # Table name: payments
 #
 #  id                :integer          not null, primary key
-#  amount            :decimal(10, )
+#  amount            :decimal(, )
 #  order_id          :integer
 #  payment_method_id :integer
-#  state             :string(255)
-#  response_code     :string(255)
-#  response_message  :string(255)
+#  state             :string
+#  response_code     :string
+#  response_message  :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  number            :string(255)
+#  number            :string
 #  source_id         :integer
-#  source_type       :string(255)
+#  source_type       :string
 #
 
 class Payment < ApplicationRecord

@@ -2,13 +2,15 @@ module Admin
   class BaseController < ApplicationController
     layout 'layouts/admin'
 
-    before_action :authorize_admin
+    before_action :authenticate_admin!
+    before_action :set_paper_trail_whodunnit
+    before_action :set_locale
+
     helper_method :current_admin_order
     helper_method :current_purchase_order
 
     rescue_from CanCan::AccessDenied do |exception|
-      flash[:error] = exception.message
-      redirect_to root_url
+      redirect_to root_url, :alert => exception.message
     end
 
     def current_admin_order(create_order = false)
@@ -56,6 +58,12 @@ module Admin
     end
     def check_stock_loaction
       redirect_to new_stock_location_path, notice: 'First Create Stock Location' unless StockLocation.present?
+    end
+
+    private
+
+    def set_locale
+      I18n.locale = params[:locale] || I18n.default_locale
     end
   end
 end

@@ -3,7 +3,7 @@
 # Table name: comments
 #
 #  id          :integer          not null, primary key
-#  body        :text(65535)
+#  body        :text
 #  user_id     :integer
 #  is_approved :boolean
 #  blog_id     :integer

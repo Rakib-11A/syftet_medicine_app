@@ -4,8 +4,8 @@
 #
 #  id         :integer          not null, primary key
 #  payment_id :integer
-#  amount     :decimal(10, )
-#  reason     :string(255)
+#  amount     :decimal(, )
+#  reason     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

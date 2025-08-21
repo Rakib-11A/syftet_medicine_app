@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: prints
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Print < ApplicationRecord
   has_many :print_barcodes, dependent: :destroy
 

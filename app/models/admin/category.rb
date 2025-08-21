@@ -3,13 +3,13 @@
 # Table name: admin_categories
 #
 #  id          :integer          not null, primary key
-#  name        :string(255)
-#  slug        :string(255)
-#  description :string(255)
-#  permalink   :string(255)
-#  meta_title  :string(255)
-#  meta_desc   :string(255)
-#  keywords    :string(255)
+#  name        :string
+#  slug        :string
+#  description :string
+#  permalink   :string
+#  meta_title  :string
+#  meta_desc   :string
+#  keywords    :string
 #  parent_id   :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

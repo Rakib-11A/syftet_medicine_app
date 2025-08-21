@@ -3,15 +3,15 @@
 # Table name: images
 #
 #  id            :integer          not null, primary key
-#  viewable_type :string(255)
+#  viewable_type :string
 #  viewable_id   :integer
 #  width         :integer
 #  height        :integer
 #  file_size     :integer
 #  position      :integer
-#  content_type  :string(255)
-#  file          :text(65535)
-#  alt           :string(255)
+#  content_type  :string
+#  file          :text
+#  alt           :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #

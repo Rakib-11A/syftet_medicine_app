@@ -3,11 +3,11 @@
 # Table name: payment_methods
 #
 #  id          :integer          not null, primary key
-#  type        :string(255)
-#  name        :string(255)
-#  description :text(65535)
+#  type        :string
+#  name        :string
+#  description :text
 #  active      :boolean
-#  preferences :text(65535)
+#  preferences :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: admin_suppliers_invoice_items
+#
+#  id                :integer          not null, primary key
+#  note              :text
+#  issued_quantity   :integer
+#  received_quantity :integer
+#  cost_price        :float
+#  sale_price        :float
+#  vat               :float
+#  total             :float
+#  expaire_date      :date
+#  invoice_id        :integer
+#  product_id        :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+# Indexes
+#
+#  index_admin_suppliers_invoice_items_on_product_id  (product_id)
+#
+
 class Admin::Suppliers::InvoiceItem < ApplicationRecord
   belongs_to :product
   belongs_to :invoice, :class_name => 'Admin::Suppliers::Invoice'

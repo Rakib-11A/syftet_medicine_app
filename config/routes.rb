@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount Ckeditor::Engine => '/ckeditor'
+  # CKEditor removed - will be replaced with ActionText or CKEditor 5
   devise_for :users, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations',

@@ -3,11 +3,11 @@
 # Table name: stock_transfers
 #
 #  id                      :integer          not null, primary key
-#  transfer_type           :string(255)
-#  reference               :string(255)
+#  transfer_type           :string
+#  reference               :string
 #  source_location_id      :integer
 #  destination_location_id :integer
-#  number                  :string(255)
+#  number                  :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #

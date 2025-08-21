@@ -1,4 +1,4 @@
-class ActionCallbacks
+class Backend::ActionCallbacks
   attr_reader :before_methods
   attr_reader :after_methods
   attr_reader :fails_methods
