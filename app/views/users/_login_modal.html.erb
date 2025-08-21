@@ -17,7 +17,7 @@
           <div id="opalloginform" class="form-wrapper sign-in-wrap">
             <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: 'login-form', remote: true) do |f| %>
                  
-                
+                <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
                 <p class="lead">Hello, Welcome Back!</p>
 
                 <div class="form-group">
