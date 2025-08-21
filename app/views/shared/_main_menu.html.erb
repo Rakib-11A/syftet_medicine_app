@@ -67,22 +67,8 @@
                         <%= t(:discount) %>
                         <span class="bubble-text-label label-hot"><%= t(:hot) %></span>
                       <% end %>
-                    </li>
-                    <% Admin::Category.menu.each do |cat| %>
-                      <li class="menu-item">
-                        <%= link_to categories_path(cat.permalink), class: 'text-link' do %>
-                          <%= cat.name %>
-                          <% if cat.sub_categories.present? %>
-                            <span class="caret"></span>
-                          <% end %>
-                        <% end %>
-                        <ul class="top-sub-menu">
-                          <%= render 'shared/sub_menu', submenu: cat.sub_categories, menu: cat %>
-                        </ul>
-                      </li>
-                    <% end %>
+                    </li> 
                   </ul>
-
                 </div>
               </nav>
             </div>
