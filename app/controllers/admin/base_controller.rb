@@ -41,7 +41,14 @@ module Admin
         @purchase = purchase
       end
     end
+
     protected
+
+    def authenticate_admin!
+      unless current_user && current_user.admin?
+        redirect_to root_path, alert: 'Access denied. Admin privileges required.'
+      end
+    end
 
     def action
       params[:action].to_sym
@@ -56,6 +63,7 @@ module Admin
       authorize! :admin, record
       authorize! action, record
     end
+
     def check_stock_loaction
       redirect_to new_stock_location_path, notice: 'First Create Stock Location' unless StockLocation.present?
     end
