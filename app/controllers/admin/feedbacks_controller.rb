@@ -1,6 +1,6 @@
 module Admin
   class FeedbacksController < BaseController
-    before_action :set_feedback , only: [:show, :checked_feedback, :update, :destroy]
+    before_action :set_feedback , only: [:show, :checked_feedback]
     def index
       @feedbacks = Feedback.all.order(created_at: :desc).page(params[:page]).per(20)
     end
