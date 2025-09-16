@@ -65,7 +65,7 @@ module Admin
     end
 
     def update
-      if @order.update_attributes(params[:orders]) && @order.line_items.present?
+      if @order.update(params[:orders]) && @order.line_items.present?
         @order.update_with_updater!
 
         unless @order.completed?
@@ -104,7 +104,7 @@ module Admin
     end
 
     def approve
-      if @order.update_attributes({shipment_date: params[:order][:shipment_date], shipment_progress: params[:order][:shipment_progress], state: 'approved'})
+      if @order.update({shipment_date: params[:order][:shipment_date], shipment_progress: params[:order][:shipment_progress], state: 'approved'})
         @order.approved_by(current_user)
         @order.credit_rewards_point
       end
@@ -233,7 +233,7 @@ module Admin
             payment_state: status == 'shipped' ? 'paid' : @order.payment_state
         }
       end
-      if @order.update_attributes(update_params)
+      if @order.update(update_params)
         comments = params[:comments].present? ? params[:comments] : "Order status updated to #{Order::ORDER_ALL_SHIPMENT_STATE[status.to_sym]}"
         @order.shipment.trackings.create(comment: comments, user_id: current_user.id)
         flash[:success] = 'Order status has been updated'

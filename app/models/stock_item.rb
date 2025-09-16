@@ -16,7 +16,7 @@ class StockItem < ApplicationRecord
   belongs_to :stock_location
   belongs_to :product
   has_many :stock_movements, dependent: :nullify
-  belongs_to :stockable, polymorphic: true
+  belongs_to :stockable, polymorphic: true, optional: true
 
   validates :stock_location, :product, presence: true
 
@@ -67,6 +67,10 @@ class StockItem < ApplicationRecord
 
   def reduce_count_on_hand_to_zero
     set_count_on_hand(0) if count_on_hand > 0
+  end
+
+  def should_track_inventory?
+    product.should_track_inventory?
   end
 
   private

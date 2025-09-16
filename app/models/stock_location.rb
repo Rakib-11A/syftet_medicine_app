@@ -35,7 +35,10 @@ class StockLocation < ApplicationRecord
   scope :order_default, -> { order(default: :desc, name: :asc) }
 
   def propagate_product(product)
-    stock_items.create!(product: product, backorderable: backorderable_default)
+    stock_items.create!(
+      product: product, 
+      backorderable: backorderable_default
+    )
   end
 
   def set_up_stock_item(product)

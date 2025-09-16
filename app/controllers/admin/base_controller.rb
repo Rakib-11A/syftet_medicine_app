@@ -17,6 +17,8 @@ module Admin
         order = Order.new
         order.guest_token = get_token
         order.admin_id = current_user.id if current_user.present?
+        # Assign a default user if none is exists
+        # order.user = User.first || User.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
         order.state = 'address'
         order.store = StockLocation.active_stock_location
         order.save!

@@ -24,7 +24,7 @@ module Admin
     end
 
     def update
-      if @shipping_method.update_attributes(shipping_method_params)
+      if @shipping_method.update(shipping_method_params)
         flash[:success] = "Shipping method updates"
         redirect_to admin_shipping_methods_path
       else

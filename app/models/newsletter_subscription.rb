@@ -11,7 +11,7 @@
 
 class NewsletterSubscription < ApplicationRecord
   validates :email, uniqueness: true, presence: true
-  after_create :send_notification
+  # after_create :send_notification  # Disabled for seed data
 
   def send_notification
     NotificationMailer.send_subscription_notification(self.email).deliver_now

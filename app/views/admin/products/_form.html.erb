@@ -52,12 +52,12 @@
 
       <div class="form-group field">
         <%= form.label :brand_id, 'Brand' %>
-        <%= form.select :brand_id, options_for_select(Admin::Brand.all.collect{|brand| [brand.name, brand.id]}, form.object.brand_id), {prompt: 'Select Brand'}, {class: 'form-control'} %>
+        <%= form.select :brand_id, options_for_select(Admin::Brand.limit(50).collect{|brand| [brand.name, brand.id]}, form.object.brand_id), {prompt: 'Select Brand'}, {class: 'form-control'} %>
       </div>
 
       <div class="form-group field">
         <%= form.label :supplier_id, 'Supplier' %>
-        <%= form.select :supplier_id, options_for_select(User.suppliers.collect{|supplier| [supplier.name, supplier.id]}, form.object.supplier_id), {prompt: 'Select Supplier'}, {class: 'form-control'} %>
+        <%= form.select :supplier_id, options_for_select(User.suppliers.limit(50).collect{|supplier| [supplier.name, supplier.id]}, form.object.supplier_id), {prompt: 'Select Supplier'}, {class: 'form-control'} %>
       </div>
 
       <div class="checkbox">
@@ -161,7 +161,7 @@
 
       <div class="form-group field">
         <%= form.label :category_ids, 'Categories' %>
-        <%= form.select :category_ids, options_for_select(Admin::Category.all.collect{|cat| [cat.name, cat.id]}, form.object.categories.ids), {prompt: 'Select Category'}, {class: 'form-control', multiple: 'multiple'} %>
+        <%= form.select :category_ids, options_for_select(Admin::Category.limit(50).collect{|cat| [cat.name, cat.id]}, form.object.categories.ids), {prompt: 'Select Category'}, {class: 'form-control', multiple: 'multiple'} %>
       </div>
 
       <div class="form-group field">

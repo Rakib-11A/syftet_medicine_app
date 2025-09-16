@@ -54,7 +54,7 @@ module Admin
       update_params = params[ActiveModel::Naming.param_key(@payment_method)].nil? ? {} : params[ActiveModel::Naming.param_key(@payment_method)].permit!
       attributes = payment_method_params.merge({preferences: update_params})
 
-      if @payment_method.update_attributes(attributes)
+      if @payment_method.update(attributes)
         flash[:success] = t(:successfully_updated, resource: t(:payment_method))
         redirect_to edit_admin_payment_method_path(@payment_method)
       else

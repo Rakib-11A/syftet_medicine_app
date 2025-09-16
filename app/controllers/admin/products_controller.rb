@@ -3,7 +3,7 @@ module Admin
     before_action :set_product, only: [:edit, :show, :update, :destroy, :stock, :remove_review, :review, :approved]
 
     def index
-      @products = active_product.page(params[:page]).per(20)
+      @products = active_product.includes(:reviews).page(params[:page]).per(20)
       respond_to do |format|
         format.html {  }
         format.json { @products = Product.master_active.search_by_name_or_code(params[:q][:term]) }
@@ -63,7 +63,7 @@ module Admin
 
     def stock
       @products = @product.variants_with_master
-      @stock_locations = StockLocation.active
+      @stock_locations = StockLocation.active.includes(:stock_items)
       if @stock_locations.empty?
         flash[:error] = t(:stock_management_requires_a_stock_location)
         redirect_to admin_stock_locations_path
@@ -108,7 +108,7 @@ module Admin
     private
 
     def set_product
-      @product = Product.friendly.find(params[:id])
+      @product = Product.friendly.includes(:brand, :supplier, :reviews).find(params[:id])
     end
 
     def product_params

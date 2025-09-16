@@ -13,8 +13,8 @@
 #
 
 class StockTransfer < ApplicationRecord
-  belongs_to :source_location, class_name: 'StockLocation'
-  belongs_to :destination_location, class_name: 'StockLocation'
+  belongs_to :source_location, class_name: 'StockLocation', optional: true
+  belongs_to :destination_location, class_name: 'StockLocation', optional: true
   has_many :stock_movements, as: :originator
 
   # def to_param

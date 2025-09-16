@@ -3,18 +3,17 @@ module Admin
     before_action :set_stock_item, only: [:update, :destroy]
 
     def create
-      product = Product.find(params[:product_id])
-      stock_location = StockLocation.find(params[:stock_location_id])
-      stock_movement = stock_location.stock_movements.build(stock_movement_params)
-
-      stock_movement.stock_item = stock_location.set_up_stock_item(product)
-
-      if stock_movement.save
-        flash[:success] = 'Stock successfully added.'
-      else
-        flash[:error] = 'unable to add stock'
+      @product = Product.find(params[:product_id])
+      @stock_location = StockLocation.find(params[:stock_location_id])
+      @stock_item = @stock_location.stock_item(@product)
+      
+      if @stock_item
+        @stock_movement = @stock_item.stock_movements.build(stock_movement_params)
+        @stock_movement.originator = current_user # Add this line
+        @stock_movement.save
       end
-      redirect_to stock_admin_product_path(product)
+      
+      redirect_to stock_admin_product_path(@product)
     end
 
     def update

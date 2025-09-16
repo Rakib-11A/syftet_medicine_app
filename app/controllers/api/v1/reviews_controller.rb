@@ -21,7 +21,7 @@ class Api::V1::ReviewsController < Api::ApiBase
 
   def update
     review = Review.find_by_id(params[:id])
-    status = review.update_attributes(name: params[:name], rating: params[:rating], text: params[:text], product_id: params[:product_id], user_id: current_user.id, email: current_user.email)
+    status = review.update(name: params[:name], rating: params[:rating], text: params[:text], product_id: params[:product_id], user_id: current_user.id, email: current_user.email)
 
     render json: {status: status}
   end

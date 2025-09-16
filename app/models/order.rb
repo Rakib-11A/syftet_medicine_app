@@ -86,17 +86,18 @@ class Order < ApplicationRecord
 
   friendly_id :number, slug_column: :number, use: :slugged
 
-  belongs_to :user
-  belongs_to :canceler , class_name: 'User'
+  belongs_to :user, optional: true
+  belongs_to :canceler , class_name: 'User', optional: true
   belongs_to :admin, class_name: 'User', optional: true
-  belongs_to :ship_address, foreign_key: :ship_address_id, class_name: 'Address'
+  belongs_to :ship_address, foreign_key: :ship_address_id, class_name: 'Address', optional: true
   belongs_to :store, class_name: 'StockLocation'
   has_many :line_items
   has_one :shipment
+  # has_many :shipments
   has_many :payments
   has_many :customer_returns
-  belongs_to :admin_coupon, :class_name => 'Admin::Coupon'
-  belongs_to :product, :class_name => 'Product'
+  belongs_to :admin_coupon, :class_name => 'Admin::Coupon', optional: true
+  belongs_to :product, :class_name => 'Product', optional: true
 
 
   accepts_nested_attributes_for :line_items
@@ -222,12 +223,12 @@ class Order < ApplicationRecord
 
   def update_with_params(params, permitted_params)
     if params[:state] == 'address'
-      status = update_attributes!(permitted_params.merge({state: 'address'}))
+      status = update!(permitted_params.merge({state: 'address'}))
       add_ship_id_to_user if status
       status
     elsif params[:state] == 'delivery'
       if init_shipment(permitted_params.delete(:shipping_method))
-        update_attributes(permitted_params.merge(shipment_state: 'pending'))
+        update(permitted_params.merge(shipment_state: 'pending'))
       end
     elsif params[:state] == 'payment'
       payment = build_payment(permitted_params)
@@ -360,12 +361,12 @@ class Order < ApplicationRecord
   end
 
   def approved_by(user)
-    update_attributes(approver_id: user.id, approved_at: Time.current, canceled_at: nil, canceler_id: nil )
+    update(approver_id: user.id, approved_at: Time.current, canceled_at: nil, canceler_id: nil )
   end
 
 
   def canceled_by(user)
-    update_attributes(canceler_id: user.id,  	canceled_at: Time.current, state: 'canceled', approved_at: nil, approver_id: nil )
+    update(canceler_id: user.id,  	canceled_at: Time.current, state: 'canceled', approved_at: nil, approver_id: nil )
   end
 
   def credit_rewards_point
@@ -421,5 +422,32 @@ class Order < ApplicationRecord
 
   def check_shipment_status_for_send_mail
     ShipmentMailer.shipped_email(shipment).deliver_now if self.shipment_state == 'shipped'
+  end
+
+  # Add missing methods for OrderUpdater
+  def canceled?
+    canceled_at.present?
+  end
+
+  def completed?
+    completed_at.present?
+  end
+
+  def outstanding_balance
+    total - payment_total
+  end
+
+  def outstanding_balance?
+    outstanding_balance == 0
+  end
+
+  def backordered?
+    # Check if any line items are backordered
+    line_items.any? { |item| item.backordered? }
+  end
+
+  def state_changed(attribute)
+    # Placeholder method for state change notifications
+    # Can be implemented later if needed
   end
 end

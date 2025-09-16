@@ -52,8 +52,8 @@ class OrderUpdater
 
   # give each of the shipments a chance to update themselves
   def update_shipments
-    shipments.each do |shipment|
-      next unless shipment.persisted?
+    if order.shipment.peresent?
+      shipment = order.shipment
       shipment.update!(order)
       shipment.refresh_rates
       shipment.update_amounts
@@ -159,9 +159,9 @@ class OrderUpdater
   # The +payment_state+ value helps with reporting, etc. since it provides a quick and easy way to locate Orders needing attention.
   def update_payment_state
     last_state = order.payment_state
-    if payments.present? && payments.valid.size == 0
+    if order.payments.present? && order.payments.valid.size == 0
       order.payment_state = 'failed'
-    elsif order.canceled? && order.payment_total == 0
+    elsif order.canceled_at.present? && order.payment_total == 0
       order.payment_state = 'void'
     else
       order.payment_state = 'balance_due' if order.outstanding_balance > 0
@@ -171,4 +171,26 @@ class OrderUpdater
     order.state_changed('payment') if last_state != order.payment_state
     order.payment_state
   end
+end
+
+private
+
+def payments
+  order.payments
+end
+
+def shipments
+  order.shipment.present? ? [order.shipment] : []
+end
+
+def adjustments
+  order.adjustments
+end
+
+def line_items
+  order.line_items
+end
+
+def all_adjustments
+  order.all_adjustments
 end

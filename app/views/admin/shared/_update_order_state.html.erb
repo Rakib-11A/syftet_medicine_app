@@ -1,0 +1,22 @@
+<script>
+$(document).ready(function() {
+  // Update order status display
+  function updateOrderStatus() {
+    $('#order_tab_summary h5#order_status').html('Status: <%= j @order.state.humanize %>');
+    $('#order_tab_summary h5#order_total').html('Total: <%= j number_to_currency(@order.total) %>');
+    
+    <% if @order.completed? %>
+      $('#order_tab_summary h5#payment_status').html('Payment: <%= j @order.payment_state.humanize %>');
+      $('#order_tab_summary h5#shipment_status').html('Shipment: <%= j @order.shipment_state.humanize %>');
+    <% end %>
+  }
+  
+  // Call on page load
+  updateOrderStatus();
+  
+  // Update when order state changes
+  $('form').on('submit', function() {
+    setTimeout(updateOrderStatus, 1000);
+  });
+});
+</script> 

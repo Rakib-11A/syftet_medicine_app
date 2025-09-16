@@ -19,7 +19,7 @@ class Admin::Suppliers::Refund < ApplicationRecord
 
   def calculate_refund_amount
     refund_amount = items.sum(:amount)
-    update_attributes(amount: refund_amount)
+    update(amount: refund_amount)
   end
 
   def item_count

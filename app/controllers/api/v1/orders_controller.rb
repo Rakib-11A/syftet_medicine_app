@@ -201,7 +201,7 @@ class Api::V1::OrdersController < Api::ApiBase
 
     if cart.present? && cart.state == 'cart'
       p 'updating to address'
-      cart.update_attributes(state: 'address')
+      cart.update(state: 'address')
     end
 
     render json: {
@@ -255,7 +255,7 @@ class Api::V1::OrdersController < Api::ApiBase
     order =  find_cart_by_token_or_user
     if order.present? && !order.completed?
       if order.ship_address.present?
-        if order.ship_address.update_attributes(ship_address_params)
+        if order.ship_address.update(ship_address_params)
         else
           error = 'Shipping address update failed. Try again later.'
         end
@@ -265,7 +265,7 @@ class Api::V1::OrdersController < Api::ApiBase
         if address.save
           bill_address = Address.new(ship_address_params)
           bill_address.save
-          order.update_attributes(bill_address_id: bill_address.id, ship_address_id: address.id)
+          order.update(bill_address_id: bill_address.id, ship_address_id: address.id)
         else
           p address.errors.inspect
           error = 'Shipping address creation failed. Please try again later.'
@@ -275,7 +275,7 @@ class Api::V1::OrdersController < Api::ApiBase
       error = 'Order not found or already complete'
     end
 
-    order.update_attributes(email: params[:email], state: 'delivery') unless error.present?
+    order.update(email: params[:email], state: 'delivery') unless error.present?
 
     render json: {
         status: !error.present?,

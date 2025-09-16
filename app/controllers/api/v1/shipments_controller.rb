@@ -10,7 +10,7 @@ class Api::V1::ShipmentsController < Api::ApiBase
   private
   def find_and_update_shipment
     @shipment = Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-    @shipment.update_attributes(shipment_params)
+    @shipment.update(shipment_params)
     @shipment.reload
   end
 

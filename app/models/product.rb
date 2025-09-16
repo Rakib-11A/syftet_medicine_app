@@ -47,8 +47,8 @@ class Product < ApplicationRecord
 
   # after_create :send_new_product_notification
 
-  belongs_to :brand, class_name: 'Admin::Brand'
-  belongs_to :product, foreign_key: :product_id
+  belongs_to :brand, class_name: 'Admin::Brand', optional: true
+  belongs_to :product, foreign_key: :product_id, optional: true
   has_many :product_categories, dependent: :destroy
   has_many :categories, class_name: 'Admin::Category', through: :product_categories
   has_many :variants, class_name: 'Product', foreign_key: :product_id, dependent: :destroy
@@ -58,7 +58,7 @@ class Product < ApplicationRecord
   has_many :stock_items
   has_many :wishlists
   has_many :print_barcodes
-  belongs_to :supplier, class_name: 'User', foreign_key: 'supplier_id'
+  belongs_to :supplier, class_name: 'User', foreign_key: 'supplier_id', optional: true
   has_many :orders
 
   accepts_nested_attributes_for :images,
@@ -162,11 +162,11 @@ class Product < ApplicationRecord
   end
 
   def should_track_inventory?
-    track_inventory? #&& Config.track_inventory_levels TODO: Need to check this
+    track_inventory?
   end
 
-  def track_inventory
-    should_track_inventory?
+  def track_inventory?
+    read_attribute(:track_inventory) || false
   end
 
   def total_on_hand

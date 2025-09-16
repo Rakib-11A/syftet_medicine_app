@@ -232,7 +232,7 @@ module Admin
       def return_item
          @refund = @purchase.order_refund
          if @refund.present?
-           @refund.update_attributes(refund_reason: params[:reason])
+           @refund.update(refund_reason: params[:reason])
          else
            @refund = @purchase.refunds.create!(supplier: @purchase.supplier, invoice_no: @purchase.no, amount: 0, date: Date.today, refund_by: current_user.name, refund_reason: params[:reason], is_order: true)
          end

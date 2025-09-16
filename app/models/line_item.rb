@@ -24,4 +24,8 @@ class LineItem < ApplicationRecord
   def total
     quantity * price
   end
+
+  def backordered?
+    product.stock_items.any? { |stock_item| stock_item.count_on_hand <= 0 && stock_item.backorderable? }
+  end
 end
