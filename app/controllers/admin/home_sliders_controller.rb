@@ -1,7 +1,7 @@
 module Admin
   class HomeSlidersController < Admin::BaseController
 
-    before_action :set_slider, only: [:show, :edit, :update, :destroy]
+    before_action :set_slider, only: [ :edit, :update, :destroy ]
 
     def index
       @sliders = HomeSlider.all.order(:position)
@@ -21,12 +21,13 @@ module Admin
     def create
       @slider = HomeSlider.new(slider_params)
       respond_to do |format|
-
         if @slider.save
           format.html { redirect_to admin_home_sliders_path, notice: 'Slider image was successfully created.' }
         else
-          redirect_back(fallback_location: admin_home_sliders_path)
-          flash.now[:error] = t('notice_messages.slider_image_not_created')
+          format.html {
+            redirect_back(fallback_location: admin_home_sliders_path)
+            flash.now[:error] = t('notice_messages.slider_image_not_created')
+          }
         end
       end
     end

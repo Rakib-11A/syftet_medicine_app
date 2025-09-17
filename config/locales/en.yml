@@ -1225,3 +1225,11 @@ en:
   time:
     formats:
       short: '%H:%M'
+  activerecord:
+    models:
+      product:
+        one: Product
+        other: Products
+      spree/product:
+        one: Product
+        other: Products

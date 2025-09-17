@@ -9,7 +9,7 @@ module Admin
 
     include CurrentPrint
     before_action :set_print, only: [:create]
-    before_action :set_print_barcode, only: [:show, :edit, :update, :destroy]
+    before_action :set_print_barcode, only: [ :edit, :update, :destroy]
 
 
     def index
