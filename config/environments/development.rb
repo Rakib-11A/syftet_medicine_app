@@ -66,4 +66,12 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+  
+  # Asset pipeline configuration for development
+  config.assets.debug = true
+  config.assets.digest = false
+  config.assets.compile = true
+  config.assets.cache_store = :null_store
 end
+
+

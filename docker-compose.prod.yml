@@ -1,0 +1,99 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${PRODUCTION_DATABASE_NAME:-armoiar_production}
+      POSTGRES_USER: ${PRODUCTION_DATABASE_USER:-armoiar}
+      POSTGRES_PASSWORD: ${PRODUCTION_DATABASE_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PRODUCTION_DATABASE_USER:-armoiar} -d ${PRODUCTION_DATABASE_NAME:-armoiar_production}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app-network
+
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      RAILS_ENV: production
+      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_LOG_TO_STDOUT: "true"
+      DATABASE_URL: postgres://${PRODUCTION_DATABASE_USER:-armoiar}:${PRODUCTION_DATABASE_PASSWORD}@db:5432/${PRODUCTION_DATABASE_NAME:-armoiar_production}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      HOST: ${PRODUCTION_HOST:-yourdomain.com}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./storage:/app/storage
+      - ./logs:/app/log
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./storage:/app/storage:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - web
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Optional: Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Optional: Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  grafana_data:
+
+networks:
+  app-network:
+    driver: bridge

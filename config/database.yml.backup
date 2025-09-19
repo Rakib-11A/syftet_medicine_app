@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL", "postgres://armoiar:secure_password@localhost:5432/armoiar") %>
+
+test:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL", "postgres://armoiar:secure_password@localhost:5432/armoiar") %>
+
+production:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL", "postgres://armoiar:secure_password@localhost:5432/armoiar_production") %>

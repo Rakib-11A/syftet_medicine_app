@@ -19,7 +19,7 @@ footer {
     text-transform: uppercase;
     line-height: 30px;
     a {
-      color: $primary_blue;
+      color: $primary_gray;
     }
   }
 
@@ -101,17 +101,17 @@ footer {
           background-color: #fffc;
           font-weight: 300;
           max-width: 100%;
-          color: $primary_blue;
+          color: $primary_gray;
           position: relative;
           border-radius: inherit;
-          border-bottom: 1px solid $primary_blue_fade;
+          border-bottom: 1px solid $primary_gray_fade;
         }
         &:before {
           position: absolute;
           content: "\f003";
           left: 15px;
           top: 15px;
-          color: $primary_blue;
+          color: $primary_gray;
           font-family: FontAwesome;
           z-index: 10;
         }
@@ -127,7 +127,7 @@ footer {
           text-transform: uppercase;
           font-weight: 500;
           letter-spacing: 5px;
-          border-bottom: 1px solid $primary_blue_fade;
+          border-bottom: 1px solid $primary_gray_fade;
           padding-bottom: 1px;
           position: relative;
           color:#fff;
@@ -139,16 +139,16 @@ footer {
       }
 
       ::-webkit-input-placeholder {
-        color: $primary_blue_fade;
+        color: $primary_gray_fade;
       }
       ::-moz-placeholder {
-        color: $primary_blue_fade;
+        color: $primary_gray_fade;
       }
       :-ms-input-placeholder {
-        color: $primary_blue_fade;
+        color: $primary_gray_fade;
       }
       :-moz-placeholder {
-        color: $primary_blue_fade;
+        color: $primary_gray_fade;
       }
     }
   }
