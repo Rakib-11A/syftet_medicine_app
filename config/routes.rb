@@ -64,6 +64,7 @@ Rails.application.routes.draw do
 
   # Admin routes and resources
 
+  
   namespace :admin do
     resources :users do
       member do
