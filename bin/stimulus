@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/environment'
+
+# Stimulus controller generator
+# Usage: bin/stimulus test
+#    or: bin/stimulus product_filter
+
+controller_name = ARGV[0]
+
+if controller_name.nil? || controller_name.empty?
+  puts "❌ Error: Please provide a controller name"
+  puts "Usage: bin/stimulus name"
+  puts "Example: bin/stimulus test"
+  exit 1
+end
+
+# Convert to snake_case for file and registration
+file_name = controller_name.underscore
+class_name = controller_name.camelize
+
+controller_file = "app/javascript/controllers/#{file_name}_controller.js"
+stimulus_file = "app/javascript/stimulus.js"
+
+# Check if controller already exists
+if File.exist?(controller_file)
+  puts "❌ Error: Controller already exists at #{controller_file}"
+  exit 1
+end
+
+# Create the controller file
+controller_content = <<~JAVASCRIPT
+  import { Controller } from "@hotwired/stimulus"
+
+  // Connects to data-controller="#{file_name.tr('_', '-')}"
+  export default class extends Controller {
+    static targets = []
+    static values = {}
+    
+    connect() {
+      console.log("#{class_name} controller connected!")
+    }
+    
+    // Add your methods here
+  }
+JAVASCRIPT
+
+File.write(controller_file, controller_content)
+puts "✅ Created #{controller_file}"
+
+# Add registration to stimulus.js
+stimulus_content = File.read(stimulus_file)
+
+# Create import and registration lines
+import_line = "import #{class_name}Controller from \"controllers/#{file_name}_controller\""
+register_line = "application.register(\"#{file_name.tr('_', '-')}\", #{class_name}Controller)"
+
+# Check if already registered
+if stimulus_content.include?(import_line)
+  puts "⚠️  Controller already registered in stimulus.js"
+else
+  # Find the last import or after application.register("hello"...)
+  insert_after = stimulus_content.index('application.register("hello"')
+  
+  if insert_after
+    # Find the end of that line
+    line_end = stimulus_content.index("\n", insert_after)
+    
+    # Insert new lines after it
+    new_content = stimulus_content[0..line_end] + 
+                  "\n" + import_line + "\n" + register_line +
+                  stimulus_content[line_end+1..-1]
+    
+    File.write(stimulus_file, new_content)
+    puts "✅ Registered controller in #{stimulus_file}"
+  else
+    puts "⚠️  Please manually add these lines to #{stimulus_file}:"
+    puts ""
+    puts "  #{import_line}"
+    puts "  #{register_line}"
+  end
+end
+
+puts ""
+puts "🎉 Stimulus controller '#{file_name.tr('_', '-')}' created!"
+puts ""
+puts "📝 Usage in views:"
+puts ""
+puts "  <div data-controller=\"#{file_name.tr('_', '-')}\">"
+puts "    <!-- your content -->"
+puts "  </div>"
+puts ""
+puts "🔄 Refresh your browser to see it work!" 

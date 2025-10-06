@@ -12,20 +12,20 @@ footer {
   .syftet-copyright {
     font-size: 12px;
     padding: 27px 0;
-    background: #fff;
-    color: #31353d;
+    background: rgba(20,23,29,0.98);
+    color: white;
   }
   .text-copyright {
     text-transform: uppercase;
     line-height: 30px;
     a {
-      color: $primary_gray;
+      color: whitesmoke;
     }
   }
 
   .syftet-footer-profile {
     .news-letter-wrapper {
-      background: asset-url('bg_img/color-colection.jpg') top left/cover no-repeat scroll;
+      background: asset-url('home_bg.jpg') top left/cover no-repeat scroll;
       background-position: center;
       background-attachment: fixed;
     }
@@ -153,8 +153,8 @@ footer {
     }
   }
   .footer-information {
-    background-color: #fbfbfb;
-    border-bottom: 1px solid #eeeeee;
+    background-color: rgba(20,23,29,0.98);
+    border-bottom: 1px solid #5a5858;
     .about-company-social {
       padding-top: 50px;
       padding-bottom: 20px;
@@ -162,7 +162,7 @@ footer {
         padding-top: 10px;
         padding-bottom: 10px;
         p {
-          color: #555;
+          color: #bdbbbb;
           font-size: 13px;
         }
       }
@@ -192,7 +192,7 @@ footer {
       padding-bottom: 20px;
     }
       h3 {
-        color: #555;
+        color: #eae5e5;
         font-size: 16px;
         font-weight: 600;
         margin-top: 0;
@@ -213,9 +213,9 @@ footer {
             text-transform: capitalize;
             display: inline-block;
             padding: 5px 0;
-            color: #555;
+            color: #bdbbbb;
             &:hover {
-              color: #31353d;
+              color: white;
               text-decoration: underline !important;
               cursor: pointer;
             }

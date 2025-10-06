@@ -1,4 +1,4 @@
-<%= form_with(model: admin_category, local: true) do |form| %>
+<%= form_with(model: admin_category, local: true, multipart: true) do |form| %>
     <% if admin_category.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(admin_category.errors.count, "error") %> prohibited this admin_category from being
@@ -20,6 +20,18 @@
     <div class="form-group field">
       <%= form.label :description %>
       <%= form.text_area :description, id: :admin_category_description, class: 'form-control' %>
+    </div>
+
+    <!-- Add image upload field -->
+    <div class="form-group field">
+      <%= form.label :image, 'Category Image' %>
+      <%= form.file_field :image, id: :admin_category_image, class: 'form-control' %>
+      <% if admin_category.image.present? %>
+        <div class="mt-2">
+          <p>Current image:</p>
+          <%= image_tag admin_category.image_url(:thumb), class: 'img-thumbnail', style: 'max-width: 150px;' %>
+        </div>
+      <% end %>
     </div>
 
     <% unless form.object.new_record? %>

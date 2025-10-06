@@ -1,230 +1,78 @@
-<header class="site-header header-default" role="banner">
-<!--  Mobile Navigation bar-->
-  <div class="topbar-mobile hidden-lg hidden-md">
-    <div class="active-mobile pull-right">
-      <button data-toggle="offcanvas" class="btn-mobile-toggle btn-offcanvas btn-toggle-canvas offcanvas" type="button">
-        <i class="fa fa-bars"></i>
+<nav class="navbar navbar-default">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </button>
-    </div>
-    <div class="topbar-inner pull-right">
-      <div class="active-mobile search-popup pull-right">
-        <span class="fa fa-search"></span>
+      <!-- Navbar Brand -->
+      <%= link_to root_path, class: "navbar-brand brand" do %>
+        <div class="nav-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40.000000" height="40.000000" fill="none">
+            <defs>
+              <image id="image_1" width="40.000000" height="40.000000" xlink:href="data:image/png;base64,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" />
+              <pattern id="pattern_1" width="1.000000" height="1.000000" image-fill-type="stretch" patternContentUnits="objectBoundingBox">
+                <use transform="matrix(0.02375,0,0,0.025,0.025,-0)" xlink:href="#image_1" />
+              </pattern>
+            </defs>
+            <rect id="SYFMATE Logo Delivery Person" width="40.000000" height="40.000000" x="0.000000" y="0.000000" fill="url(#pattern_1)" />
+          </svg>
 
-        <div class="active-content">
-          <form action="<%= products_path %>" method="get" class="input-group search-category">
-            <input name="name" maxlength="60" class="form-control custom-form-control mobile-search-design" type="text" size="20" placeholder="Search Products">
-
-            <div class="input-group-btn">
-              <label class="btn btn-link btn-search">
-                <span class="title-search hidden">Search</span>
-                <input type="submit" class="fa searchsubmit" value="">
-              </label>
-              <input type="hidden" name="post_type" value="product">
-            </div>
-          </form>
         </div>
-      </div>
-
-      <div class="active-mobile setting-popup pull-left">
-        <%= link_to current_user.present? ? my_account_path : account_registration_path, style: 'padding: 0; color: #ffffff' do %>
-          <span class="fa fa-user"></span>
-        <% end %>
-      </div>
-
-      <div class="active-mobile pull-left cart-popup custom-cart">
-        <span class="fa fa-shopping-cart"></span>
-        <span class="mini-cart-items mobile-mini-cart-count"><%= line_item_count %></span>
-
-        <div class="active-content custom-dropdown-content shopping-cart-doopdown">
-          <%= render 'shared/cart_items' %>
+        <div class="name_info">
+          <h1>SyfMate</h1>
+          <p>Your Safe Mate for Health & Home</p>
         </div>
-      </div>
-    </div>
-    <div class="active-mobile setting-popup pull-right">
-      <%= link_to root_path, style: 'color: #ffffff' do %>
-        <i class="fa fa-home"></i>
       <% end %>
     </div>
-  </div>
 
-
-  <!--Desktop Navigation bar-->
-  <section class="header-main clearfix">
-    <div class="container-fuild">
-      <section class="respon-menu main-menu no-sticky clearfix">
-        <div class="col-lg-3 col-md-5 col-xs-12">
-          <div id="syftet-mainmenu" class="syftet-mainmenu">
-            <div class="inner navbar-mega-simple">
-              <nav data-duration="400" class="hidden-xs hidden-sm slide animate navbar navbar-mega reset-margin" role="navigation">
-                <div class="collapse navbar-collapse navbar-mega-collapse nopadding">
-                  <ul id="primary-menu" class="nav navbar-nav megamenu">
-                    <li class="menu-item site-logo-link">
-                      <%= link_to root_path do %>
-                        <%= image_tag 'top_logo.png', class: 'img-fluidxx' %>
-                      <% end %>
-                    </li>
-                    <li class="menu-item">
-                      <%= link_to promotion_products_path('discount'), class: 'text-link' do %>
-                        <%= t(:discount) %>
-                        <span class="bubble-text-label label-hot"><%= t(:hot) %></span>
-                      <% end %>
-                    </li>
-
-                  </ul>
-                </div>
-              </nav>
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav ul-left">
+        <li class="nav-item bars hidden-md hidden-sm hidden-xs">
+          <%= link_to "javascript:void(0)", class: "nav-link icon" do %>
+            <i class="fa-solid fa-bars"></i>
+          <% end %>
+        </li>
+        <li class="nav-item nav-location hidden-md hidden-sm hidden-xs">
+          <%= link_to "javascript:void(0)", class: "nav-link" do %>
+            <i class="fa-solid fa-location-dot"></i> Deliver to: <span style="font-weight: bold; color: black;">DOHS, Mirpur, Dhaka</span>
+          <% end %>
+        </li>
+        <li class="nav-item search-box">
+          <form class="form-inline my-2 my-lg-0">
+            <div class="search-wrapper">
+              <button type="submit" class="search-icon-btn">
+                <i class="fa-solid fa-search"></i>
+              </button>
+              <input class="form-control search-input" type="search" placeholder="Search for medicine and products" aria-label="Search">
             </div>
-          </div>
-        </div>
-        <!-- Search bar -->
-        <div class="col-lg-6 col-md-4 col-xs-12 hidden-xs hidden-sm">
-          <div class="toggle-overlay-container">
-            <div class="search-box">
-              <form method="get" id="search_form" class="input-group search-category" action="<%= products_path %>">
-                <input name="name" id="search-term-name" maxlength="60" class="form-control search-category-input" type="text" size="20" placeholder="Search Products" autocomplete="false">
+          </form>
+        </li>
+      </ul>
 
-                <div class="input-group-btn">
-                  <label class="btn btn-link btn-search submit-search">
-                    <span class="title-search hidden">Search</span>
-                    <input type="submit" class="fa searchsubmit" value="">
-                  </label>
-                </div>
-              </form>
-            </div>
-            <div class="dropdown-toggle-button" data-target=".toggle-overlay-container"></div>
-          </div>
-        </div>
+      <!-- Right UL -->
+      <ul class="nav navbar-nav navbar-right ul-right">
+        <li class="nav-item">
+          <%= link_to "javascript:void(0)", class: "nav-link icon" do %>
+            <i class="fa-regular fa-user"></i>
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "javascript:void(0)", class: "nav-link icon" do %>
+            <i class="fa-regular fa-heart"></i>
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "javascript:void(0)", class: "nav-link icon" do %>
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="top-number">3</span>
+          <% end %>
+        </li>
+      </ul>
 
-        <div class="respon-link col-lg-3 col-md-3 col-xs-12 hidden-xs hidden-sm">
-          <div class="header-right clearfix">
-            <div class="opal-topcart pull-right">
-              <div id="cart" class="custom-cart dropdown version-1 box-top">
-                <%= link_to '#', class: 'dropdown-toggle mini-cart box-wrap', 'data-toggle' => 'dropdown', 'aria-expandedx' => 'true' do %>
-                      <span class="icon-basket icons">
-                      <i class="fa fa-shopping-cart"></i>
-                      <span class="mini-cart-items"><%= line_item_count %></span>
-                        <% if current_order %>
-                        <span class="price-amount amount mini-cart-total">
-                            <%= amount_with_currency(current_order.total) %>
-                          </span>
-                        <% end %>
-                    </span>
-                <% end %>
-                <div class="dropdown-menu custom-dropdown-content" id="shopping-cart-doopdown">
-                  <%= render 'shared/cart_items' %>
-                </div>
-
-              </div>
-            </div>
-
-            <%= link_to wishlists_path, class: 'syftet-btn-wishlist pull-right' do %>
-              <i class="fa fa-heart-o" aria-hidden="true"></i>
-            <% end %>
-
-            <!--Search bar-->
-            <div id="search-container" class="search-box-wrapper pull-right">
-              <div class="opal-dropdow-search dropdown">
-                <a data-target=".bs-search-modal-lg" data-toggle="modal" class="search-focus btn dropdown-toggle dropdown-toggle-overlay">
-                  <i class="fa fa-search"></i>
-                </a>
-
-                <%= render 'shared/search_modal' %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
-  </section>
-</header>
-
-<!--Mobile Menu Sidebar-->
-<div id="syftet-off-canvas" class="opal-off-canvas sidebar-offcanvas hidden-lg hidden-md">
-  <div class="opal-off-canvas-body">
-    <div class="offcanvas-head bg-primary text-right">
-      <span>Menu</span>
-      <button type="button" class="btn btn-offcanvas btn-toggle-canvas btn-default" data-toggle="offcanvas">
-        <i class="fa fa-close"></i>
-      </button>
-    </div>
-    <nav class="navbar navbar-offcanvas navbar-static" role="navigation">
-      <div class="navbar-collapse navbar-offcanvas-collapse">
-        <ul id="main-menu-offcanvas" class="nav navbar-nav">
-          <li class="menu-item">
-            <%= link_to root_path do %>
-              <i class="fa fa-home"></i> <%= t(:home) %>
-            <% end %>
-          </li>
-
-          <li class="menu-item">
-            <a href="<%= promotion_products_path('discount') %>">
-              <%= t(:discount) %>
-            </a>
-          </li>
-
-          <%# Taxonomy.all.each do |taxm| %>
-
-          <li class="dropdown">
-            <%#= link_to '#', class: 'dropdown-toggle', data: {toggle: 'dropdown'} do %>
-            <%#= taxm.name %> <b class="caret"></b>
-            <%# end %>
-            <ul class="dropdown-menu">
-              <%# taxm.taxons.where('parent_id IS NULL').each do |taxon| %>
-              <%#= raw draw_mobile_menu_tree(taxon) %>
-              <%# end %>
-            </ul>
-          </li>
-          <%# end %>
-
-          <li class="menu-item">
-            <a href="<%= promotion_products_path('new') %>">
-              <%= t(:new_arrival) %>
-            </a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <%= t(:page) %> <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <%= link_to t(:about_us), about_us_path, class: 'dropdown-toggle' %>
-              </li>
-              <li>
-                <%= link_to 'Customer Support', contact_us_path, class: 'dropdown-toggle' %>
-              </li>
-              <li>
-                <%= link_to 'Frequent Ask Question', faq_path, class: 'dropdown-toggle' %>
-              </li>
-              <li>
-                <%= link_to 'Secure Shopping', secure_shopping_path, class: 'dropdown-toggle' %>
-              </li>
-              <li>
-                <a href="/blogs">
-                  Our <%= t(:blog) %>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-
   </div>
-</div>
-
-<script type="text/javascript">
-    $(function () {
-        $('.btn-toggle-canvas').click(function () {
-            $('#page').find('.syftet-page-inner').toggleClass('active');
-        });
-
-        $('.dropdown-submenu b.caret').on("click", function (e) {
-            $(this).parent().next('ul').toggle();
-            e.stopPropagation();
-            e.preventDefault();
-        });
-        //Cart Dropdown
-//        $(".dropdown-toggle").dropdown();
-    });
-</script>
+</nav>

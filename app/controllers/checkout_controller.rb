@@ -34,7 +34,7 @@ class CheckoutController < ApplicationController
         end
       end
     else
-      render :edit#@order.state
+      render :edit #@order.state
     end
   end
 

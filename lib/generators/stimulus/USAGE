@@ -1,0 +1,17 @@
+Description:
+    Creates a Stimulus controller with automatic registration
+
+Example:
+    rails generate stimulus cart
+
+    This will create:
+        app/javascript/controllers/cart_controller.js
+        
+    And automatically:
+        - Register it in app/javascript/stimulus.js
+        - Add pin to config/importmap.rb
+
+Usage Examples:
+    rails g stimulus product_filter
+    rails g stimulus image_gallery
+    rails g stimulus dropdown 

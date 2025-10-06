@@ -13,6 +13,7 @@
 #  parent_id   :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  image       :string
 #
 
 class Admin::Category < ApplicationRecord
@@ -22,6 +23,9 @@ class Admin::Category < ApplicationRecord
   validates_length_of :description,  :maximum => 255
   self.table_name = 'admin_categories'
 
+  # Add CarrierWave mount for image uploads
+  mount_uploader :image, Admin::CategoryImageUploader
+
   after_save :set_permalink
 
   has_many :sub_categories, class_name: 'Admin::Category', foreign_key: :parent_id, dependent: :destroy
@@ -29,13 +33,22 @@ class Admin::Category < ApplicationRecord
   has_many :product_categories, dependent: :destroy
   has_many :products, through: :product_categories
 
+  # Add image_url method for different sizes
+  def image_url(size = :thumb)
+    if image.present?
+      image.url(size)
+    else
+      # Default placeholder image if no image is uploaded
+      '/assets/fallback/empty_product.svg'
+    end
+  end
+
   private
 
   def set_permalink
-    if category.present?
-      update_column(:permalink, category.permalink + '/' + slug)
-    else
-      update_column(:permalink, slug)
+    if permalink.blank?
+      self.permalink = name.parameterize
+      self.save
     end
   end
 
@@ -46,4 +59,8 @@ class Admin::Category < ApplicationRecord
   # def self.parent
     # self.where('parent_id is present')
   # end
+
+  def self.menu
+    self.where('parent_id is NULL')
+  end
 end

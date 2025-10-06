@@ -328,4 +328,6 @@ Rails.application.routes.draw do
       post '/checkout/update_order/:state', to: 'checkout#update_order', as: :update_checkout
     end
   end
+  get 'search', to: 'home#search'
 end
+

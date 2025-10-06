@@ -1,35 +1,41 @@
 <% content_for :slider do %>
-  <%= render 'shared/top_slider' %>
+  <div class="container slider-container">
+    <div class="row">
+        <%= render "shared/top_slider" %>
+    </div>
+  </div>
 <% end %>
 
-<div class="slugan-items">
-  <div class="row">
-    <div class="col-sm-3">
-      <%= image_tag 'quality.png', class: 'img-fluid' %>
-
-      <p>High Quality + Reasonable Price</p>
+<div class="container">
+  <div class="row emergency-section">
+    <div class="col-md-6">
+      <div class="addressless-delivery">
+        <div class="addressless-delivery-title">
+          <i class="fa-solid fa-location-crosshairs"></i>  <h5>Addressless Delivery</h5>
+        </div>
+        <p>Get seamless delivery experience now, order from anywhere and we will reach you in no time.</p>
+        <%= link_to "Order Now", "javascript:void(0)", class: "order-btn" %>
+      </div>
     </div>
-
-    <div class="col-sm-3">
-      <%= image_tag 'own-factory.png', class: 'img-fluid' %>
-
-      <p>Imported Product</p>
-    </div>
-
-    <div class="col-sm-3">
-      <%= image_tag 'money-refund.png', class: 'img-fluid' %>
-
-      <p>100% Money Refund</p>
-    </div>
-
-    <div class="col-sm-3">
-      <%= image_tag 'truck.png', class: 'img-fluid' %>
-
-      <p>Custom Order & Fast Delivery</p>
+    <div class="col-md-6">
+      <div class="emergency-medicine">
+        <h5>Emergency Medicine Request</h5>
+        <p>Upload you prescription for a direct order, or call us to speak with and executive for urgent needs.</p>
+        <div class="emergency-medicine-delivery">
+          <%= link_to "#", class: "call-now-btn" do %>
+            <i class="fa-solid fa-phone"></i><span class="emergency-medicine-call">Call Now</span>
+          <% end %>
+          <%= link_to "#", class: "upload-prescription-btn" do %>
+            <i class="fa-solid fa-file-circle-plus"></i><span class="emergency-medicine-call">Upload Prescription</span>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
+<!--Shop by Categories-->
+<%= render "shared/shop_by_categories" %>
+<!--Featured Products-->
 <!--<section class="featured-products">-->
 <!--  <div class="view-more-products">-->
 <!--    <div class="overlay-bg">-->
@@ -47,16 +53,14 @@
 
 
 <div class="container">
-
-
   <section class="featured-products" style="padding-top: 35px;">
-    <!--    <h3 class="title public-title">-->
-    <%#= t(:featured_products) %>
-    <!--    </h3>-->
+    <h3 class="title public-title">
+      <%= t(:featured_products) %>
+    </h3>
 
     <div class="product-lists clearfix">
       <div class="row">
-        <% @featured_products.each do |product| %>
+        <% @featured_products.first(10).each do |product| %>
           <div class="product-wrapper product col-sm-6 col-md-3">
             <%= render 'products/product', product: product %>
           </div>
@@ -71,25 +75,18 @@
   </section>
 
   <%#= render 'top_category_promo' %>
-  <a href="/promo/discount/products" style="display: block;">
-    <%= image_tag('offer_banner.png', class: 'image-responsive', style: 'margin: 20px 0; width: 100%; max-width: 100%') %>
-  </a>
+<!--  <a href="/promo/discount/products" style="display: block;">-->
+    <%#= image_tag('offer_banner.png', class: 'image-responsive', style: 'margin: 20px 0; width: 100%; max-width: 100%') %>
+<!--  </a>-->
 
 </div>
 
-<!--<section class="row featured-banner">-->
-<!--  <div class="hidden-xs">-->
-<!--    <div class="effect-v3x" style="text-align: center">-->
-<!--      <a href="/producsts">-->
-<%#= image_tag('trends.jpg', style: "width: 100%") %>
-<!--      </a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
 
+<!--Offered Products/ New Arrivals-->
 <div class="container">
   <%= render 'home/new_arrival' %>
 </div>
+
 <!--<section class="we-love-landing clearfix">-->
 <!--  <div class="row">-->
 <!--    <div class="col-sm-12">-->
@@ -133,6 +130,7 @@
 <%= render 'gallery' if @gallery_images.present? %>
 
 <%= render 'blogs' if @blogs.present? %>
+
 <script type="text/javascript">
     $(function () {
         // $("img.lazy").lazyload();

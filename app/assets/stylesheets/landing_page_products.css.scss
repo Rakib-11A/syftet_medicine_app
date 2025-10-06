@@ -72,9 +72,6 @@
   }
 }
 
-.featured-banner {
-  margin-bottom: 30px;
-}
 
 .we-love-landing {
   .wrapper {
@@ -145,24 +142,34 @@
   .brand_list {
     .brand_wrapper {
       padding-bottom: 30px;
-
       a {
         .brand_item {
+          min-height: 155px;
           text-align: center;
-          font-size: 17px;
           padding: 10px 0;
-          //border: 1px solid #c7c2c2;
-          font-weight: 600;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
           color: #676363;
-
           .brand_name {
             margin-top: 15px;
+            h4 {
+              color: #2c2c2c;
+              font-weight: bold;
+            }
           }
+        }
+        img{
+          max-width: 70px;
+          min-height: 70px;
+          border-radius: 50%;
+          width: 100%;
+          height: 100%;
+          border: 1px solid #eae5e5;
         }
 
         &:hover {
           .brand_item {
-            box-shadow: 2px 2px 5px 3px #d0d2d8;
+            transform: translateY(-4px);
+            transition: transform 0.3s ease;
           }
         }
       }

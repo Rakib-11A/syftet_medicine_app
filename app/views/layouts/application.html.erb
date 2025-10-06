@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> Armoiar | Beauty Product </title>
+  <title> SYFMATE | Medical Product </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
+  <meta name="description" content="Syfmate brings you thousands of medical items in over several different major categories.">
   <meta property="og:locale" content="en_US">
-  <meta property="keyword" content="beauty product, skin care, original">
+  <meta property="keyword" content="medicine, beauty product, skin care, original">
   <meta name="facebook-domain-verification" content="">
-  <meta property="og:url" content="https://armoiar.com">
-  <meta property="twitter:url" content="https://armoiar.com">
+  <meta property="og:url" content="https://syfmate.com">
+  <meta property="twitter:url" content="https://syfmate.com">
   <meta property="og:type" content="website">
   <meta property="fb:app_id" content="">
-  <meta name="twitter:title" content="Armoiar | Beauty Product">
-  <meta property="og:title" content="Armoiar | Quality Product">
+  <meta name="twitter:title" content="Syfmate | Beauty Product">
+  <meta property="og:title" content="Syfmate | Quality Product">
   <meta name="image" content="<%= image_url('trends.jpg') %>">
   <meta name="twitter:image:src" content="<%= image_url('trends.jpg') %>">
   <meta name="twitter:image" content="<%= image_url('trends.jpg') %>">
   <meta property="og:image" content="<%= image_url('trends.jpg')%>">
-  <meta name="twitter:description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
-  <meta property="og:description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
+  <meta name="twitter:description" content="Syfmate brings you thousands of grocery items in over several different major categories.">
+  <meta property="og:description" content="Syfmate brings you thousands of grocery items in over several different major categories.">
   <meta name="twitter:creator" content="@armoiar">
-  <meta name="twitter:site" content="@armoiar_products">
-  <meta property="og:site_name" content="Armoiar">
+  <meta name="twitter:site" content="@Syfmate_products">
+  <meta property="og:site_name" content="Syfmate">
   <meta name="twitter:card" content="summary">
   <%= csrf_meta_tags %>
   <%= favicon_link_tag 'favicon.ico' %>
   <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
   <%= render 'shared/cdn_resources' %>
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
+  <%= javascript_include_tag 'application' %>
+  <%= javascript_importmap_tags %>
 </head>
 
 <body>
 <div id="page">
   <%= render 'shared/notification' %>
   <%= render 'shared/custom_flash' %>
-  <%#= render 'shared/subscription_popup' %>
+  <div class="top_nav">
+    <%= render "shared/top_nav" %>
+  </div>
   <div class="syftet-page-inner row-offcanvas row-offcanvas-left">
-    <div class="top-nav">
-      <div class="containerxx">
-        <%= render 'shared/top_nav' %>
-      </div>
-    </div>
     <%= render 'shared/main_menu' %>
+    <div id="navbar-spacer" class="navbar-spacer"></div>
     <%= yield :slider %>
     <div class="<%= 'container' unless (controller_name == 'home' && action_name == 'index') %>">
       <%= yield %>
@@ -70,5 +69,7 @@
 <a id="btn-contact-top" href="<%= contact_us_path %>" title="Contact us">
   <i class="fa fa-envelope"></i>
 </a>
+<!-- Load Bootstrap JS after jQuery/application.js to ensure mobile toggle works -->
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 </body>
 </html>

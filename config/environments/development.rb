@@ -72,6 +72,9 @@ Rails.application.configure do
   config.assets.digest = false
   config.assets.compile = true
   config.assets.cache_store = :null_store
+  
+  # Don't check for precompiled assets - importmap handles app/javascript
+  config.assets.check_precompiled_asset = false
 end
 
 

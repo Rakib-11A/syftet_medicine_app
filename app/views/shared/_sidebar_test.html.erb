@@ -1,0 +1,25 @@
+<!-- Test Sidebar Button -->
+<button onclick="testSidebar()" style="position: fixed; top: 100px; right: 20px; z-index: 10000; background: red; color: white; padding: 10px;">
+  Test Sidebar
+</button>
+
+<script>
+function testSidebar() {
+  console.log("Testing sidebar...");
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  if (sidebar) {
+    console.log("Sidebar found:", sidebar);
+    console.log("Current classes:", sidebar.classList.toString());
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+    document.body.classList.toggle('sidebar-open');
+    
+    console.log("After toggle - classes:", sidebar.classList.toString());
+  } else {
+    console.error("Sidebar not found!");
+  }
+}
+</script>

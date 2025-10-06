@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def index
+    @categories = Admin::Category.where("parent_id IS NULL")
     @featured_products = Product.featured_products.includes(:reviews).order(id: :desc)
     # @new_arrivals = Product.new_arrivals.includes(:reviews)
     @new_arrivals = Product.where(discountable: true).includes(:reviews)
@@ -13,5 +14,17 @@ class HomeController < ApplicationController
   def sitemap
     @products = Product.all
     @domain = "#{request.protocol}#{request.host_with_port}"
+  end
+
+  def search
+    @search_term = params[:search]
+    if @search_term.present?
+      @products = Product.where("name ILIKE ? OR description ILIKE ?", 
+                                "%#{@search_term}%", "%#{@search_term}%")
+                        .includes(:reviews)
+                        .limit(20)
+    else
+      @products = Product.featured_products.includes(:reviews).limit(20)
+    end
   end
 end

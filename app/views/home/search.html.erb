@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Search Results</h2>
+      
+      <% if @search_term.present? %>
+        <p>Search results for: "<strong><%= @search_term %></strong>"</p>
+      <% end %>
+      
+      <% if @products.present? %>
+        <div class="row">
+          <% @products.each do |product| %>
+            <div class="col-md-3 col-sm-6 mb-4">
+              <div class="card">
+                <% if product.images.any? %>
+                  <%= image_tag product.images.first.file.url(:product), class: "card-img-top", alt: product.name %>
+                <% else %>
+                  <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fa fa-image fa-3x text-muted"></i>
+                  </div>
+                <% end %>
+                
+                <div class="card-body">
+                  <h5 class="card-title"><%= product.name %></h5>
+                  <p class="card-text"><%= truncate(product.description, length: 100) %></p>
+                  <p class="card-text">
+                    <strong>Price: <%= number_to_currency(product.price) %></strong>
+                  </p>
+                  <%= link_to "View Details", product_path(product), class: "btn btn-primary" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          <h4>No products found</h4>
+          <p>Try searching with different keywords or browse our categories.</p>
+          <%= link_to "Browse All Products", root_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

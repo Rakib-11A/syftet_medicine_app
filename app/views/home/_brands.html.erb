@@ -11,12 +11,12 @@
 
           <div class="brand_list">
             <% @brands.each do |brand| %>
-              <div class="col-sm-3 brand_wrapper">
+              <div class="col-sm-3 col-md-2 brand_wrapper">
                 <%= link_to get_brand_url(brand.permalink) do %>
                   <div class="brand_item">
-                    <%= image_tag brand.image_url(:mini), height: 70 %>
+                    <%= image_tag brand.image_url(:thumb) %>
                     <div class="brand_name">
-                      <%= brand.name %>
+                      <h4><%= brand.name %></h4>
                     </div>
                   </div>
                 <% end %>

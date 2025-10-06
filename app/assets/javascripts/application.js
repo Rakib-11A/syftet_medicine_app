@@ -16,6 +16,7 @@
 //= require lightgallery.min
 //= require bootstrap-datepicker
 //= require bootstrap-datetimepicker
+//= require sticky_navigation
 //= require_tree .
 
 $(function () {
