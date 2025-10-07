@@ -1,70 +1,35 @@
-<div class="product-block">
-  <figure>
-    <a title="<%= product.name %>" href="<%= product_path(product) %>" class="product-image">
+<div class="featured-card">
+  <div class="fc-image">
+    <a title="<%= product.name %>" href="<%= product_path(product) %>">
       <%= product_preview_image(product) %>
     </a>
+  </div>
 
-    <div class="wrap-add-whishlist clearfix">
-      <div class="add-to-wishlist wishlist-product-<%= product.id %>">
-        <%= raw wishlist_link(product.id) %>
-      </div>
-    </div>
+  <div class="fc-body">
+    <h5 class="fc-title"><%= link_to product.name, product_path(product) %></h5>
+    <% if product.description.present? %>
+      <p class="fc-desc"><%= truncate(strip_tags(product.description), length: 100) %></p>
+    <% end %>
 
-    <div class="button-action clearfix">
-      <div class="button-groups">
-        <div class="add-cart">
-          <% if product.total_on_hand > 0 %>
-            <%= render 'products/shared/add_to_cart_form', product: product %>
-          <% elsif product.pre_order == true %>
-            <%= render 'products/shared/add_to_cart_form', product: product %>
-          <% end %>
-        </div>
-        <div class="wrap-acction-group">
-          <div class="quick-view hidden-xs hidden-sm">
-            <a title="Quick view" href="#" data-action="<%= product_quickview_path(product) %>" class="quickview" data-toggle="modal" data-target="#quickview-modal">
-              <i class="fa fa-eye" title="Quick view"> </i>
-            </a>
-          </div>
-
-          <div class="yith-compare">
-            <%= link_to product_compare_path(product), title: 'Add to compare', class: 'compare', remote: true do %>
-              <i class="fa fa-refresh"></i>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </figure>
-  <% if product.discountable %>
-    <div class="promo-badge"><%= product.display_discount %></div>
-  <% end %>
-  <div class="meta">
-    <h3 class="name">
-      <%= link_to product.name, product_path(product) %>
-    </h3>
-
-    <div class="caption">
-      <div class="rating">
-        <div class="star-rating" data-rating="<%= average_rating(product) %>">
-          ******
-        </div>
-      </div>
-      <% if product.reward_point > 0 %>
-        <div class="rewards-point-wrapper" title="You will get <%= product.reward_point %> rewards point, If you purchased this product.">
-          <%= image_tag('trophy.png') %> <%= product.reward_point %>
-          <i class="fa fa-info-circle btn" data-container="body" data-toggle="popover" data-placement="top" data-content="You will get <%= product.reward_point %> rewards point, If you purchased this product."></i>
-        </div>
+    <div class="fc-price">
+      <% if product.discountable %>
+        <span class="fc-price-current"><%= amount_with_currency(product.price) %></span>
+        <span class="fc-price-old"><%= amount_with_currency(product.sale_price) %></span>
+      <% else %>
+        <span class="fc-price-current"><%= amount_with_currency(product.price) %></span>
       <% end %>
-      <span class="price">
-            <span class="amount">
-              <% if product.discountable %>
-                <%= amount_with_currency(product.price) %>
-                <span class="discount-amount"> <%= amount_with_currency(product.sale_price) %> </span>
-              <% else %>
-                <%= amount_with_currency(product.price) %>
-              <% end %>
-            </span>
-        </span>
+    </div>
+
+    <div class="fc-actions">
+      <% if product.total_on_hand > 0 || product.pre_order == true %>
+        <button class="fc-btn fc-btn-add-to-cart" onclick="addToCart(<%= product.id %>)">
+          <i class="fa fa-shopping-cart"></i> Add to Cart
+        </button>
+      <% else %>
+        <button class="fc-btn fc-btn-out-of-stock" disabled>
+          <i class="fa fa-times-circle"></i> Out of Stock
+        </button>
+      <% end %>
     </div>
   </div>
 </div>

@@ -10,7 +10,7 @@
 
     <div class="product-lists clearfix">
       <div class="row">
-        <% @new_arrivals.first(9).each do |product| %>
+        <% @new_arrivals.first(10).each do |product| %>
           <div class="col-sm-6 col-md-3">
             <%= render 'products/product', product: product %>
           </div>

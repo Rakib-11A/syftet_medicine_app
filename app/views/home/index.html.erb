@@ -6,7 +6,8 @@
   </div>
 <% end %>
 
-<div class="container">
+<!-- Emergency Section -->
+<div class="container es-container">
   <div class="row emergency-section">
     <div class="col-md-6">
       <div class="addressless-delivery">
@@ -22,63 +23,46 @@
         <h5>Emergency Medicine Request</h5>
         <p>Upload you prescription for a direct order, or call us to speak with and executive for urgent needs.</p>
         <div class="emergency-medicine-delivery">
-          <%= link_to "#", class: "call-now-btn" do %>
-            <i class="fa-solid fa-phone"></i><span class="emergency-medicine-call">Call Now</span>
-          <% end %>
-          <%= link_to "#", class: "upload-prescription-btn" do %>
-            <i class="fa-solid fa-file-circle-plus"></i><span class="emergency-medicine-call">Upload Prescription</span>
-          <% end %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= link_to "#", class: "call-now-btn" do %>
+                <i class="fa-solid fa-phone"></i><span class="emergency-medicine-call">Call Now</span>
+              <% end %>
+            </div>
+            <div class="col-md-6">
+              <%= link_to "#", class: "upload-prescription-btn" do %>
+                <i class="fa-solid fa-file-circle-plus"></i><span class="emergency-medicine-call">Upload Prescription</span>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <!--Shop by Categories-->
 <%= render "shared/shop_by_categories" %>
-<!--Featured Products-->
-<!--<section class="featured-products">-->
-<!--  <div class="view-more-products">-->
-<!--    <div class="overlay-bg">-->
-<!--      <h3> Now Quality And Service Is On Your Hand! </h3>-->
-<!--      <h5> Freedom to make a custom servicing and repairing. </h5>-->
-<!--      <p>-->
-<!--        Don't let it late. Quality, Price & Time are our concern to serve you.-->
-<!--      </p>-->
-<%#= link_to products_path, class: 'btn-more btn btn-warning' do %>
-<!--        <%#= t(:view_more) %> <i class="fa fa-plus"></i>-->
-<%# end %>
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
 
 
+<!-- Featured Product -->
 <div class="container">
   <section class="featured-products" style="padding-top: 35px;">
-    <h3 class="title public-title">
-      <%= t(:featured_products) %>
-    </h3>
+    <div class="product-header">
+      <h5>Featured Products</h5>
+      <%= link_to "View All", "#", class: "btn-right" %>
+    </div>
 
     <div class="product-lists clearfix">
       <div class="row">
-        <% @featured_products.first(10).each do |product| %>
+        <% @featured_products.first(4).each do |product| %>
           <div class="product-wrapper product col-sm-6 col-md-3">
             <%= render 'products/product', product: product %>
           </div>
         <% end %>
       </div>
     </div>
-    <div class="text-center">
-      <%= link_to products_path, class: 'btn-more' do %>
-        View More...
-      <% end %>
-    </div>
   </section>
-
-  <%#= render 'top_category_promo' %>
-<!--  <a href="/promo/discount/products" style="display: block;">-->
-    <%#= image_tag('offer_banner.png', class: 'image-responsive', style: 'margin: 20px 0; width: 100%; max-width: 100%') %>
-<!--  </a>-->
-
 </div>
 
 
@@ -86,44 +70,6 @@
 <div class="container">
   <%= render 'home/new_arrival' %>
 </div>
-
-<!--<section class="we-love-landing clearfix">-->
-<!--  <div class="row">-->
-<!--    <div class="col-sm-12">-->
-<!--      <div class="wrapper clearfix">-->
-<!--        <div class="col-sm-6">-->
-<!--          <div class="col-inner-container row">-->
-<!--            <div class="call-to-action">-->
-<!--              <div class="cta-desc">-->
-<!--                <h2>Do you love quality product?</h2>-->
-
-<!--                <div class="cta-text">A professional-looking tote for your everyday needs! This Wilsons Leather-->
-<!--                  tote has a canvas look with genuine leather trim and a structured silhouette. Its shiny gold-tone-->
-<!--                  hardware and two-tone design give it extra fashionable flair.-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="cta-button">-->
-<!--                <a href="/products">-->
-<!--                  discover <i class="fa fa-plus"></i>-->
-<!--                </a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-sm-6">-->
-<!--          <div class="row">-->
-<!--            <div class="single-image-fluid effect-v1">-->
-<!--              <a href="/products" title="" target="_self">-->
-<%#= image_tag('best_lips.jpg', style: 'width: 100%;') %>
-<!--              </a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
 
 <%= render 'brands' if @brands.present? %>
 
