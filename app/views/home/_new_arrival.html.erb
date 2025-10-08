@@ -1,7 +1,8 @@
 <section class="new-arrival">
   <div class="kc-col-container">
-    <div class="kc-elm kc-css-566045 kc-title-wrap ">
-      <h3 class="public-title mb20 pb10"> Offered Products </h3>
+    <div class="flash-sell-header">
+      <h5><i class="fa-solid fa-bolt-lightning"></i><span class="flash-title"> Flash Sell</span></h5>
+      <%= link_to "View All", "#", class: "btn-right" %>
     </div>
 
     <div class="kc-elm kc-css-603181 divider_line line-height-one">
@@ -10,7 +11,7 @@
 
     <div class="product-lists clearfix">
       <div class="row">
-        <% @new_arrivals.first(10).each do |product| %>
+        <% @new_arrivals.first(4).each do |product| %>
           <div class="col-sm-6 col-md-3">
             <%= render 'products/product', product: product %>
           </div>

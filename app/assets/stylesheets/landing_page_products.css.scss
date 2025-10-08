@@ -1,6 +1,35 @@
 @import "basic_vars";
 
-// ==== Category's style =====
+
+// ==== Flash Sell Style ====
+.flash-sell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  h5 {
+    color: rgba(31, 41, 55, 1);
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: var(--itemspacing-m, 32px);
+    letter-spacing: 0;
+    text-align: left;
+
+    i {
+      color: red;
+    }
+  }
+  .btn-right {
+    color: var(--Congress Blue, var(--color-azure-28, rgba(0, 61, 143, 1)));
+    font-size: 16px;
+    font-weight: 500;
+    line-height: var(--lineheight-24, 24px);
+    letter-spacing: 0;
+    text-align: left;
+  }
+}
+// ==== Category's Style =====
 .category-header {
   display: flex;
   justify-content: space-between;
@@ -168,7 +197,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
     background: #fafafa;
     img {
       width: 100%;
@@ -240,6 +268,7 @@
     }
     .fc-btn:active,
     form .btn:active,
+
     form input[type="submit"]:active {
       transform: translateY(1px);
     }
@@ -571,5 +600,36 @@
     .call-to-action {
       padding: 0 10% 10% 10%;
     }
+  }
+}
+
+//==== Customer Metrics Styles ====
+.customer-metrics {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 32px;
+  border-radius: 8px;
+  background: rgba(74, 158, 255, 0.24) !important;
+  h3 {
+
+
+    color: $primary_blue_fade;
+
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0;
+    text-align: center;
+  }
+  p {
+    color:rgba(107, 114, 128, 1);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+    letter-spacing: 0;
+    text-align: center;
   }
 }

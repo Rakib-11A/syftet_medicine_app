@@ -41,6 +41,11 @@
   </div>
 </div>
 
+<!--Offered Products/ New Arrivals-->
+<div class="container">
+  <%= render 'home/new_arrival' %>
+</div>
+
 <!--Shop by Categories-->
 <%= render "shared/shop_by_categories" %>
 
@@ -65,14 +70,21 @@
   </section>
 </div>
 
-
-<!--Offered Products/ New Arrivals-->
-<div class="container">
-  <%= render 'home/new_arrival' %>
+<!--Customer Metrics-->
+<div class="container customer-metrics">
+  <div class="current-user">
+    <h3>100K+</h3>
+    <p>Current Users</p>
+  </div>
+  <div class="current-user">
+    <h3>95%</h3>
+    <p>Positive Reviews</p>
+  </div>
+  <div class="current-user">
+    <h3>30 Min</h3>
+    <p>Avg. Delivery Time</p>
+  </div>
 </div>
-
-<%= render 'brands' if @brands.present? %>
-
 <%= render 'gallery' if @gallery_images.present? %>
 
 <%= render 'blogs' if @blogs.present? %>
