@@ -1,0 +1,24 @@
+<div class="container furry-container">
+  <div class="furry-head">
+    <h5>Essential for Furry Friends</h5>
+    <%= link_to "View All", "javascript:void(0)", class: "btn-right" %>
+  </div>
+  <div class="furry-content">
+    <% @furry_subcategories.each do |cat| %>
+      <div class="furry-wrapper ">
+        <%= link_to categories_path(cat.permalink.presence || cat.slug.presence || cat.name.to_s.parameterize) do %>
+          <div class="furry-image">
+            <%= image_tag cat.image_url(:large) if cat.respond_to?(:image_url) %>
+          </div>
+          <div class="furry-info">
+            <h5><%= cat.name %></h5>
+            <p><%= cat.description %></p>
+          </div>
+        <% end %>
+        <%= link_to categories_path(cat.permalink.presence || cat.slug.presence || cat.name.to_s.parameterize), class: "cart-button" do %>
+          Add to Cart
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

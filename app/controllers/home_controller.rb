@@ -9,6 +9,7 @@ class HomeController < ApplicationController
     @brands = Admin::Brand.where(is_active: true).where.not(image: nil).limit(12)
     @gallery_images = Admin::GalleryImage.all.order(:position).limit(20)
     @sliders = HomeSlider.all #.order(:position)
+    @furry_subcategories = Admin::Category.find_by(name: "Furry Friends").sub_categories
   end
 
   def sitemap

@@ -121,6 +121,132 @@
   }
 }
 
+/* ===== Essential for Furry Friends Styles ===== */
+.furry-container {
+  .furry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h5 {
+      color: rgba(31, 41, 55, 1);
+
+      font-size: 24px;
+      font-weight: 700;
+      line-height: var(--itemspacing-m, 32px);
+      letter-spacing: 0;
+      text-align: left;
+    }
+    .btn-right {
+      color: var(--Congress Blue, var(--color-azure-28, rgba(0, 61, 143, 1)));
+      font-size: 16px;
+      font-weight: 500;
+      line-height: var(--lineheight-24, 24px);
+      letter-spacing: 0;
+      text-align: left;
+    }
+  }
+  .furry-wrapper {
+    background: #fff;
+    border: 3px solid ghostwhite;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .furry-image {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background: #fafafa;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 6px;
+        transition: transform 0.4s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .furry-info {
+      padding: 15px;
+      text-align: center;
+
+      h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(31, 41, 55, 1);
+      }
+
+      p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: rgba(107, 114, 128, 1);
+        line-height: 1.5;
+      }
+    }
+
+    .cart-button {
+      display: block;
+      width: 90%;
+      margin: 10px auto 15px;
+      padding: 10px 0;
+      border-radius: 6px;
+      text-align: center;
+      background: rgba(0, 61, 143, 1);
+      color: #fff;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        background: #00308a;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+.furry-content {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
+// Responsive breakpoints
+@media (max-width: 992px) {
+  .furry-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .furry-content {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .furry-content {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
 // ==== Featured products Style ====
 .featured-products {
   margin-bottom: 40px;
@@ -631,5 +757,74 @@
     line-height: 14px;
     letter-spacing: 0;
     text-align: center;
+  }
+}
+
+//==== Customer Testimonial Styles ====
+.customer-testimonials {
+  .customer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .box-item {
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    background: var(--Catskill #94a0df, var(--color-grey-98, rgb(68, 127, 185)));
+  }
+  .customer-say {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(31, 41, 55, 1);
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: var(--itemspacing-m, 32px);
+    letter-spacing: 0;
+    text-align: center;
+  }
+  .customer-box {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
+    h5 {
+      color: var(--Ebony Clay, var(--color-azure-17, rgba(31, 41, 55, 1)));
+
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 0;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    .customer-star {
+      i {
+        color: gold;
+        line-height: 0;
+      }
+    }
+  }
+  .customer-avatar {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #d0d6f1;
+    border-radius: 50%;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .customer-reviews {
+    padding: 10px 0;
+    color: #857f7f;
+    line-height: 0;
+    p {
+      padding-top: 10px;
+    }
   }
 }

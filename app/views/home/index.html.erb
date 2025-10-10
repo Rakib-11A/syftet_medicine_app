@@ -49,7 +49,7 @@
 <!--Shop by Categories-->
 <%= render "shared/shop_by_categories" %>
 
-
+<%= render "shared/essential_for_furry_friends" %>
 <!-- Featured Product -->
 <div class="container">
   <section class="featured-products" style="padding-top: 35px;">
@@ -85,6 +85,10 @@
     <p>Avg. Delivery Time</p>
   </div>
 </div>
+
+<!--Customer Testimonial-->
+<%= render 'shared/customer_testimonial' %>
+
 <%= render 'gallery' if @gallery_images.present? %>
 
 <%= render 'blogs' if @blogs.present? %>
