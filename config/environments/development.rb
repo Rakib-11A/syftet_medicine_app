@@ -75,6 +75,15 @@ Rails.application.configure do
   
   # Don't check for precompiled assets - importmap handles app/javascript
   config.assets.check_precompiled_asset = false
+
+  # config/environments/development.rb
+
+  Rails.application.configure do
+    # Allow ngrok tunnel
+    config.hosts << "imposable-karie-straight.ngrok-free.dev"
+    # config.hosts << /[a-z0-9-]+\.ngrok-free\.dev/
+  end
+
 end
 
 

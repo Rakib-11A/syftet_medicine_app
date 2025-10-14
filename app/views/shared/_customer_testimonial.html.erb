@@ -2,72 +2,29 @@
   <div class="container">
     <h3 class="customer-say">What Our Customers Say</h3>
     <div class="customer-row">
-      <div class="col-md-4 box-item">
-        <div class="customer-box">
-          <div class="customer-avatar">
-            <%= image_tag "female-avater.png" %>
+      <% Review.first(3).each do |review| %>
+        <div class="customer-wrapper">
+          <div class="customer-img-info">
+            <div class="customer-avatar">
+              <%= image_tag "female-avater.png" %>
+            </div>
+            <div class="customer-info">
+              <div class="customer-name"><%= review.name %></div>
+              <div class="customer-star">
+                <% review.rating.times do %>
+                  <i class="fa-solid fa-star fa-sm"></i>
+                <% end %>
+              </div>
+            </div>
           </div>
-          <div>
-            <h5 class="customer-title">Anika Rahman</h5>
-            <p class="customer-star">
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-            </p>
+          <div class="review-text">
+            <%= review.text %>
           </div>
-        </div>
-        <div class="customer-reviews">
-          <h5>"incredibly fast delivery! i got my emergency medicine in under 30 minutes. A true lifesaver"</h5>
-          <p> <%= Date.today.strftime("%B %d, %Y") %></p>
-        </div>
-
-      </div>
-      <div class="col-md-4 box-item">
-        <div class="customer-box">
-          <div class="customer-avatar">
-            <%= image_tag "male-avater.png" %>
-          </div>
-          <div>
-            <h5 class="customer-title">Sabbir Karim</h5>
-            <p class="customer-star">
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-            </p>
+          <div class="review-date">
+            <%= review.created_at.strftime("%B %d, %Y") %>
           </div>
         </div>
-        <div class="customer-reviews">
-          <h5>"The website is very easy to use and I always find what I need. Great service and genuine products."</h5>
-          <p> <%= Date.today.strftime("%B %d, %Y") %></p>
-        </div>
-
-      </div>
-      <div class="col-md-4 box-item">
-        <div class="customer-box">
-          <div class="customer-avatar">
-            <%= image_tag "female-avater.png" %>
-          </div>
-          <div>
-            <h5 class="customer-title">Fahmida Alam</h5>
-            <p class="customer-star">
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-              <i class="fa-solid fa-star fa-sm"></i>
-            </p>
-          </div>
-        </div>
-        <div class="customer-reviews">
-          <h5>"I love the prescription upload feature. It saves so much time and hassle. Highly recommended!"</h5>
-          <p> <%= Date.today.strftime("%B %d, %Y") %></p>
-        </div>
-
-      </div>
+      <% end %>
     </div>
   </div>
 
