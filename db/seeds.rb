@@ -42,9 +42,9 @@ reviews_data = [
 ]
 
 reviews_data.each do |review_attributes|
-Review.find_or_create_by!(
-  email: review_attributes[:email],
-  product_id: review_attributes[:product_id]
+  Review.find_or_create_by!(
+    email: review_attributes[:email],
+    product_id: review_attributes[:product_id]
   ) do |review|
     review.name = review_attributes[:name]
     review.rating = review_attributes[:rating]
