@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class BlogsController < Admin::BaseController
-    before_action :set_blog, only: [:show, :edit, :update, :destroy]
+    before_action :set_blog, only: %i[show edit update destroy]
 
     # GET /blogs
     # GET /blogs.json
@@ -10,8 +12,7 @@ module Admin
 
     # GET /blogs/1
     # GET /blogs/1.json
-    def show
-    end
+    def show; end
 
     # GET /blogs/new
     def new
@@ -19,8 +20,7 @@ module Admin
     end
 
     # GET /blogs/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /blogs
     # POST /blogs.json
@@ -64,6 +64,7 @@ module Admin
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
       @blog = Blog.friendly.find(params[:id])
@@ -75,4 +76,3 @@ module Admin
     end
   end
 end
-

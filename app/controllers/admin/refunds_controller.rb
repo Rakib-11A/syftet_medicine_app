@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class RefundsController < BaseController
     before_action :load_order
-
 
     # rescue_from Core::GatewayError, with: :spree_core_gateway_error, only: :create TODO: Need to active
 
@@ -24,7 +25,7 @@ module Admin
       respond_to do |format|
         format.html do
           if @refund.save
-            flash[:success] = "Order Item Successfully returned"
+            flash[:success] = 'Order Item Successfully returned'
             redirect_to edit_admin_payment_method_path(@payment)
           else
             render :new

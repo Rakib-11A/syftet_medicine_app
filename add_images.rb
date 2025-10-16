@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Simple script to add images to products
-puts "��️ Adding images to products..."
+puts '��️ Adding images to products...'
 
 # Medical images by category
 images_by_category = {
@@ -20,23 +22,23 @@ default_images = ['medicine-pills.jpg', 'pharmaceutical.jpg', 'medical-product.j
 # Process each product
 Product.includes(:categories).each do |product|
   next if product.images.any?
-  
+
   category_name = product.categories.first&.name
   images = images_by_category[category_name] || default_images
-  
+
   # Add 3 images to each product
   images.first(3).each_with_index do |image_name, index|
     product.images.create!(
       position: index + 1,
       alt: "#{product.name} - #{image_name}",
-      content_type: "image/jpeg",
+      content_type: 'image/jpeg',
       width: 400,
       height: 400,
-      file_size: rand(50000..200000)
+      file_size: rand(50_000..200_000)
     )
   end
-  
+
   puts "✅ Added images to #{product.name}"
 end
 
-puts "🎉 Completed! Total images: #{Image.count}" 
+puts "🎉 Completed! Total images: #{Image.count}"

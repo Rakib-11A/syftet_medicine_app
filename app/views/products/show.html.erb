@@ -12,7 +12,7 @@
 <% end %>
 
 <% content_for :breadcrumb do %>
-  <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb(@product.name, '', '', {products: products_path}) %>
+  <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb(@product.name, '', '', { products: products_path}) %>
 <% end %>
 
 <div class="mt10 clearfix">

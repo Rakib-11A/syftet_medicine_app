@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: admin_suppliers_invoices_attachments
@@ -9,7 +11,13 @@
 #  updated_at :datetime         not null
 #
 
-class Admin::Suppliers::Invoices::Attachment < ApplicationRecord
-  mount_uploader :picture, Admin::SupplierInvoiceUploader
-  belongs_to :invoice , class_name: 'Admin::Suppliers::Invoice'
+module Admin
+  module Suppliers
+    module Invoices
+      class Attachment < ApplicationRecord
+        mount_uploader :picture, Admin::SupplierInvoiceUploader
+        belongs_to :invoice, class_name: 'Admin::Suppliers::Invoice'
+      end
+    end
+  end
 end

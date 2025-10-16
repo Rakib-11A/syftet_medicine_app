@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: payment_methods
@@ -12,19 +14,18 @@
 #  updated_at  :datetime         not null
 #
 
-class PaymentMethod::SslCommerz < PaymentMethod
-  PREFERENCES = [
-      {field: :store_id, type: :string, default: ''},
-      {field: :store_passwd, type: :string, default: ''},
-  ]
-  include Preferable
+class PaymentMethod::SslCommerz < ::PaymentMethod
+    PREFERENCES = [
+      { field: :store_id, type: :string, default: '' },
+      { field: :store_passwd, type: :string, default: '' }
+    ].freeze
+    include Preferable
 
-  def auto_capture?
-    true
-  end
+    def auto_capture?
+      true
+    end
 
-  def process
-    {state: 'Complete', response_code: 200, response_message: 'Payment success'}
-  end
-
- end
+    def process
+      { state: 'Complete', response_code: 200, response_message: 'Payment success' }
+    end
+end

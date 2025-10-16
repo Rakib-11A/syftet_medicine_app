@@ -1,49 +1,50 @@
 <% content_for :slider do %>
-  <div class="container slider-container">
+<div class="container slider-container">
     <div class="row">
         <%= render "shared/top_slider" %>
     </div>
-  </div>
+</div>
 <% end %>
 
 <!-- Emergency Section -->
 <div class="container es-container">
-  <div class="row emergency-section">
-    <div class="col-md-6">
-      <div class="addressless-delivery">
-        <div class="addressless-delivery-title">
-          <i class="fa-solid fa-location-crosshairs"></i>  <h5>Addressless Delivery</h5>
-        </div>
-        <p>Get seamless delivery experience now, order from anywhere and we will reach you in no time.</p>
-        <%= link_to "Order Now", "javascript:void(0)", class: "order-btn" %>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="emergency-medicine">
-        <h5>Emergency Medicine Request</h5>
-        <p>Upload you prescription for a direct order, or call us to speak with and executive for urgent needs.</p>
-        <div class="emergency-medicine-delivery">
-          <div class="row">
-            <div class="col-md-6">
-              <%= link_to "#", class: "call-now-btn" do %>
-                <i class="fa-solid fa-phone"></i><span class="emergency-medicine-call">Call Now</span>
-              <% end %>
+    <div class="row emergency-section">
+        <div class="col-md-6">
+            <div class="addressless-delivery">
+                <div class="addressless-delivery-title">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                    <h5>Addressless Delivery</h5>
+                </div>
+                <p>Get seamless delivery experience now, order from anywhere and we will reach you in no time.</p>
+                <%= link_to "Order Now", "javascript:void(0)", class: "order-btn" %>
             </div>
-            <div class="col-md-6">
-              <%= link_to "#", class: "upload-prescription-btn" do %>
-                <i class="fa-solid fa-file-circle-plus"></i><span class="emergency-medicine-call">Upload Prescription</span>
-              <% end %>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="col-md-6">
+            <div class="emergency-medicine">
+                <h5>Emergency Medicine Request</h5>
+                <p>Upload you prescription for a direct order, or call us to speak with and executive for urgent needs.</p>
+                <div class="emergency-medicine-delivery">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <%= link_to "#", class: "call-now-btn" do %>
+                            <i class="fa-solid fa-phone"></i><span class="emergency-medicine-call">Call Now</span>
+                            <% end %>
+                        </div>
+                        <div class="col-md-6">
+                            <%= link_to "#", class: "upload-prescription-btn" do %>
+                            <i class="fa-solid fa-file-circle-plus"></i><span class="emergency-medicine-call">Upload Prescription</span>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--Offered Products/ New Arrivals-->
 <div class="container">
-  <%= render 'home/new_arrival' %>
+    <%= render 'home/new_arrival' %>
 </div>
 
 <!--Shop by Categories-->
@@ -52,38 +53,38 @@
 <%= render "shared/essential_for_furry_friends" %>
 <!-- Featured Product -->
 <div class="container">
-  <section class="featured-products" style="padding-top: 35px;">
-    <div class="product-header">
-      <h5>Featured Products</h5>
-      <%= link_to "View All", "#", class: "btn-right" %>
-    </div>
+    <section class="featured-products" style="padding-top: 35px;">
+        <div class="product-header">
+            <h5>Featured Products</h5>
+            <%= link_to "View All", "#", class: "btn-right" %>
+        </div>
 
-    <div class="product-lists clearfix">
-      <div class="row">
-        <% @featured_products.first(4).each do |product| %>
-          <div class="product-wrapper product col-sm-6 col-md-3">
-            <%= render 'products/product', product: product %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </section>
+        <div class="product-lists clearfix">
+            <div class="row">
+                <% @featured_products.first(4).each do |product| %>
+                <div class="product-wrapper product col-sm-6 col-md-3">
+                    <%= render 'products/product', product: product %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </section>
 </div>
 
 <!--Customer Metrics-->
 <div class="container customer-metrics">
-  <div class="current-user">
-    <h3>100K+</h3>
-    <p>Current Users</p>
-  </div>
-  <div class="current-user">
-    <h3>95%</h3>
-    <p>Positive Reviews</p>
-  </div>
-  <div class="current-user">
-    <h3>30 Min</h3>
-    <p>Avg. Delivery Time</p>
-  </div>
+    <div class="current-user">
+        <h3>100K+</h3>
+        <p>Current Users</p>
+    </div>
+    <div class="current-user">
+        <h3>95%</h3>
+        <p>Positive Reviews</p>
+    </div>
+    <div class="current-user">
+        <h3>30 Min</h3>
+        <p>Avg. Delivery Time</p>
+    </div>
 </div>
 
 <!--Customer Testimonial-->
@@ -94,7 +95,7 @@
 <%= render 'blogs' if @blogs.present? %>
 
 <script type="text/javascript">
-    $(function () {
+    $(function() {
         // $("img.lazy").lazyload();
     });
 </script>

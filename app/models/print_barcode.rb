@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: print_barcodes
@@ -21,6 +23,4 @@ class PrintBarcode < ApplicationRecord
   belongs_to :user
   belongs_to :product
   belongs_to :print
-
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderContents
   attr_accessor :order, :currency
 
@@ -24,7 +26,7 @@ class OrderContents
 
   def update_cart(params)
     if order.update(filter_order_items(params))
-      order.line_items = order.line_items.select { |li| li.quantity > 0 }
+      order.line_items = order.line_items.select { |li| li.quantity.positive? }
       # Update totals, then check if the order is eligible for any cart promotions.
       # If we do not update first, then the item total will be wrong and ItemTotal
       # promotion rules would not be triggered.
@@ -40,7 +42,7 @@ class OrderContents
 
   private
 
-  def after_add_or_remove(line_item, options = {})
+  def after_add_or_remove(line_item, _options = {})
     persist_totals
     # shipment = options[:shipment]
     # shipment.present? ? shipment.update_amounts : order.ensure_updated_shipments
@@ -53,7 +55,9 @@ class OrderContents
 
   def filter_order_items(params)
     filtered_params = params.symbolize_keys
-    return filtered_params if filtered_params[:line_items_attributes].nil? || filtered_params[:line_items_attributes][:id]
+    if filtered_params[:line_items_attributes].nil? || filtered_params[:line_items_attributes][:id]
+      return filtered_params
+    end
 
     line_item_ids = order.line_items.pluck(:id)
 
@@ -66,7 +70,7 @@ class OrderContents
   end
 
   def order_updater
-    @updater ||= OrderUpdater.new(order)
+    @order_updater ||= OrderUpdater.new(order)
   end
 
   def persist_totals
@@ -74,12 +78,12 @@ class OrderContents
     order_updater.update
   end
 
-  def add_to_line_item(variant, quantity, options = {})
+  def add_to_line_item(variant, quantity, _options = {})
     line_item = order.line_items.find_by_variant_id(variant.id)
 
     if line_item
       line_item.quantity += quantity.to_i
-      line_item.currency = 'usd' #currency unless currency.nil?
+      line_item.currency = 'usd' # currency unless currency.nil?
     else
       line_item = order.line_items.new(quantity: quantity.to_i,
                                        variant_id: variant.id,
@@ -103,7 +107,7 @@ class OrderContents
     line_item
   end
 
-  def grab_line_item_by_variant(variant, raise_error = false, options = {})
+  def grab_line_item_by_variant(variant, raise_error = false, _options = {})
     line_item = order.line_items.find_by_variant_id(variant.id)
 
     if !line_item.present? && raise_error

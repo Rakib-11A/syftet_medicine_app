@@ -1,9 +1,11 @@
-  module Admin
-    module PaymentsHelper
-      def payment_method_name(payment)
-        # hack to allow us to retrieve the name of a "deleted" payment method
-        id = payment.payment_method_id
-        PaymentMethod.find_with_destroyed(id).name
-      end
+# frozen_string_literal: true
+
+module Admin
+  module PaymentsHelper
+    def payment_method_name(payment)
+      # HACK: to allow us to retrieve the name of a "deleted" payment method
+      id = payment.payment_method_id
+      PaymentMethod.find_with_destroyed(id).name
     end
   end
+end

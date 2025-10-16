@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class StockLocationsController < BaseController
-    before_action :set_stock_location, only: [:edit, :update, :destroy, :stock_items]
+    before_action :set_stock_location, only: %i[edit update destroy stock_items]
 
     def index
       @stock_locations = StockLocation.all.order(created_at: :desc)
@@ -22,8 +24,7 @@ module Admin
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       respond_to do |format|

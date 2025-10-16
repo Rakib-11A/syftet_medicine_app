@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class BaseController < ApplicationController
     layout 'layouts/admin'
@@ -9,7 +11,7 @@ module Admin
     helper_method :current_purchase_order
 
     rescue_from CanCan::AccessDenied do |exception|
-      redirect_to root_url, :alert => exception.message
+      redirect_to root_url, alert: exception.message
     end
 
     def current_admin_order(create_order = false)
@@ -24,31 +26,31 @@ module Admin
         order.save!
         @order = order
       end
-      unless @order.present? && @order.completed?
-        @order
-      end
+      return if @order.present? && @order.completed?
+
+      @order
     end
 
     def current_purchase_order(create_order = false, supplier_id)
-      if create_order && supplier_id && @purchase.blank?
-        supplier = User.suppliers.find_by(id: supplier_id)
-        purchase = Admin::Suppliers::Invoice.new
-        purchase.date = Date.today
-        purchase.supplier = supplier
-        purchase.issued_by = current_user
-        purchase.amount = 0
-        purchase.save!
-        purchase.generate_invoice_no
-        @purchase = purchase
-      end
+      return unless create_order && supplier_id && @purchase.blank?
+
+      supplier = User.suppliers.find_by(id: supplier_id)
+      purchase = Admin::Suppliers::Invoice.new
+      purchase.date = Date.today
+      purchase.supplier = supplier
+      purchase.issued_by = current_user
+      purchase.amount = 0
+      purchase.save!
+      purchase.generate_invoice_no
+      @purchase = purchase
     end
 
     protected
 
     def authenticate_admin!
-      unless current_user && current_user.admin?
-        redirect_to root_path, alert: 'Access denied. Admin privileges required.'
-      end
+      return if current_user&.admin?
+
+      redirect_to root_path, alert: 'Access denied. Admin privileges required.'
     end
 
     def action
@@ -56,11 +58,11 @@ module Admin
     end
 
     def authorize_admin
-      if respond_to?(:model_class, true) && model_class
-        record = model_class
-      else
-        record = controller_name.to_sym
-      end
+      record = if respond_to?(:model_class, true) && model_class
+                 model_class
+               else
+                 controller_name.to_sym
+               end
       authorize! :admin, record
       authorize! action, record
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CategoriesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :page_not_found
   # helper 'products'
@@ -6,7 +8,7 @@ class CategoriesController < ApplicationController
 
   def show
     @category = Admin::Category.find_by_permalink(params[:id])
-    @categories = Admin::Category.where("parent_id IS NULL")
+    @categories = Admin::Category.where('parent_id IS NULL')
     @brands = Admin::Brand.active
     @top_category = @category.category
     redirect_to products_path unless @category

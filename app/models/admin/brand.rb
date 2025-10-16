@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: admin_brands
@@ -15,29 +17,30 @@
 #  updated_at  :datetime         not null
 #
 
-class Admin::Brand < ApplicationRecord
-  extend FriendlyId
-  friendly_id :name, use: :slugged
+module Admin
+  class Brand < ApplicationRecord
+    extend FriendlyId
+    friendly_id :name, use: :slugged
 
-  mount_uploader :image, Admin::HomeSliderUploader
+    mount_uploader :image, Admin::HomeSliderUploader
 
-  has_many :products, dependent: :destroy
+    has_many :products, dependent: :destroy
 
+    scope :active, -> { where(is_active: true) }
 
-  scope :active, -> { where(is_active: true) }
+    after_save :set_permalink
+    before_destroy :check_product
 
-  after_save :set_permalink
-  before_destroy :check_product
+    self.table_name = 'admin_brands'
 
-  self.table_name = 'admin_brands'
+    private
 
-  private
+    def set_permalink
+      update_column(:permalink, slug)
+    end
 
-  def set_permalink
-    update_column(:permalink, slug)
-  end
-
-  def check_product
-    !products.present?
+    def check_product
+      !products.present?
+    end
   end
 end

@@ -1,2 +1,8 @@
-module Admin::Suppliers::PaymentsHelper
+# frozen_string_literal: true
+
+module Admin
+  module Suppliers
+    module PaymentsHelper
+    end
+  end
 end

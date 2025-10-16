@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: admin_suppliers_text_messages
@@ -12,5 +14,9 @@
 #  updated_at  :datetime         not null
 #
 
-class Admin::Suppliers::TextMessage < ApplicationRecord
+module Admin
+  module Suppliers
+    class TextMessage < ApplicationRecord
+    end
+  end
 end

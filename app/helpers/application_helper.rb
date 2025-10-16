@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   # Devise Things
 
@@ -40,28 +42,23 @@ module ApplicationHelper
     if taxon.present?
       html_code += taxon_breadscrumb(taxon.category) # + "<li> #{link_to taxon.name, ''} </li>"
     end
-    if product.present?
-      html_code += "<li> #{link_to taxon.name, ''} </li>"
-    end
+    html_code += "<li> #{link_to taxon.name, ''} </li>" if product.present?
     customs.each do |link_text, link|
       html_code += "<li> #{link_to link_text, link} </li>"
     end
     html_code + "<li> #{t(text.downcase.to_sym)} </li>"
   end
 
-  def sort_link object, field, text
+  def sort_link(_object, _field, text)
     text
   end
 
   def taxon_breadscrumb(node)
     html = []
     return '' unless node.present?
-    if node.category.present?
-      html.push("<li> #{link_to node.name, categories_path(node.permalink)} </li>")
-      html.push(taxon_breadscrumb(node.category))
-    else
-      html.push("<li> #{link_to node.name, categories_path(node.permalink)} </li>")
-    end
+
+    html.push("<li> #{link_to node.name, categories_path(node.permalink)} </li>")
+    html.push(taxon_breadscrumb(node.category)) if node.category.present?
     html.reverse.join('')
   end
 
@@ -89,7 +86,7 @@ module ApplicationHelper
   end
 
   def link_to_tracking(shipment, target)
-    link_to shipment.tracking, "/shipment/tracking/#{shipment.tracking}", {target: target}
+    link_to shipment.tracking, "/shipment/tracking/#{shipment.tracking}", { target: target }
   end
 
   def payment_method(type)
@@ -103,24 +100,23 @@ module ApplicationHelper
 
   def map_text_to_icon(text)
     case text
-      when 'paypalexpress'
-        'paypal'
-      when 'cash'
-        'money'
-      when 'creditpoint'
-        'bullseye'
-      else
-        text
+    when 'paypalexpress'
+      'paypal'
+    when 'cash'
+      'money'
+    when 'creditpoint'
+      'bullseye'
+    else
+      text
     end
   end
 
   def included_tax_total(order)
-    order.tax_total > 0 ? amount_with_currency(order.tax_total) : 'All Taxes Included'
+    order.tax_total.positive? ? amount_with_currency(order.tax_total) : 'All Taxes Included'
   end
 
   def pretty_time(time)
-    [I18n.l(time.to_date, format: :long), time.strftime("%l:%M %p")].join(" ")
+    [I18n.l(time.to_date, format: :long), time.strftime('%l:%M %p')].join(' ')
     # time.strftime("%l:%M %p")
   end
-
 end

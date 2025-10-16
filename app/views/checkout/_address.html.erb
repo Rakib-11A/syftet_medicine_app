@@ -1,5 +1,5 @@
 <% content_for :breadcrumb do %>
-    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Shipping Address', '', '', {'checkout' => '/checkout'}) %>
+    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Shipping Address', '', '', { 'checkout' => '/checkout'}) %>
 <% end %>
 <% unless current_user.present? %>
     <div class="billing-form">

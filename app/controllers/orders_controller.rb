@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   # before_action :check_authorization, except: [:reset, :show]
   # before_action :apply_coupon_code, only: :update
@@ -21,7 +23,7 @@ class OrdersController < ApplicationController
     if @order.contents.update_cart(order_params)
       respond_with(@order) do |format|
         format.html do
-          if params.has_key?(:checkout)
+          if params.key?(:checkout)
             @order.next if @order.cart?
             if @order.state == 'address'
               redirect_to checkout_address_path(state: 'address')
@@ -42,19 +44,20 @@ class OrdersController < ApplicationController
 
   # Shows the current incomplete order from the session
   def edit
-    @order = current_order || Order.incomplete.
-        includes(line_items: [variant: [:images, :option_values, :product]]).
-        find_or_initialize_by(guest_token: cookies.signed[:guest_token])
+    @order = current_order || Order.incomplete
+                                   .includes(line_items: [variant: %i[images option_values product]])
+                                   .find_or_initialize_by(guest_token: cookies.signed[:guest_token])
     associate_user
-    return redirect_to root_path unless @order.line_items.length > 0
+    return redirect_to root_path unless @order.line_items.length.positive?
+
     # product = @order.line_items.first.product
     # # @recommend_products = product.recommended_products
     # # unless @recommend_products.length > 0
     # #   @recommend_products = product.get_recom_products
     # # end
-    @title = "Your Shipping Bag – Brandcruz.com Secure Shopping"
-    @keywords = "brandcruz, Brand Cruz, Brandcruz.com"
-    @description = "Shop for shopping cart cover at Brandcruz.com. Free Shipping. Free Returns. All the time."
+    @title = 'Your Shipping Bag – Brandcruz.com Secure Shopping'
+    @keywords = 'brandcruz, Brand Cruz, Brandcruz.com'
+    @description = 'Shop for shopping cart cover at Brandcruz.com. Free Shipping. Free Returns. All the time.'
   end
 
   def reset
@@ -79,7 +82,7 @@ class OrdersController < ApplicationController
         line_item.size = size
         line_item.save
       rescue ActiveRecord::RecordInvalid => e
-        @error = e.record.errors.full_messages.join(", ")
+        @error = e.record.errors.full_messages.join(', ')
       end
     else
       @error = t(:please_enter_reasonable_quantity)
@@ -101,22 +104,22 @@ class OrdersController < ApplicationController
   end
 
   def shipped_track
-    @orders = Order.all #try_spree_current_user.orders.complete.order('completed_at desc')
+    @orders = Order.all # try_spree_current_user.orders.complete.order('completed_at desc')
     @order = Order.find_by_number(params[:order_id]) || Order.find_by_id(params[:order_id])
-    @trackes = @order.shipment.trackings.order('created_at desc').group_by { |track| track.created_at.strftime('%A, %d %b') }
+    @trackes = @order.shipment.trackings.order('created_at desc').group_by do |track|
+      track.created_at.strftime('%A, %d %b')
+    end
   end
 
   def empty
-    if @order = current_order
-      @order.empty!
-    end
+    @order.empty! if (@order = current_order)
 
     redirect_to cart_checkout_path
   end
 
   def accurate_title
-    if @order && @order.completed?
-      t(:order_number, :number => @order.number)
+    if @order&.completed?
+      t(:order_number, number: @order.number)
     else
       t(:shopping_cart)
     end
@@ -133,7 +136,7 @@ class OrdersController < ApplicationController
 
   def apply_coupon
     @order = current_order
-    @error = "Order not found"
+    @error = 'Order not found'
     if @order.present? && params[:coupon_code].present?
       @order.coupon_code = params[:coupon_code]
 
@@ -145,7 +148,7 @@ class OrdersController < ApplicationController
         @success = handler.success
       end
     else
-      @error = "Order or coupon code not found"
+      @error = 'Order or coupon code not found'
     end
 
     respond_to do |format|
@@ -156,16 +159,14 @@ class OrdersController < ApplicationController
   def remove_coupon
     @order = current_order
     @success = false
-    if @order.present?
-      order_promotions = @order.order_promotions.where(promotion_id: params[:id]).first
-      adjustments = @order.adjustments
-      if adjustments.length > 0
-        adjustments.destroy_all
-      end
-      order_promotions.destroy
-      # Adjustable::AdjustmentsUpdater.update(@order)
-      @success = true
-    end
+    return unless @order.present?
+
+    order_promotions = @order.order_promotions.where(promotion_id: params[:id]).first
+    adjustments = @order.adjustments
+    adjustments.destroy_all if adjustments.length.positive?
+    order_promotions.destroy
+    # Adjustable::AdjustmentsUpdater.update(@order)
+    @success = true
   end
 
   private
@@ -177,18 +178,17 @@ class OrdersController < ApplicationController
   def apply_coupon_code
     assign_order_with_lock
 
-    if params[:orders] && params[:orders][:coupon_code] && @order.present?
+    return unless params[:orders] && params[:orders][:coupon_code] && @order.present?
 
-      @order.coupon_code = params[:orders][:coupon_code]
+    @order.coupon_code = params[:orders][:coupon_code]
 
-      handler = PromotionHandler::Coupon.new(@order).apply
+    handler = PromotionHandler::Coupon.new(@order).apply
 
-      if handler.error.present?
-        flash[:error] = handler.error
-        respond_with(@order) { |format| format.html { redirect_to cart_checkout_path } } and return
-      elsif handler.success
-        flash[:success] = handler.success
-      end
+    if handler.error.present?
+      flash[:error] = handler.error
+      respond_with(@order) { |format| format.html { redirect_to cart_checkout_path } } and return
+    elsif handler.success
+      flash[:success] = handler.success
     end
   end
 
@@ -201,16 +201,16 @@ class OrdersController < ApplicationController
   end
 
   def verify_authentication
-    unless current_user
-      redirect_to '/secure-user-signin-signup'
-    end
+    return if current_user
+
+    redirect_to '/secure-user-signin-signup'
   end
 
   def assign_order_with_lock
     @order = current_order(lock: true)
-    unless @order
-      flash[:error] = t(:order_not_found)
-      redirect_to root_path and return
-    end
+    return if @order
+
+    flash[:error] = t(:order_not_found)
+    redirect_to root_path and return
   end
 end

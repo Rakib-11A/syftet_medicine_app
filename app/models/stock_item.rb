@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stock_items
@@ -20,12 +22,12 @@ class StockItem < ApplicationRecord
 
   validates :stock_location, :product, presence: true
 
-  validates :product_id, uniqueness: {scope: [:stock_location_id, :deleted_at]}, allow_blank: true
+  validates :product_id, uniqueness: { scope: %i[stock_location_id deleted_at] }, allow_blank: true
 
   validates :count_on_hand, numericality: {
-      greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 2**31 - 1,
-      only_integer: true
+    greater_than_or_equal_to: 0,
+    less_than_or_equal_to: 2**31 - 1,
+    only_integer: true
   }, if: :verify_count_on_hand?
 
   delegate :weight, to: :product
@@ -58,7 +60,7 @@ class StockItem < ApplicationRecord
   end
 
   def in_stock?
-    count_on_hand > 0
+    count_on_hand.positive?
   end
 
   def available?
@@ -66,7 +68,7 @@ class StockItem < ApplicationRecord
   end
 
   def reduce_count_on_hand_to_zero
-    set_count_on_hand(0) if count_on_hand > 0
+    set_count_on_hand(0) if count_on_hand.positive?
   end
 
   def should_track_inventory?
@@ -76,7 +78,7 @@ class StockItem < ApplicationRecord
   private
 
   def verify_count_on_hand?
-    saved_change_to_count_on_hand? && !backorderable? && (count_on_hand < count_on_hand_before_last_save) && (count_on_hand < 0)
+    saved_change_to_count_on_hand? && !backorderable? && (count_on_hand < count_on_hand_before_last_save) && count_on_hand.negative?
   end
 
   # Process backorders based on amount of stock received

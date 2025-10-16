@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class GalleryImagesController < BaseController
-    before_action :set_admin_gallery_image, only: [:show, :edit, :update, :destroy]
+    before_action :set_admin_gallery_image, only: %i[show edit update destroy]
 
     # GET /admin/gallery_images
     def index
@@ -9,8 +11,7 @@ module Admin
     end
 
     # GET /admin/gallery_image/1
-    def show
-    end
+    def show; end
 
     # GET /admin/gallery_image/new
     def new
@@ -18,8 +19,7 @@ module Admin
     end
 
     # GET /admin/gallery_images/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /admin/gallery_images
     def create

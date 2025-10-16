@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: admin_suppliers_discounts
@@ -18,9 +20,13 @@
 #  index_admin_suppliers_discounts_on_supplier_id  (supplier_id)
 #
 
-class Admin::Suppliers::Discount < ApplicationRecord
-  validates :supplier_id, :amount, :date, presence: true
+module Admin
+  module Suppliers
+    class Discount < ApplicationRecord
+      validates :supplier_id, :amount, :date, presence: true
 
-  belongs_to :supplier, class_name: 'User'
-  belongs_to :invoice, class_name: 'Admin::Suppliers::Invoice'
+      belongs_to :supplier, class_name: 'User'
+      belongs_to :invoice, class_name: 'Admin::Suppliers::Invoice'
+    end
+  end
 end

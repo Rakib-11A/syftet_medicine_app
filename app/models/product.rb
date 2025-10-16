@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: products
@@ -64,7 +66,7 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :images,
                                 allow_destroy: true,
                                 reject_if: proc { |attributes|
-                                  attributes.all? { |k, v| v.blank? }
+                                  attributes.all? { |_k, v| v.blank? }
                                 }
 
   validates_presence_of :name, :code, :cost_price, :sale_price, :is_active, :slug
@@ -82,24 +84,23 @@ class Product < ApplicationRecord
   # scope :new_arrivals, -> { master_active.where('created_at >= ?', 15.days.ago) }
   scope :new_arrivals, -> { master_active.where('created_at >= ?', 30.days.ago) }
   scope :stock_out_of_limit, -> { joins(:stock_items).where('count_on_hand <= min_stock') }
-  
+
   # Soft delete scopes
   scope :with_deleted, -> { unscope(where: :deleted_at) }
   scope :only_deleted, -> { where.not(deleted_at: nil) }
-  
+
   # Override default scope to exclude soft deleted records
   default_scope { where(deleted_at: nil) }
 
   def related_products
-    category = self.categories.last
-    if category.present?
-      products = category.product_categories.order('RANDOM()').limit(10)
-      products
-    end
+    category = categories.last
+    return unless category.present?
+
+    category.product_categories.order('RANDOM()').limit(10)
   end
 
   def slug_candidates
-    [:name, :name_and_sequence]
+    %i[name name_and_sequence]
   end
 
   def name_and_sequence
@@ -125,7 +126,7 @@ class Product < ApplicationRecord
   end
 
   def on_stock
-    if total_on_hand > 0
+    if total_on_hand.positive?
       "<span class='product-in-stock'> In Stock </span>"
     else
       "<span class='product-out-stock'> Out Of Stock </span>"
@@ -136,7 +137,7 @@ class Product < ApplicationRecord
     where('products.name LIKE :q OR products.code LIKE :q', q: "%#{query_param}%")
   end
 
-  def price(user = nil)
+  def price(_user = nil)
     discountable ? discount_price : sale_price
   end
 
@@ -154,6 +155,7 @@ class Product < ApplicationRecord
 
   def discount_amount
     return 0 unless discountable
+
     is_amount ? discount : (sale_price * (discount / 100.0))
   end
 
@@ -176,7 +178,7 @@ class Product < ApplicationRecord
   def variants_total_on_hand
     sum = 0
     variants_with_master.each do |va|
-      sum = sum + va.total_on_hand
+      sum += va.total_on_hand
     end
     sum
   end
@@ -184,7 +186,7 @@ class Product < ApplicationRecord
   def average_rating
     total_review = reviews.count
     ratings = reviews.sum(:rating)
-    if total_review > 0
+    if total_review.positive?
       (ratings / total_review)
     else
       0
@@ -215,18 +217,18 @@ class Product < ApplicationRecord
   end
 
   def ensure_not_referenced_by_any_print_barcode
-    unless print_barcodes.empty?
-      errors.add(:base, 'Print Barcode is present')
-      throw :abort
-    end
+    return if print_barcodes.empty?
+
+    errors.add(:base, 'Print Barcode is present')
+    throw :abort
   end
 
   def generate_barcode
-    unless barcode.present?
-      self.barcode = loop do
-        timestamp = (Time.now.to_f * 1000.0).to_i
-        break timestamp unless Product.exists?(barcode: timestamp)
-      end
+    return if barcode.present?
+
+    self.barcode = loop do
+      timestamp = (Time.now.to_f * 1000.0).to_i
+      break timestamp unless Product.exists?(barcode: timestamp)
     end
   end
 end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Admin
   class VariantsController < BaseController
     before_action :set_product
-    before_action :set_variant, only: [:edit, :update, :destroy]
+    before_action :set_variant, only: %i[edit update destroy]
 
     def index
       @variants = @product.variants.page(params[:page]).per(20)
@@ -15,15 +17,16 @@ module Admin
       @variant = @product.variants.build(variant_params)
       respond_to do |format|
         if @variant.save
-          format.html { redirect_to admin_product_variants_path(@product), notice: 'Variant added to product successfully.' }
+          format.html do
+            redirect_to admin_product_variants_path(@product), notice: 'Variant added to product successfully.'
+          end
         else
           format.html { render :new }
         end
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       respond_to do |format|

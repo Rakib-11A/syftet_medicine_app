@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 module Admin
   class OrdersController < BaseController
     before_action :initialize_order_events
-    before_action :load_order, only: [:edit, :shipment, :update_line_item, :remove_line_item, :add_product, :update, :cancel, :resume, :approve, :resend, :open_adjustments, :close_adjustments, :cart, :track, :update_state]
+    before_action :load_order,
+                  only: %i[edit shipment update_line_item remove_line_item add_product update cancel resume approve resend
+                           open_adjustments close_adjustments cart track update_state]
 
     respond_to? :html
 
@@ -9,7 +13,7 @@ module Admin
       params[:q] ||= {}
       @orders = Order.all.approved.order(approved_at: :desc)
       if params[:order].present?
-        @result =  Order.result(params, @orders)
+        @result = Order.result(params, @orders)
         @orders = @result[:orders]
         params[:q] = @result[:params_hash]
       end
@@ -50,9 +54,8 @@ module Admin
     def edit
       # can_not_transition_without_customer_info
 
-      unless @order.completed?
-#        @order.refresh_shipment_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
-      end
+      nil if @order.completed?
+      #        @order.refresh_shipment_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
     end
 
     def cart
@@ -72,8 +75,8 @@ module Admin
           # Jump to next step if order is not completed.
           redirect_to admin_order_customer_path(@order) and return
         end
-      else
-        @order.errors.add(:line_items, t('errors.messages.blank')) if @order.line_items.empty?
+      elsif @order.line_items.empty?
+        @order.errors.add(:line_items, t('errors.messages.blank'))
       end
 
       render action: :edit
@@ -84,11 +87,11 @@ module Admin
       @order.init_shipment(@shipment_method)
 
       @order.special_instructions = params[:special_instructions]
-      @order.shipment_state = "pending"
+      @order.shipment_state = 'pending'
       @order.state = 'payment'
-      if @order.save
-        render action: :edit
-      end
+      return unless @order.save
+
+      render action: :edit
     end
 
     def cancel
@@ -104,7 +107,8 @@ module Admin
     end
 
     def approve
-      if @order.update({shipment_date: params[:order][:shipment_date], shipment_progress: params[:order][:shipment_progress], state: 'approved'})
+      if @order.update({ shipment_date: params[:order][:shipment_date],
+                         shipment_progress: params[:order][:shipment_progress], state: 'approved' })
         @order.approved_by(current_user)
         @order.credit_rewards_point
       end
@@ -140,16 +144,15 @@ module Admin
       @shipment.update_attribute(:tracking, params[:tracking])
     end
 
-    def customer
-
-    end
+    def customer; end
 
     def add_product
-      if params[:variant_id].present?
-        variant = Product.find_by(id: params[:variant_id])
-      else
-        variant = Product.where('barcode = ? OR lower(code) = ?', params[:barcode_or_pcode], params[:barcode_or_pcode].downcase).first
-      end
+      variant = if params[:variant_id].present?
+                  Product.find_by(id: params[:variant_id])
+                else
+                  Product.where('barcode = ? OR lower(code) = ?', params[:barcode_or_pcode],
+                                params[:barcode_or_pcode].downcase).first
+                end
 
       redirect_to cart_admin_order_url(@order) and return unless variant.present?
 
@@ -164,7 +167,7 @@ module Admin
           line_item.size = size
           line_item.save
         rescue ActiveRecord::RecordInvalid => e
-          @error = e.record.errors.full_messages.join(", ")
+          @error = e.record.errors.full_messages.join(', ')
         end
       else
         @error = t(:please_enter_reasonable_quantity)
@@ -178,14 +181,12 @@ module Admin
         add_or_remove_quantity = params[:quantity].to_i
         if add_or_remove_quantity > line_item.quantity
           line_item = @order.contents.add(line_item.product, add_or_remove_quantity - line_item.quantity, {})
-        elsif add_or_remove_quantity < line_item.quantity && add_or_remove_quantity > 0
+        elsif add_or_remove_quantity < line_item.quantity && add_or_remove_quantity.positive?
           line_item = @order.contents.remove(line_item.product, add_or_remove_quantity.abs, {})
         else
           @order.errors.add(:base, 'Invalid quantity')
         end
-        unless line_item.save
-          @order.errors.add(:base, line_item.errors.full_messages.join(", "))
-        end
+        @order.errors.add(:base, line_item.errors.full_messages.join(', ')) unless line_item.save
       else
         @order.errors.add(:base, 'Item not found')
       end
@@ -206,8 +207,10 @@ module Admin
 
     def track
       @trackes = []
-      if @order.shipment
-        @trackes = @order.shipment.trackings.order('created_at').group_by { |track| track.created_at.strftime('%A, %d %b') }
+      return unless @order.shipment
+
+      @trackes = @order.shipment.trackings.order('created_at').group_by do |track|
+        track.created_at.strftime('%A, %d %b')
       end
     end
 
@@ -215,22 +218,22 @@ module Admin
       order_params = params[:order]
       status = order_params[:shipment_state]
       update_params = {}
-      if 'payment_failed' == status
+      if status == 'payment_failed'
         update_params = {
-            state: 'payment',
-            payment_state: 'failed',
-            shipment_state: nil,
-            approver_id: '',
-            shipped_at: nil,
-            confirmation_delivered: nil
+          state: 'payment',
+          payment_state: 'failed',
+          shipment_state: nil,
+          approver_id: '',
+          shipped_at: nil,
+          confirmation_delivered: nil
         }
       else
         update_params = {
-            shipment_state: status == 'processing' ? nil : status,
-            shipment_date: format_date(order_params[:shipment_date]),
-            shipment_progress: order_params[:shipment_progress].present? ? order_params[:shipment_progress] : 0,
-            shipped_at: (!@order.shipped_at.present? && status == 'shipped') ? DateTime.now : @order.shipped_at,
-            payment_state: status == 'shipped' ? 'paid' : @order.payment_state
+          shipment_state: status == 'processing' ? nil : status,
+          shipment_date: format_date(order_params[:shipment_date]),
+          shipment_progress: order_params[:shipment_progress].present? ? order_params[:shipment_progress] : 0,
+          shipped_at: !@order.shipped_at.present? && status == 'shipped' ? DateTime.now : @order.shipped_at,
+          payment_state: status == 'shipped' ? 'paid' : @order.payment_state
         }
       end
       if @order.update(update_params)
@@ -238,7 +241,7 @@ module Admin
         @order.shipment.trackings.create(comment: comments, user_id: current_user.id)
         flash[:success] = 'Order status has been updated'
         if @order.shipment_state == 'shipped'
-          #OrderMailer.update_order(@order).deliver_now
+          # OrderMailer.update_order(@order).deliver_now
           @order.check_shipment_status_for_send_mail
         end
         redirect_back fallback_location: admin_order_path(@order)
@@ -248,6 +251,7 @@ module Admin
     end
 
     private
+
     def order_params
       params[:created_by_id] = current_user.try(:id)
       params.permit(:created_by_id, :user_id)
@@ -260,7 +264,7 @@ module Admin
 
     # Used for extensions which need to provide their own custom event links on the order details view.
     def initialize_order_events
-      @order_events = %w{cancel}
+      @order_events = %w[cancel]
     end
 
     def model_class
@@ -268,13 +272,10 @@ module Admin
     end
 
     def format_date(date)
-      if date.present?
-        dates = date.split('/')
-        "#{dates.last}-#{dates.first}-#{dates.second}"
-      else
-        nil
-      end
-    end
+      return unless date.present?
 
+      dates = date.split('/')
+      "#{dates.last}-#{dates.first}-#{dates.second}"
+    end
   end
 end

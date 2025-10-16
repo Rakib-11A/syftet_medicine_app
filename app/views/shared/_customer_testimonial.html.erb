@@ -1,31 +1,31 @@
 <section class="customer-testimonials">
-  <div class="container">
-    <h3 class="customer-say">What Our Customers Say</h3>
-    <div class="customer-row">
-      <% Review.first(3).each do |review| %>
-        <div class="customer-wrapper">
-          <div class="customer-img-info">
-            <div class="customer-avatar">
-              <%= image_tag "female-avater.png" %>
+    <div class="container">
+        <h3 class="customer-say">What Our Customers Say</h3>
+        <div class="customer-row">
+            <% Review.first(3).each do |review| %>
+            <div class="customer-wrapper">
+                <div class="customer-img-info">
+                    <div class="customer-avatar">
+                        <%= image_tag "icons/female-avater.png" %>
+                    </div>
+                    <div class="customer-info">
+                        <div class="customer-name"><%= review.name %></div>
+                        <div class="customer-star">
+                            <% review.rating.times do %>
+                            <i class="fa-solid fa-star fa-sm"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <%= review.text %>
+                </div>
+                <div class="review-date">
+                    <%= review.created_at.strftime("%B %d, %Y") %>
+                </div>
             </div>
-            <div class="customer-info">
-              <div class="customer-name"><%= review.name %></div>
-              <div class="customer-star">
-                <% review.rating.times do %>
-                  <i class="fa-solid fa-star fa-sm"></i>
-                <% end %>
-              </div>
-            </div>
-          </div>
-          <div class="review-text">
-            <%= review.text %>
-          </div>
-          <div class="review-date">
-            <%= review.created_at.strftime("%B %d, %Y") %>
-          </div>
+            <% end %>
         </div>
-      <% end %>
     </div>
-  </div>
 
 </section>

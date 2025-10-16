@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Search
   attr_accessor :taxon, :terms, :page
 
@@ -8,52 +10,38 @@ class Search
   end
 
   def result
-    if taxon.present?
-      result_object = taxon.products.master_active #.joins(:variants) #.joins(:prices)
-    else
-      result_object = Product.master_active #.joins(:variants)
-    end
+    result_object = if taxon.present?
+                      taxon.products.master_active # .joins(:variants) #.joins(:prices)
+                    else
+                      Product.master_active # .joins(:variants)
+                    end
 
-    if terms[:product_type] == 'recent'
-      result_object = result_object.where("products.created_at >= ?", 15.days.ago)
-    end
+    result_object = result_object.where('products.created_at >= ?', 15.days.ago) if terms[:product_type] == 'recent'
 
     if terms[:product_type] == 'sale' || terms[:q] == 'discount'
       result_object = result_object.where('products.discountable = true')
     end
 
-    if terms[:product_type] == 'featured'
-      result_object = result_object.where('products.is_featured = true')
-    end
+    result_object = result_object.where('products.is_featured = true') if terms[:product_type] == 'featured'
 
-    if terms[:product_type] == 'top_rate'
-      result_object = result_object.joins(:reviews).order("reviews.rating DESC")
-    end
+    result_object = result_object.joins(:reviews).order('reviews.rating DESC') if terms[:product_type] == 'top_rate'
 
-    if terms[:name].present?
-      result_object = result_object.where("lower(products.name) like '%#{terms[:name]}%'")
-    end
+    result_object = result_object.where("lower(products.name) like '%#{terms[:name]}%'") if terms[:name].present?
 
     if terms[:min] && terms[:max]
       result_object = result_object.where("products.sale_price between #{terms[:min]} and #{terms[:max]}")
     end
 
-    if terms[:size].present?
-      result_object = result_object.where("products.size = '#{terms[:size]}'")
-    end
+    result_object = result_object.where("products.size = '#{terms[:size]}'") if terms[:size].present?
 
-    if terms[:color].present?
-      result_object = result_object.where('products.color = ?', terms[:color])
-    end
+    result_object = result_object.where('products.color = ?', terms[:color]) if terms[:color].present?
 
     result_object = result_object.distinct
     result_object = sort_by(result_object)
-    result_object.page(page).per(terms[:per_page] || 20) #Syftet.config.product_per_page)
+    result_object.page(page).per(terms[:per_page] || 20) # Syftet.config.product_per_page)
   end
 
-
   def api_result
-
     if terms[:taxon].present?
       category = Taxon.find_by_id(terms[:taxon])
       result_object = category.present? ? category.products.joins(:variants) : Product.joins(:variants)
@@ -61,35 +49,21 @@ class Search
       result_object = Product.joins(:variants)
     end
 
-    if terms['q'] == 'featured'
-      result_object = result_object.where('products.is_featured = true')
-    end
-    if terms['q'] == 'top_rate'
-      result_object = result_object.joins(:reviews).order("reviews.rating DESC")
-    end
+    result_object = result_object.where('products.is_featured = true') if terms['q'] == 'featured'
+    result_object = result_object.joins(:reviews).order('reviews.rating DESC') if terms['q'] == 'top_rate'
 
-    if terms['q'] == 'new'
-      result_object = result_object.where('products.created_at >= ?', 15.days.ago)
-    end
+    result_object = result_object.where('products.created_at >= ?', 15.days.ago) if terms['q'] == 'new'
 
-    if terms['q'] == 'discount'
-      result_object = result_object.where('products.discountable = true')
-    end
-    if terms['q'] == 'sale'
-      result_object = result_object.where('products.discountable = true')
-    end
+    result_object = result_object.where('products.discountable = true') if terms['q'] == 'discount'
+    result_object = result_object.where('products.discountable = true') if terms['q'] == 'sale'
 
-    if terms[:name].present?
-      result_object = result_object.where("lower(name) like '%#{terms[:name]}%'")
-    end
+    result_object = result_object.where("lower(name) like '%#{terms[:name]}%'") if terms[:name].present?
 
     if terms[:min].present? && terms[:max].present?
       result_object = result_object.where("prices.amount between #{terms[:min]} and #{terms[:max]}")
     end
 
-    if terms[:size].present?
-      result_object = result_object.where("variants.size = '#{terms[:size]}'")
-    end
+    result_object = result_object.where("variants.size = '#{terms[:size]}'") if terms[:size].present?
 
     if terms[:color].present?
       result_object = result_object.where('variants.color_image IN (?)', terms[:color].split(/,/))
@@ -111,5 +85,4 @@ class Search
     end
     sort_result
   end
-
 end

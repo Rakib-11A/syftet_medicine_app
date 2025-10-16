@@ -1,24 +1,25 @@
-class Backend::ActionCallbacks
-  attr_reader :before_methods
-  attr_reader :after_methods
-  attr_reader :fails_methods
+# frozen_string_literal: true
 
-  def initialize
-    @before_methods = []
-    @after_methods = []
-    @fails_methods = []
+module Backend
+  class ActionCallbacks
+    attr_reader :before_methods, :after_methods, :fails_methods
+
+    def initialize
+      @before_methods = []
+      @after_methods = []
+      @fails_methods = []
+    end
+
+    def before(method)
+      @before_methods << method
+    end
+
+    def after(method)
+      @after_methods << method
+    end
+
+    def fails(method)
+      @fails_methods << method
+    end
   end
-
-  def before(method)
-    @before_methods << method
-  end
-
-  def after(method)
-    @after_methods << method
-  end
-
-  def fails(method)
-    @fails_methods << method
-  end
-
 end

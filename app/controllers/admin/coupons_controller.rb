@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class CouponsController < BaseController
-    before_action :set_admin_coupon, only: [:show, :edit, :update, :destroy]
+    before_action :set_admin_coupon, only: %i[show edit update destroy]
 
     # GET /admin/coupons
     # GET /admin/coupons.json
@@ -10,8 +12,7 @@ module Admin
 
     # GET /admin/coupons/1
     # GET /admin/coupons/1.json
-    def show
-    end
+    def show; end
 
     # GET /admin/coupons/new
     def new
@@ -19,17 +20,14 @@ module Admin
     end
 
     # GET /admin/coupons/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /admin/coupons
     # POST /admin/coupons.json
     def create
       @admin_coupon = Admin::Coupon.new(admin_coupon_params)
 
-      unless admin_coupon_params[:maximum_limit_count].present?
-        @admin_coupon.maximum_limit_count = 0
-      end
+      @admin_coupon.maximum_limit_count = 0 unless admin_coupon_params[:maximum_limit_count].present?
 
       if params[:amount_type].present? && params[:amount_type] == 'Discount'
         @admin_coupon.discount = @admin_coupon.percentage
@@ -74,6 +72,7 @@ module Admin
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_admin_coupon
       @admin_coupon = Admin::Coupon.find(params[:id])

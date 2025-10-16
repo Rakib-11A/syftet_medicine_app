@@ -1,5 +1,6 @@
-class CommentsController < ApplicationController
+# frozen_string_literal: true
 
+class CommentsController < ApplicationController
   def create
     blog = Blog.friendly.find(params[:blog_id])
     comment = blog.comments.new(comment_params)

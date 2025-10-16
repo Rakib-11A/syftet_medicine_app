@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class BrandsController < BaseController
-    before_action :set_admin_brand, only: [:show, :edit, :update, :destroy]
+    before_action :set_admin_brand, only: %i[show edit update destroy]
 
     # GET /admin/brands
     def index
@@ -8,8 +10,7 @@ module Admin
     end
 
     # GET /admin/brands/1
-    def show
-    end
+    def show; end
 
     # GET /admin/brands/new
     def new
@@ -17,8 +18,7 @@ module Admin
     end
 
     # GET /admin/brands/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /admin/brands
     def create

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: payments
@@ -38,48 +40,48 @@ class Payment < ApplicationRecord
   scope :failed, -> { with_state('failed') }
 
   def update_order
-
     if order.completed?
       order.updater.update_payment_state
       order.updater.update_shipments
       order.updater.update_shipment_state
     end
 
-    if self.completed? || order.completed?
-      order.persist_totals
-    end
+    return unless completed? || order.completed?
+
+    order.persist_totals
   end
 
   def actions
-    if self.state == 'captured'
+    if state == 'captured'
       ['refund']
-    elsif self.state == 'void'
+    elsif state == 'void'
       []
     else
-      ['capture', 'void',]
+      %w[capture void]
     end
   end
 
   def captured?
-    self.state == 'captured'
+    state == 'captured'
   end
 
   def void?
-    self.state == 'void'
+    state == 'void'
   end
 
   def prefix
     Payment::PREFIX
   end
 
-  def capture!(capture_amount = nil)
+  def capture!(_capture_amount = nil)
     return true if captured?
+
     payment_method.capture(self)
   end
 
   def void_transaction!
     return true if void?
+
     payment_method.void(self)
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: payment_methods
@@ -13,20 +15,19 @@
 #
 
 class PaymentMethod < ApplicationRecord
-
   scope :active, -> { where(active: true) }
-  scope :available, -> { active.where(display_on: [:front_end, :back_end, :both]) }
+  scope :available, -> { active.where(display_on: %i[front_end back_end both]) }
 
   validates :name, presence: true
 
-  has_many :payments, class_name: "Payment", inverse_of: :payment_method
+  has_many :payments, class_name: 'Payment', inverse_of: :payment_method
 
   def self.providers
     Rails.application.config.spree.payment_methods
   end
 
   def self.all_active
-    self.where(active: true)
+    where(active: true)
   end
 
   def provider_class
@@ -57,20 +58,20 @@ class PaymentMethod < ApplicationRecord
   end
 
   def type_name
-    self.type.split('::').last
+    type.split('::').last
   end
 
   # Custom gateways should redefine this method. See Gateway implementation
   # as an example
-  def reusable_sources(order)
+  def reusable_sources(_order)
     []
   end
 
   def auto_capture?
-    self.auto_capture.nil? ? Syftet.config.auto_capture : self.auto_capture
+    auto_capture.nil? ? Syftet.config.auto_capture : auto_capture
   end
 
-  def supports?(source)
+  def supports?(_source)
     true
   end
 
@@ -79,6 +80,6 @@ class PaymentMethod < ApplicationRecord
   end
 
   def store_credit?
-    self.class == PaymentMethod::StoreCredit
+    instance_of?(PaymentMethod::StoreCredit)
   end
 end

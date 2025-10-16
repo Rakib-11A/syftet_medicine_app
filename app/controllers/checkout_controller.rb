@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is somewhat contrary to standard REST convention since there is not
 # actually a Checkout object. There's enough distinct logic specific to
 # checkout which has nothing to do with updating an order that this approach
@@ -34,7 +36,7 @@ class CheckoutController < ApplicationController
         end
       end
     else
-      render :edit #@order.state
+      render :edit # @order.state
     end
   end
 
@@ -43,9 +45,7 @@ class CheckoutController < ApplicationController
     is_pre_order = false
     line_items.each do |line_item|
       product = Product.find_by(id: line_item.variant_id)
-      if product.min_stock < line_item.quantity && product.pre_order == true
-        is_pre_order = true
-      end
+      is_pre_order = true if product.min_stock < line_item.quantity && product.pre_order == true
     end
     if is_pre_order == true
       @order.pre_order = true
@@ -53,11 +53,11 @@ class CheckoutController < ApplicationController
     end
     @results = Admin::Coupon.all
     if @order.state == 'address'
-      @title = "Secure checkout SSL | Shipping Address - BrandCruz"
+      @title = 'Secure checkout SSL | Shipping Address - BrandCruz'
     elsif @order.state == 'payment'
-      @title = "SSL Secured Payment Processing - BrandCruz"
+      @title = 'SSL Secured Payment Processing - BrandCruz'
     elsif @order.state == 'complete' && params[:failed_id].present?
-      @title = "SSL Secured Payment Processing - BrandCruz"
+      @title = 'SSL Secured Payment Processing - BrandCruz'
       @order.state = 'payment'
     end
     @order.state = params[:state] if params[:state]
@@ -68,7 +68,7 @@ class CheckoutController < ApplicationController
     result = Admin::Coupon.find_by(code: admin_coupons)
     if result.present?
       if value == 1
-        if(result.maximum_limit_count < result.maximun_limit) && (result.expiration > Date.today)
+        if (result.maximum_limit_count < result.maximun_limit) && (result.expiration > Date.today)
           result.maximum_limit_count += value
           @order.coupon_id = result.id
         end
@@ -84,11 +84,11 @@ class CheckoutController < ApplicationController
 
   def check_coupon_code
     result = update_maximum_limit_count(1)
-    if result.discount > 0
-      @order.adjustment_total = result.discount.to_f
-    else
-      @order.adjustment_total = (@order.item_total.to_f * result.percentage.to_f) / 100.0
-    end
+    @order.adjustment_total = if result.discount.positive?
+                                result.discount.to_f
+                              else
+                                (@order.item_total.to_f * result.percentage.to_f) / 100.0
+                              end
 
     if @order.save
       result.save
@@ -98,13 +98,13 @@ class CheckoutController < ApplicationController
     end
 
     respond_to do |format|
-      if (result.present?) && (result.expiration > Date.today) && (result.maximum_limit_count < result.maximun_limit)
-        msg = { :status => "ok", :message => "Your coupon code work!", :discount_coupon_amount =>  @order.adjustment_total, :discount_coupon_code => result.code }
-        format.json  { render :json => msg } # don't do msg.to_json
-      else
-        msg = { :status => "ok", :message => "Sorry! Expiration date or Maximum limit cross.",  }
-        format.json  { render :json => msg }
-      end
+      msg = if result.present? && (result.expiration > Date.today) && (result.maximum_limit_count < result.maximun_limit)
+              { status: 'ok', message: 'Your coupon code work!',
+                discount_coupon_amount: @order.adjustment_total, discount_coupon_code: result.code }
+            else
+              { status: 'ok', message: 'Sorry! Expiration date or Maximum limit cross.' }
+            end
+      format.json { render json: msg }
     end
   end
 
@@ -126,20 +126,20 @@ class CheckoutController < ApplicationController
   end
 
   def validate_state
-    if @order.state == 'address'
-      before_address
-    end
+    return unless @order.state == 'address'
+
+    before_address
   end
 
   def unknown_state?
     (params[:state] && !@order.has_checkout_step?(params[:state])) ||
-        (!params[:state] && !@order.has_checkout_step?(@order.state))
+      (!params[:state] && !@order.has_checkout_step?(@order.state))
   end
 
   def insufficient_payment?
-    params[:state] == "confirm" &&
-        @order.payment_required? &&
-        @order.payments.valid.sum(:amount) != @order.total
+    params[:state] == 'confirm' &&
+      @order.payment_required? &&
+      @order.payments.valid.sum(:amount) != @order.total
   end
 
   def correct_state
@@ -153,18 +153,18 @@ class CheckoutController < ApplicationController
   end
 
   def ensure_valid_state
-    if @order.state != correct_state && !skip_state_validation?
-      flash.keep
-      @order.update_column(:state, correct_state)
-      if @order.state == 'payment'
-        if params[:failed_id].present?
-          redirect_to checkout_payment_path(state: 'payment', failed_id: params[:failed_id])
-        else
-          redirect_to checkout_payment_path(state: 'payment')
-        end
+    return unless @order.state != correct_state && !skip_state_validation?
+
+    flash.keep
+    @order.update_column(:state, correct_state)
+    if @order.state == 'payment'
+      if params[:failed_id].present?
+        redirect_to checkout_payment_path(state: 'payment', failed_id: params[:failed_id])
       else
-        redirect_to checkout_state_path(@order.state)
+        redirect_to checkout_payment_path(state: 'payment')
       end
+    else
+      redirect_to checkout_state_path(@order.state)
     end
   end
 
@@ -179,35 +179,35 @@ class CheckoutController < ApplicationController
   end
 
   def ensure_valid_state_lock_version
-    if params[:orders] && params[:orders][:state_lock_version]
-      @order.with_lock do
-        unless @order.state_lock_version == params[:orders].delete(:state_lock_version).to_i
-          #flash[:error] = t(:order_already_updated)
-          #redirect_to(checkout_state_path(@order.state)) && return TODO: Need to activate
-        end
-        @order.increment!(:state_lock_version)
+    return unless params[:orders] && params[:orders][:state_lock_version]
+
+    @order.with_lock do
+      unless @order.state_lock_version == params[:orders].delete(:state_lock_version).to_i
+        # flash[:error] = t(:order_already_updated)
+        # redirect_to(checkout_state_path(@order.state)) && return TODO: Need to activate
       end
+      @order.increment!(:state_lock_version)
     end
   end
 
   def set_state_if_present
-    if params[:state]
-      if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
-        if params[:failed_id].present?
-          redirect_to checkout_state_path(@order.state, failed_id: params[:failed_id])
-        else
-          redirect_to checkout_state_path(@order.state)
-        end
+    return unless params[:state]
+
+    if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
+      if params[:failed_id].present?
+        redirect_to checkout_state_path(@order.state, failed_id: params[:failed_id])
+      else
+        redirect_to checkout_state_path(@order.state)
       end
-      @order.state = params[:state]
     end
+    @order.state = params[:state]
   end
 
   def ensure_checkout_allowed
-    unless @order.line_items.count > 0
-      flash[:error] = "Your shopping cart is empty"
-      redirect_to products_path
-    end
+    return if @order.line_items.count.positive?
+
+    flash[:error] = 'Your shopping cart is empty'
+    redirect_to products_path
   end
 
   def ensure_order_not_completed
@@ -216,10 +216,10 @@ class CheckoutController < ApplicationController
   end
 
   def ensure_sufficient_stock_lines
-    if @order.insufficient_stock_lines.present?
-      flash[:error] = t(:inventory_error_flash_for_insufficient_quantity)
-      redirect_to cart_checkout_path
-    end
+    return unless @order.insufficient_stock_lines.present?
+
+    flash[:error] = t(:inventory_error_flash_for_insufficient_quantity)
+    redirect_to cart_checkout_path
   end
 
   # Provides a route to redirect after order completion
@@ -237,31 +237,31 @@ class CheckoutController < ApplicationController
   end
 
   def before_delivery
-    unless @order.ship_address.present?
-      redirect_to checkout_state_path('address')
-    end
+    return if @order.ship_address.present?
+
+    redirect_to checkout_state_path('address')
   end
 
   def before_payment
-   # before_address
-   unless @order.shipment.present?
-     redirect_to checkout_state_path('delivery')
-   end
+    # before_address
+    return if @order.shipment.present?
+
+    redirect_to checkout_state_path('delivery')
   end
 
   def add_store_credit_payments
-    if params.has_key?(:apply_store_credit)
-      @order.add_store_credit_payments
+    return unless params.key?(:apply_store_credit)
 
-      # Remove other payment method parameters.
-      params[:orders].delete(:payments_attributes)
-      params.delete(:payment_source)
+    @order.add_store_credit_payments
 
-      # Return to the Payments page if additional payment is needed.
-      if @order.payments.valid.sum(:amount) < @order.total
-        redirect_to checkout_state_path(@order.state) and return
-      end
-    end
+    # Remove other payment method parameters.
+    params[:orders].delete(:payments_attributes)
+    params.delete(:payment_source)
+
+    # Return to the Payments page if additional payment is needed.
+    return unless @order.payments.valid.sum(:amount) < @order.total
+
+    redirect_to checkout_state_path(@order.state) and return
   end
 
   def check_authorization
@@ -274,6 +274,7 @@ class CheckoutController < ApplicationController
 
   def strip_zip(address_params)
     return unless address_params
+
     address_params[:zipcode] = address_params[:zipcode].strip if address_params[:zipcode]
   end
 end

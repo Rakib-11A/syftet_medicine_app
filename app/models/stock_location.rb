@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stock_locations
@@ -28,7 +30,7 @@ class StockLocation < ApplicationRecord
   validates :name, presence: true
 
   scope :active, -> { where(active: true) }
-  scope :default, -> { where(default: true).first}
+  scope :default, -> { where(default: true).first }
 
   after_create :create_stock_items, if: :propagate_all_variants?
   after_save :ensure_one_default
@@ -36,7 +38,7 @@ class StockLocation < ApplicationRecord
 
   def propagate_product(product)
     stock_items.create!(
-      product: product, 
+      product: product,
       backorderable: backorderable_default
     )
   end
@@ -51,11 +53,7 @@ class StockLocation < ApplicationRecord
 
   def stock_item_or_create(product)
     product_stock = stock_item(product)
-    if product_stock
-      product_stock
-    else
-      stock_items.create!(product_id: product.id)
-    end
+    product_stock || stock_items.create!(product_id: product.id)
   end
 
   def count_on_hand(product)
@@ -70,7 +68,7 @@ class StockLocation < ApplicationRecord
     move(product, quantity, originator)
   end
 
-  def restock_backordered(product, quantity, originator = nil)
+  def restock_backordered(product, quantity, _originator = nil)
     item = stock_item_or_create(product)
     item.update_columns(count_on_hand: item.count_on_hand + quantity, updated_at: Time.current)
   end
@@ -85,14 +83,14 @@ class StockLocation < ApplicationRecord
   end
 
   def fill_status(product, quantity)
-    if item = stock_item(product)
+    if (item = stock_item(product))
 
       if item.count_on_hand >= quantity
         on_hand = quantity
         backordered = 0
       else
         on_hand = item.count_on_hand
-        on_hand = 0 if on_hand < 0
+        on_hand = 0 if on_hand.negative?
         backordered = item.backorderable? ? (quantity - on_hand) : 0
       end
 
@@ -103,7 +101,7 @@ class StockLocation < ApplicationRecord
   end
 
   def self.active_stock_location
-    active.where(default: true).first || self.first
+    active.where(default: true).first || first
   end
 
   private
@@ -115,8 +113,8 @@ class StockLocation < ApplicationRecord
   end
 
   def ensure_one_default
-    if default
-      StockLocation.where(default: true).where.not(id: id).update_all(default: false)
-    end
+    return unless default
+
+    StockLocation.where(default: true).where.not(id: id).update_all(default: false)
   end
 end

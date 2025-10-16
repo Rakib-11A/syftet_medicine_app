@@ -1,5 +1,5 @@
 <%= content_for :breadcrumb do %>
-    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb(@blog.title, '', '', {blogs: blogs_path}) %>
+    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb(@blog.title, '', '', { blogs: blogs_path}) %>
 <% end %>
 <h1 class="public-title"> <%= @blog.title %> </h1>
 

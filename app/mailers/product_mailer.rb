@@ -1,5 +1,6 @@
-class ProductMailer < ApplicationMailer
+# frozen_string_literal: true
 
+class ProductMailer < ApplicationMailer
   def product_subscription(email, product)
     @email = email
     @product = product

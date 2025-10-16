@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.array! @stock_items do |stock_item|
   if stock_item.product.present?
     json.id stock_item.product_id

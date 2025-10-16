@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Setting
   attr_accessor :currency, :currency_symbol
 

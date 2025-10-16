@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GenerateNumber
   extend ActiveSupport::Concern
 
@@ -18,13 +20,13 @@ module GenerateNumber
     loop do
       candidate = new_candidate(length)
       return candidate unless self.class.exists?(number: candidate)
+
       length += 1 if self.class.count > Rational(BASE**length, 2)
     end
   end
 
   def new_candidate(length)
     candidates = NUMBERS + LETTERS
-    (self.prefix || 'OR-') + length.times.map { candidates.sample(random: Random.new) }.join
+    (prefix || 'OR-') + length.times.map { candidates.sample(random: Random.new) }.join
   end
-
 end

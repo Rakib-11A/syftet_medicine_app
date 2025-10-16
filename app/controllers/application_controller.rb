@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -16,15 +18,15 @@ class ApplicationController < ActionController::Base
       order.save!
       @order = order
     end
-    unless @order.present? && @order.completed?
-      @order
-    end
+    return if @order.present? && @order.completed?
+
+    @order
   end
 
   # after sign in path override from devise
   def after_sign_in_path_for(resource)
-    if resource && resource.admin?
-      admin_path# stored_location_for(resource) || admin_path
+    if resource&.admin?
+      admin_path # stored_location_for(resource) || admin_path
     else
       request.env['omniauth.origin'] || stored_location_for(resource || 'user') || root_path
     end
@@ -35,18 +37,18 @@ class ApplicationController < ActionController::Base
     unless token.present?
       token = SecureRandom.urlsafe_base64(nil, false)
       cookies[:guest_token] = {
-          :value => token,
-          :expires => 1.year.from_now
+        value: token,
+        expires: 1.year.from_now
       }
     end
     token
   end
 
   def custom_authenticate_user!
-    unless current_user.present?
-      session[:user_redirect_to] = request.original_url
-      redirect_to "#{root_path}#login"
-    end
+    return if current_user.present?
+
+    session[:user_redirect_to] = request.original_url
+    redirect_to "#{root_path}#login"
   end
 
   def current_currency
@@ -56,7 +58,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def load_order
-    @order ||= Order.get_incomplete_order(get_token, current_user)
+    @load_order ||= Order.get_incomplete_order(get_token, current_user)
   end
 
   def load_settings

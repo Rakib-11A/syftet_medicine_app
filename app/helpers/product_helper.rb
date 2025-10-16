@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 module ProductHelper
   def product_preview_image(product, url = false)
-    if product.images.present?
-      image_url = product.images.first.file.url
-    else
-      image_url = no_image
-    end
+    image_url = if product.images.present?
+                  product.images.first.file.url
+                else
+                  no_image
+                end
     url ? image_url : image_tag(image_url, class: 'image-hover product-image lazy')
   end
 
-  def mini_image(variant, size = 50)
+  def mini_image(variant, _size = 50)
     image_url = no_image
     if variant.present?
       image_url = variant.images.present? ? variant.images.order(:id).first.file.url(:small) : no_image
     end
-    image_tag(image_url, style: "width: #{50}px")
+    image_tag(image_url, style: 'width: 50px')
   end
 
   def wishlist_link(product)
@@ -30,7 +32,7 @@ module ProductHelper
   def average_rating(product)
     total_review = product.reviews.count
     ratings = product.reviews.sum(:rating)
-    if total_review > 0
+    if total_review.positive?
       (ratings / total_review)
     else
       0
@@ -59,6 +61,7 @@ module ProductHelper
 
   def discount_price(product)
     return unless product.discountable
+
     discount_amount = product.sale_price
     raw("<del>
       <span class='price-amount discount-amount'>
@@ -82,11 +85,10 @@ module ProductHelper
   end
 
   def no_image
-    asset_path('empty_product.svg')
+    asset_path('fallback/empty_product.svg')
   end
 
   def searched_value_date_range(attr)
     params[:q].present? ? params[:q][attr] : "#{Date.today} - #{Date.today}"
   end
-
 end

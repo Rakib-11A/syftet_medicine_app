@@ -1,2 +1,6 @@
-module Admin::VariantsHelper
+# frozen_string_literal: true
+
+module Admin
+  module VariantsHelper
+  end
 end

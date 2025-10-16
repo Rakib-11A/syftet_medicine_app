@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateRewardsPoints < ActiveRecord::Migration[5.2]
   def change
     create_table :rewards_points do |t|

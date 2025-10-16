@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module CurrentPrint
   private
+
   def set_print
     @print = Print.find(session[:print_id])
   rescue ActiveRecord::RecordNotFound

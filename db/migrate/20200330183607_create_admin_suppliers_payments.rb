@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAdminSuppliersPayments < ActiveRecord::Migration[5.2]
   def change
     create_table :admin_suppliers_payments do |t|

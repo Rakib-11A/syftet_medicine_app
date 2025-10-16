@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class ShippingMethodsController < BaseController
-    before_action :set_shipping_method, only: [:edit, :update, :destroy]
+    before_action :set_shipping_method, only: %i[edit update destroy]
 
     def index
       @shipping_methods = ShippingMethod.all.order(created_at: :desc)
@@ -20,12 +22,11 @@ module Admin
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       if @shipping_method.update(shipping_method_params)
-        flash[:success] = "Shipping method updates"
+        flash[:success] = 'Shipping method updates'
         redirect_to admin_shipping_methods_path
       else
         render :edit
@@ -47,6 +48,5 @@ module Admin
     def set_shipping_method
       @shipping_method = ShippingMethod.find_by_id(params[:id])
     end
-
   end
 end

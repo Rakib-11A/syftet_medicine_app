@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class PaymentMethodsController < BaseController
     before_action :validate_payment_method_provider, only: :create
@@ -32,12 +34,10 @@ module Admin
       payment_method = PaymentMethod.find_by_id(params[:id])
       if payment_method.destroy
         flash[:success] = t(:successfully_removed, resource: t(:payment_method))
-        redirect_to admin_payment_methods_path
       else
-        flash[:error] = "Something Worng please try latter"
-        redirect_to admin_payment_methods_path
+        flash[:error] = 'Something Worng please try latter'
       end
-
+      redirect_to admin_payment_methods_path
     end
 
     def update
@@ -45,14 +45,14 @@ module Admin
       payment_method_type = params[:payment_method].delete(:type)
       if @payment_method['type'].to_s != payment_method_type
         @payment_method.update_columns(
-            type: payment_method_type,
-            updated_at: Time.current,
+          type: payment_method_type,
+          updated_at: Time.current
         )
         @payment_method = PaymentMethod.find(params[:id])
       end
 
       update_params = params[ActiveModel::Naming.param_key(@payment_method)].nil? ? {} : params[ActiveModel::Naming.param_key(@payment_method)].permit!
-      attributes = payment_method_params.merge({preferences: update_params})
+      attributes = payment_method_params.merge({ preferences: update_params })
 
       if @payment_method.update(attributes)
         flash[:success] = t(:successfully_updated, resource: t(:payment_method))
@@ -69,7 +69,7 @@ module Admin
       @providers = [PaymentMethod::Cash,
                     PaymentMethod::SslCommerz,
                     PaymentMethod::CreditPoint,
-                    PaymentMethod::PayPalExpress] #Gateway.providers.sort { |p1, p2| p1.name <=> p2.name }
+                    PaymentMethod::PayPalExpress] # Gateway.providers.sort { |p1, p2| p1.name <=> p2.name }
     end
 
     def validate_payment_method_provider
@@ -77,10 +77,10 @@ module Admin
                                'PaymentMethod::SslCommerz',
                                'PaymentMethod::CreditPoint',
                                'PaymentMethod::PayPalExpress']
-      if !valid_payment_methods.include?(params[:payment_method][:type])
-        flash[:error] = t(:invalid_payment_provider)
-        redirect_to new_admin_payment_method_path
-      end
+      return if valid_payment_methods.include?(params[:payment_method][:type])
+
+      flash[:error] = t(:invalid_payment_provider)
+      redirect_to new_admin_payment_method_path
     end
 
     def payment_method_params

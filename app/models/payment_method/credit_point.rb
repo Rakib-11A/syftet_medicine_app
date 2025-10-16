@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: payment_methods
@@ -12,70 +14,66 @@
 #  updated_at  :datetime         not null
 #
 
-class PaymentMethod::CreditPoint < PaymentMethod
-  def actions
-    %w{capture void}
-  end
+class PaymentMethod::CreditPoint < ::PaymentMethod
+    def actions
+      %w[capture void]
+    end
 
-  # Indicates whether its possible to capture the payment
-  def can_capture?(payment)
-    ['checkout', 'pending'].include?(payment.state)
-  end
+    # Indicates whether its possible to capture the payment
+    def can_capture?(payment)
+      %w[checkout pending].include?(payment.state)
+    end
 
-  # Indicates whether its possible to void the payment.
-  def can_void?(payment)
-    payment.state != 'void'
-  end
+    # Indicates whether its possible to void the payment.
+    def can_void?(payment)
+      payment.state != 'void'
+    end
 
-  def process
-    {state: 'pending', response_code: 200, response_message: 'Payment success'}
-  end
+    def process
+      { state: 'pending', response_code: 200, response_message: 'Payment success' }
+    end
 
-  def capture(payment)
-    payment.state = 'captured'
-    if payment.save
+    def capture(payment)
+      payment.state = 'captured'
+      return unless payment.save
+
       payment.order.update_attribute(:payment_state, 'paid')
     end
-  end
 
-  def purchase(amount, source, options = {})
-    response = simulated_successful_billing_response
-    response
-  end
-
-  def cancel(amount, source, order, code)
-    response = simulated_successful_billing_response
-    if response.success?
-      update_rewards_points(amount.to_f, 'Purchased Canceled', order)
+    def purchase(_amount, _source, _options = {})
+      simulated_successful_billing_response
     end
-    response
-  end
 
-  def void(*)
-    simulated_successful_billing_response
-  end
+    def cancel(amount, _source, order, _code)
+      response = simulated_successful_billing_response
+      update_rewards_points(amount.to_f, 'Purchased Canceled', order) if response.success?
+      response
+    end
 
-  def source_required?
-    false
-  end
+    def void(*)
+      simulated_successful_billing_response
+    end
 
-  def credit(*)
-    simulated_successful_billing_response
-  end
+    def source_required?
+      false
+    end
 
-  private
+    def credit(*)
+      simulated_successful_billing_response
+    end
 
-  def simulated_successful_billing_response
-    ActiveMerchant::Billing::Response.new(true, '', {}, {authorization: true})
-  end
+    private
 
-  def update_rewards_points(amount, reason, order)
-    p '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-    if order.present?
+    def simulated_successful_billing_response
+      ActiveMerchant::Billing::Response.new(true, '', {}, { authorization: true })
+    end
+
+    def update_rewards_points(amount, reason, order)
+      p '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
+      return unless order.present?
+
       order_id = order.id
       user_id = order.user_id
       RewardsPoint.create(order_id: order_id, points: amount, reason: reason, user_id: user_id)
     end
-  end
-
 end

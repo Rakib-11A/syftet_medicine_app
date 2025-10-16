@@ -1,8 +1,10 @@
-class NotificationMailer < ApplicationMailer
+# frozen_string_literal: true
 
+class NotificationMailer < ApplicationMailer
   def send_contact_notification(contact)
     @contact = contact
-    mail(to: 'info@sattarshoppingmall.com', subject: "Contact request from: #{@contact.email}", from: 'mahabubziko@gmail.com')
+    mail(to: 'info@sattarshoppingmall.com', subject: "Contact request from: #{@contact.email}",
+         from: 'mahabubziko@gmail.com')
   end
 
   def send_subscription_notification(email)

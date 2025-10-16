@@ -1,25 +1,29 @@
+# frozen_string_literal: true
+
 module Admin
   class StockItemsController < BaseController
-    before_action :set_stock_item, only: [:update, :destroy]
+    before_action :set_stock_item, only: %i[update destroy]
 
     def create
       @product = Product.find(params[:product_id])
       @stock_location = StockLocation.find(params[:stock_location_id])
       @stock_item = @stock_location.stock_item(@product)
-      
+
       if @stock_item
         @stock_movement = @stock_item.stock_movements.build(stock_movement_params)
         @stock_movement.originator = current_user # Add this line
         @stock_movement.save
       end
-      
+
       redirect_to stock_admin_product_path(@product)
     end
 
     def update
       respond_to do |format|
         if @stock_item.update(stock_item_params)
-          format.html { redirect_to stock_admin_product_path(@stock_item.product), notice: 'Stock changed successfully.' }
+          format.html do
+            redirect_to stock_admin_product_path(@stock_item.product), notice: 'Stock changed successfully.'
+          end
         else
           format.html { redirect_to stock_admin_product_path(@stock_item.product), error: 'Unable to changed stock.' }
         end

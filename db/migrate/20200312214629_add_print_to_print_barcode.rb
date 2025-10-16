@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPrintToPrintBarcode < ActiveRecord::Migration[5.2]
   def change
     add_reference :print_barcodes, :print, foreign_key: true

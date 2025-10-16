@@ -4,7 +4,7 @@
     <div class="container">
       <!--<div class="page-title uppercase text-center with-bb hidden-xs">-->
       <% content_for :breadcrumb do %>
-          <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb("shipped_track", '', '', {my_account: my_account_path, order: order_path(@order)}) %>
+          <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb("shipped_track", '', '', { my_account: my_account_path, order: order_path(@order)}) %>
       <% end %>
       <!--</div>-->
       <div class="chunk track-package">

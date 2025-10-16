@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Admin
   module Suppliers
     class DiscountsController < BaseController
-      before_action :set_admin_suppliers_discount, only: [:show, :edit, :destroy]
+      before_action :set_admin_suppliers_discount, only: %i[show edit destroy]
 
       # GET /admin/suppliers/discounts
       # GET /admin/suppliers/discounts.json
@@ -12,8 +14,7 @@ module Admin
 
       # GET /admin/suppliers/discounts/1
       # GET /admin/suppliers/discounts/1.json
-      def show
-      end
+      def show; end
 
       # GET /admin/suppliers/discounts/new
       def new
@@ -24,21 +25,15 @@ module Admin
       end
 
       # GET /admin/suppliers/discounts/1/edit
-      def edit
-      end
+      def edit; end
 
       # POST /admin/suppliers/discounts
       # POST /admin/suppliers/discounts.json
       def create
-
         @invoice = Admin::Suppliers::Invoice.find_by_id(discount_params[:invoice_id])
         @discount = @invoice.discounts.build(discount_params.merge(supplier_id: @invoice.supplier_id))
         if @discount.save
-          if @invoice.due_amount <= 0
-            @invoice.is_complete = true
-          else
-            @invoice.is_complete = false
-          end
+          @invoice.is_complete = @invoice.due_amount <= 0
           @invoice.save
           redirect_to admin_suppliers_discounts_path
         else
@@ -53,9 +48,9 @@ module Admin
         @invoice = Admin::Suppliers::Invoice.find_by_id(discount_params[:invoice_id])
         @discount = @invoice.discounts.find_by_id(params[:id])
         @discount.update(discount_params.merge(supplier_id: @invoice.supplier_id))
-        if @discount.save
-          redirect_to admin_suppliers_discounts_path
-        end
+        return unless @discount.save
+
+        redirect_to admin_suppliers_discounts_path
       end
 
       # DELETE /admin/suppliers/discounts/1
@@ -69,6 +64,7 @@ module Admin
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_admin_suppliers_discount
         @discount = Admin::Suppliers::Discount.find(params[:id])
@@ -76,9 +72,9 @@ module Admin
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def discount_params
-        params.require(:admin_suppliers_discount).permit(:amount, :date, :discount_by, :discount_reason, :invoice_no, :invoice_id, :supplier_id)
+        params.require(:admin_suppliers_discount).permit(:amount, :date, :discount_by, :discount_reason, :invoice_no,
+                                                         :invoice_id, :supplier_id)
       end
     end
   end
 end
-

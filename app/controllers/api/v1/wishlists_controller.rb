@@ -1,19 +1,24 @@
-class Api::V1::WishlistsController < Api::ApiBase
-  before_action :load_user
+# frozen_string_literal: true
 
-  def index
-    wishlists = @user.wishlists.page(params[:page])
+module Api
+  module V1
+    class WishlistsController < Api::ApiBase
+      before_action :load_user
 
-    response = {
-        total_item: wishlists.total_count,
-        success: true,
-        products: []
-    }
+      def index
+        wishlists = @user.wishlists.page(params[:page])
 
-    wishlists.each do |wishlist|
-      product = wishlist.product
-      if product.present?
-        response[:products] << {
+        response = {
+          total_item: wishlists.total_count,
+          success: true,
+          products: []
+        }
+
+        wishlists.each do |wishlist|
+          product = wishlist.product
+          next unless product.present?
+
+          response[:products] << {
             id: product.id,
             wish_id: wishlist.id,
             name: product.name,
@@ -24,30 +29,34 @@ class Api::V1::WishlistsController < Api::ApiBase
             is_favourited: true,
             # promotion: product.promotionable,
             total_on_hand: product.total_on_hand,
-            categories: product.categories.as_json(only: [:id, :name])
-        }
+            categories: product.categories.as_json(only: %i[id name])
+          }
+        end
+
+        render json: response
+      end
+
+      def create
+        wishlist = @user.wishlists.find_or_initialize_by(product_id: params[:product_id])
+        status = if wishlist.new_record?
+                   wishlist.save
+                 else
+                   (wishlist.destroy ? true : false)
+                 end
+        render json: { status: status }
+      end
+
+      def remove
+        wishlist = @user.wishlists.find_by_id(params[:wishlist_id])
+        if wishlist
+          status = wishlist.destroy ? true : false
+          message = status ? 'Wishlist removed' : 'Unable to remove from wishlist'
+        else
+          status = false
+          message = 'Wishlist not found'
+        end
+        render json: { success: status, message: message }
       end
     end
-
-    render json: response
   end
-
-  def create
-    wishlist = @user.wishlists.find_or_initialize_by(product_id: params[:product_id])
-    status = wishlist.new_record? ? wishlist.save : (wishlist.destroy ? true : false)
-    render json: {status: status}
-  end
-
-  def remove
-    wishlist = @user.wishlists.find_by_id(params[:wishlist_id])
-    if wishlist
-      status = wishlist.destroy ? true : false
-      message = status ? 'Wishlist removed' : 'Unable to remove from wishlist'
-    else
-      status = false
-      message = 'Wishlist not found'
-    end
-    render json: {success: status, message: message}
-  end
-
 end

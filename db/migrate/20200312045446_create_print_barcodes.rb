@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePrintBarcodes < ActiveRecord::Migration[5.2]
   def change
     create_table :print_barcodes do |t|

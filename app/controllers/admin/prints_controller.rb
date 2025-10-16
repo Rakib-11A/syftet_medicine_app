@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin
   class PrintsController < BaseController
-    before_action :set_print, only: [:show, :edit, :update, :destroy]
+    before_action :set_print, only: %i[show edit update destroy]
     rescue_from ActiveRecord::RecordNotFound, with: :invalid_print
     # GET /prints
     # GET /prints.json
@@ -10,8 +12,7 @@ module Admin
 
     # GET /prints/1
     # GET /prints/1.json
-    def show
-    end
+    def show; end
 
     # GET /prints/new
     def new
@@ -19,8 +20,7 @@ module Admin
     end
 
     # GET /prints/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /prints
     # POST /prints.json
@@ -64,6 +64,7 @@ module Admin
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def invalid_print
       logger.error "Attempt to access invalid cart #{params[:id]}"

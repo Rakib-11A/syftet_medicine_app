@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Preferable
   extend ActiveSupport::Concern
 
@@ -11,12 +13,11 @@ module Preferable
     if defined?(self::PREFERENCES) && self::PREFERENCES.any?
       self::PREFERENCES.each do |preference|
         define_method preference_getter_method(preference[:field]) do
-          self.preferences = Hash.new unless self.preferences.kind_of?(Hash)
+          self.preferences = ({}) unless preferences.is_a?(Hash)
           field_value = preferences.fetch("preferred_#{preference[:field]}", preference[:default])
           field_value.blank? ? preference[:default] : field_value
         end
       end
     end
   end
-
 end

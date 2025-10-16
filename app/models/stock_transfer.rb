@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stock_transfers
@@ -32,9 +34,9 @@ class StockTransfer < ApplicationRecord
   def transfer(source_location, destination_location, products)
     transaction do
       products.each_pair do |product, quantity|
-        source_location.unstock(product, quantity, self) if source_location
+        source_location&.unstock(product, quantity, self)
         destination_location.restock(product, quantity, self)
-        self.number = "#{Date.today.strftime("%Y%m%d")}-#{id}"
+        self.number = "#{Date.today.strftime('%Y%m%d')}-#{id}"
         self.source_location = source_location
         self.destination_location = destination_location
         save!

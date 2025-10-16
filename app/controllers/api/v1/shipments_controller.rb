@@ -1,24 +1,31 @@
-class Api::V1::ShipmentsController < Api::ApiBase
-  before_action :find_and_update_shipment, only: [:ship]
-  respond_to :json
+# frozen_string_literal: true
 
-  def ship
-    @shipment.ship! unless @shipment.shipped?
-    respond_with(@shipment, default_template: :show)
-  end
+module Api
+  module V1
+    class ShipmentsController < Api::ApiBase
+      before_action :find_and_update_shipment, only: [:ship]
+      respond_to :json
 
-  private
-  def find_and_update_shipment
-    @shipment = Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-    @shipment.update(shipment_params)
-    @shipment.reload
-  end
+      def ship
+        @shipment.ship! unless @shipment.shipped?
+        respond_with(@shipment, default_template: :show)
+      end
 
-  def shipment_params
-    if params[:shipment] && !params[:shipment].empty?
-      params.require(:shipment).permit!
-    else
-      {}
+      private
+
+      def find_and_update_shipment
+        @shipment = Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
+        @shipment.update(shipment_params)
+        @shipment.reload
+      end
+
+      def shipment_params
+        if params[:shipment] && !params[:shipment].empty?
+          params.require(:shipment).permit!
+        else
+          {}
+        end
+      end
     end
   end
 end

@@ -1,13 +1,17 @@
-module Admin::PrintBarcodesHelper
-  def attribute_present?(params, attr)
-    params[attr].present?
-  end
+# frozen_string_literal: true
 
-  def attribute_true?(params, attr)
-    attribute_present?(params, attr) ? params[attr] == "1" : false
-  end
+module Admin
+  module PrintBarcodesHelper
+    def attribute_present?(params, attr)
+      params[attr].present?
+    end
 
-  def set_style_value(params, attr)
-    attribute_present?(params, attr) ? params[attr] + 'px' : '0px'
+    def attribute_true?(params, attr)
+      attribute_present?(params, attr) ? params[attr] == '1' : false
+    end
+
+    def set_style_value(params, attr)
+      attribute_present?(params, attr) ? "#{params[attr]}px" : '0px'
+    end
   end
 end

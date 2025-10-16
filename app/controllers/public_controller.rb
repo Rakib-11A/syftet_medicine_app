@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mail'
 
 class PublicController < ApplicationController
@@ -12,20 +14,18 @@ class PublicController < ApplicationController
   end
 
   def return_policy
-    @title = "BrandCruz: Designer Apparel, Shoes, Handbags, & Beauty FREE SHIPPING"
-    @keywords = "free shipping, coupon code, brand, cloth, shoes, women shoes"
-    @description = "Free Shipping & Free Returns at Brandcruz.com. Shop the latest styles from top designers including Michael Kors, Tory Burch, Burberry, Christian Louboutin."
+    @title = 'BrandCruz: Designer Apparel, Shoes, Handbags, & Beauty FREE SHIPPING'
+    @keywords = 'free shipping, coupon code, brand, cloth, shoes, women shoes'
+    @description = 'Free Shipping & Free Returns at Brandcruz.com. Shop the latest styles from top designers including Michael Kors, Tory Burch, Burberry, Christian Louboutin.'
   end
 
   def international
-    @title = "Brandcruz: Search and find the latest in fashion | Shipping Worldwide"
-    @keywords = "Shoes, Dress, New to Sale, Designers,"
-    @description = "FREE RETURNS & FREE 3-DAY SHIPPING WORLDWIDE -Women’s, Men’s Dresses, Handbags, Shoes, Jeans, Tops and more."
+    @title = 'Brandcruz: Search and find the latest in fashion | Shipping Worldwide'
+    @keywords = 'Shoes, Dress, New to Sale, Designers,'
+    @description = 'FREE RETURNS & FREE 3-DAY SHIPPING WORLDWIDE -Women’s, Men’s Dresses, Handbags, Shoes, Jeans, Tops and more.'
   end
 
-  def promise
-
-  end
+  def promise; end
 
   def subscribe
     email = params[:newsletter_subscription][:email]
@@ -42,49 +42,43 @@ class PublicController < ApplicationController
         p newsletter.errors
         @message = newsletter.errors.first
       end
-    rescue => ex
+    rescue StandardError => e
       p 'sdfsdfsdfsdf'
-      p ex.message
-      @message = "Email address not valid: #{ex.message}"
+      p e.message
+      @message = "Email address not valid: #{e.message}"
     end
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
-  def privacy_policy
+  def privacy_policy; end
 
-  end
-
-  def term_condition
-
-  end
+  def term_condition; end
 
   def unauthorized
     respond_to do |format|
-      format.html {
+      format.html do
         redirect_to root_path
-      }
+      end
       format.js {}
     end
   end
 
   def safe_shopping_guarantee
-    @title = "Brandcruz.com – Shop securely for Shoes, clothing, accessories and more on sale!"
+    @title = 'Brandcruz.com – Shop securely for Shoes, clothing, accessories and more on sale!'
     @keywords = "Women's Clothing, Sandals, Jackets & Coats, Women's Shoes"
-    @description = "Discounted shoes, clothing, accessories and more at Brandcruz.com! Shop for brands you love on sale. Score on the Style, Score on the Price."
+    @description = 'Discounted shoes, clothing, accessories and more at Brandcruz.com! Shop for brands you love on sale. Score on the Style, Score on the Price.'
   end
 
   def secure_shopping
-    @title = "Brandcruz.com - Up to 50% off luxury fashion‎ |Shop Secure"
-    @keywords = "Sale, Shoes, Designers, Dresses, Clothing, Tops , Bags, porter"
-    @description = "Shop designer fashion online at Brandcruz.com. Designer clothes, designer shoes, designer bags and designer accessories from top designer brands: ..."
+    @title = 'Brandcruz.com - Up to 50% off luxury fashion‎ |Shop Secure'
+    @keywords = 'Sale, Shoes, Designers, Dresses, Clothing, Tops , Bags, porter'
+    @description = 'Shop designer fashion online at Brandcruz.com. Designer clothes, designer shoes, designer bags and designer accessories from top designer brands: ...'
   end
 
   def coupon
-    @title = "Brandcruz.com coupon code – Brandcruz.com | FREE SHIPPING & RETURNS"
-    @description = "Brandcruz.com coupon code available online, Promotion code for unbeatable discount"
-    @keywords = "brandcruz.com coupon code, brandcruz, brandcruz.com"
+    @title = 'Brandcruz.com coupon code – Brandcruz.com | FREE SHIPPING & RETURNS'
+    @description = 'Brandcruz.com coupon code available online, Promotion code for unbeatable discount'
+    @keywords = 'brandcruz.com coupon code, brandcruz, brandcruz.com'
   end
 
   def faq
@@ -96,18 +90,14 @@ class PublicController < ApplicationController
   def not_found
     respond_to do |format|
       format.html { render status: 404 }
-      format.xml { render xml: {error: 'Not found'}, status: 404 }
-      format.json { render json: {error: 'Not found'}, status: 404 }
+      format.xml { render xml: { error: 'Not found' }, status: 404 }
+      format.json { render json: { error: 'Not found' }, status: 404 }
     end
   end
 
-  def internal_error
+  def internal_error; end
 
-  end
-
-  def unacceptable
-
-  end
+  def unacceptable; end
 
   def wishlist
     render layout: 'product'

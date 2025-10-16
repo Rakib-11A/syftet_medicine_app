@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stock_movements
@@ -21,10 +23,10 @@ class StockMovement < ApplicationRecord
   with_options presence: true do
     validates :stock_item
     validates :quantity, numericality: {
-        greater_than_or_equal_to: -2**31,
-        less_than_or_equal_to: 2**31 - 1,
-        only_integer: true,
-        allow_nil: true
+      greater_than_or_equal_to: -2**31,
+      less_than_or_equal_to: 2**31 - 1,
+      only_integer: true,
+      allow_nil: true
     }
   end
 
@@ -37,7 +39,8 @@ class StockMovement < ApplicationRecord
   private
 
   def update_stock_item_quantity
-    return unless self.stock_item.product.should_track_inventory? # TODO: Check later
+    return unless stock_item.product.should_track_inventory? # TODO: Check later
+
     stock_item.adjust_count_on_hand quantity
   end
 end

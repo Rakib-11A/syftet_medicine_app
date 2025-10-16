@@ -1,5 +1,5 @@
 <% content_for :breadcrumb do %>
-    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Payment', '', '', {'checkout' => '/checkout', 'Shipping Address' => '/checkout/address', 'Delivery' => '/checkout/delivery'}) %>
+    <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb('Payment', '', '', { 'checkout' => '/checkout', 'Shipping Address' => '/checkout/address', 'Delivery' => '/checkout/delivery'}) %>
 <% end %>
 
 <script type="text/javascript" asyc src='https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/3.0.0/jquery.payment.min.js'></script>

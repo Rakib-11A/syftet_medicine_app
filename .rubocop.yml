@@ -1,0 +1,34 @@
+# .rubocop.yml
+
+# RuboCop-কে তার স্ট্যান্ডার্ড নিয়মগুলো ব্যবহার করতে বলুন
+inherit_gem:
+  rubocop-standard:
+    - config/default.yml
+  # rubocop-rails জেম যোগ করলে এই লাইনটি প্রয়োজন
+  rubocop-rails:
+    - config/default.yml
+
+# আপনার প্রজেক্টের জন্য কাস্টম কনফিগারেশন
+AllCops:
+  # Ruby ভার্সন সেট করুন (আপনার Gemfile বা প্রজেক্টের ভার্সন অনুযায়ী)
+  TargetRubyVersion: 3.2 # উদাহরণ
+  # RuboCop-এর ইন্সপেকশন থেকে বাদ দিতে চান এমন ফাইল/ডিরেক্টরি
+  Exclude:
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'config/environments/*'
+    - 'node_modules/**/*'
+
+# ঐচ্ছিক: কিছু জনপ্রিয় কপ কাস্টমাইজ করা (আপনার প্রয়োজনে)
+Metrics/BlockLength:
+  # Rake task, Migration, Seeds এবং Spec-এর জন্য বড় ব্লক সাইজ অনুমোদিত
+  ExcludedMethods: ['describe', 'context', 'it', 'to', 'from']
+  Max: 50
+
+Style/FrozenStringLiteralComment:
+  # এই কমেন্টটি স্বয়ংক্রিয়ভাবে সব ফাইলে যোগ করার প্রয়োজনীয়তা বন্ধ করুন
+  Enabled: false
+
+Layout/LineLength:
+  # যদি আপনি লাইনের দৈর্ঘ্য 120-এর বেশি রাখতে চান (স্ট্যান্ডার্ড 80 বা 100)
+  Max: 120

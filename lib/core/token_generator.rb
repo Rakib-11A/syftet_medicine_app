@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Core
   module TokenGenerator
     def generate_guest_token(model_class = Order)

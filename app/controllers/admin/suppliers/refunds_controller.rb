@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 module Admin
   module Suppliers
     class RefundsController < BaseController
-      before_action :set_refund, only: [:show, :edit, :update, :destroy, :edit_refund, :remove_refund_item, :remove_refund, :refund, :new_return_item, :refund_items]
+      before_action :set_refund,
+                    only: %i[show edit update destroy edit_refund remove_refund_item remove_refund refund
+                             new_return_item refund_items]
 
       def index
         supplier_ids = User.suppliers.map(&:id)
@@ -9,8 +13,7 @@ module Admin
         @refunds = @refunds.page(params[:page]).per(20)
       end
 
-      def show
-      end
+      def show; end
 
       def new
         if params[:state].present? && params[:state] == 'order'
@@ -27,18 +30,17 @@ module Admin
 
       def new_refund
         @suppliers = User.suppliers
-        if params[:supplier_id].present?
-          @supplier = @suppliers.find_by_id(params[:supplier_id])
-          @refund = Admin::Suppliers::Refund.create!(supplier_id: @supplier.id, refund_by: current_user.name, amount: 0, date: Date.today)
-          redirect_to refund_admin_suppliers_refunds_path(id: @refund.id)
-        end
+        return unless params[:supplier_id].present?
 
+        @supplier = @suppliers.find_by_id(params[:supplier_id])
+        @refund = Admin::Suppliers::Refund.create!(supplier_id: @supplier.id, refund_by: current_user.name,
+                                                   amount: 0, date: Date.today)
+        redirect_to refund_admin_suppliers_refunds_path(id: @refund.id)
       end
 
       def refund
         @supplier = @refund.supplier
         @purchases = Admin::Suppliers::Invoice.where(supplier_id: @supplier.id).received
-
       end
 
       def update_refund
@@ -47,9 +49,9 @@ module Admin
         @refund.refund_reason = params[:refund_reason]
         @refund.is_order = true
         @refund.save!
-        if @refund
-          redirect_to refunds_admin_suppliers_purchase_orders_path
-        end
+        return unless @refund
+
+        redirect_to refunds_admin_suppliers_purchase_orders_path
       end
 
       def refund_items
@@ -63,11 +65,12 @@ module Admin
         @purchase = Admin::Suppliers::Invoice.find_by(id: params[:invoice_id])
         @invoice_item = @purchase.items.find(params[:invoice_item_id])
         quantity = params[:quantity].present? ? params[:quantity].to_i : 1
-        @refund_item = @refund.items.create!(invoice_item_id: @invoice_item.id, amount: @invoice_item.cost_price * quantity, quantity: quantity , product_id: params[:product_id])
+        @refund_item = @refund.items.create!(invoice_item_id: @invoice_item.id,
+                                             amount: @invoice_item.cost_price * quantity, quantity: quantity, product_id: params[:product_id])
         @refund.calculate_refund_amount
-        if @refund
-          redirect_to refund_admin_suppliers_refunds_path(id: @refund.id)
-        end
+        return unless @refund
+
+        redirect_to refund_admin_suppliers_refunds_path(id: @refund.id)
       end
 
       def remove_refund
@@ -86,23 +89,18 @@ module Admin
       #   redirect_to edit_refund_admin_supplier_refunds_path(id: @refund.id)
       # end
 
-      def edit
-      end
+      def edit; end
 
       def create
-          @invoice = Admin::Suppliers::Invoice.find_by_id(refund_params[:invoice_id])
-          @refund = @invoice.refunds.build(refund_params.merge(supplier_id: @invoice.supplier_id))
-          if @refund.save
-            if @invoice.due_amount <= 0
-              @invoice.is_complete = true
-            else
-              @invoice.is_complete = false
-            end
-            @invoice.save
-            redirect_to new_admin_suppliers_payment_path(invoice_id: @invoice.id)
-          else
-            render :new, invoice_id: @invoice.id
-          end
+        @invoice = Admin::Suppliers::Invoice.find_by_id(refund_params[:invoice_id])
+        @refund = @invoice.refunds.build(refund_params.merge(supplier_id: @invoice.supplier_id))
+        if @refund.save
+          @invoice.is_complete = @invoice.due_amount <= 0
+          @invoice.save
+          redirect_to new_admin_suppliers_payment_path(invoice_id: @invoice.id)
+        else
+          render :new, invoice_id: @invoice.id
+        end
       end
 
       def update
@@ -137,4 +135,3 @@ module Admin
     end
   end
 end
-

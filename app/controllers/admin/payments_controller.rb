@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module Admin
   class PaymentsController < Admin::BaseController
-    before_action :load_order, only: [:create, :new, :index, :fire]
-    before_action :load_payment, except: [:create, :new, :index]
+    before_action :load_order, only: %i[create new index fire]
+    before_action :load_payment, except: %i[create new index]
     before_action :load_data
 
     respond_to :html
 
     def index
-      @payments = @order.payments #.includes(refunds: :reason)
+      @payments = @order.payments # .includes(refunds: :reason)
       @refunds = @payments.flat_map(&:refunds)
       redirect_to new_admin_order_payment_url(@order) if @payments.empty?
     end
@@ -18,14 +20,14 @@ module Admin
 
     def create
       @order.update_with_payment(object_params)
-      if @order.completed?
-        if @order.admin.present?
-          @order.approved_order(current_user)
-          if @order.approved?
-            redirect_to admin_order_payments_path(@order)
-          end
-        end
-      end
+      return unless @order.completed?
+      return unless @order.admin.present?
+
+      @order.approved_order(current_user)
+      return unless @order.approved?
+
+      redirect_to admin_order_payments_path(@order)
+
       # invoke_callbacks(:create, :before)
       # @payment ||= @order.payments.build(object_params)
       # if @payment.payment_method.source_required? && params[:card].present? and params[:card] != 'new'
@@ -56,17 +58,17 @@ module Admin
     end
 
     def fire
-      return unless event = params[:e]
+      return unless (event = params[:e])
 
       # Because we have a transition method also called void, we do this to avoid conflicts.
-      event = "void_transaction" if event == "void"
+      event = 'void_transaction' if event == 'void'
       if @payment.send("#{event}!")
         flash[:success] = t(:payment_updated)
       else
         flash[:error] = t(:cannot_perform_operation)
       end
-    rescue Exception => ge
-      flash[:error] = "#{ge.message}"
+    rescue Exception => e
+      flash[:error] = e.message.to_s
     ensure
       redirect_to admin_order_payments_path(@order)
     end
@@ -74,7 +76,7 @@ module Admin
     private
 
     def object_params
-      if params[:payment] and params[:payment_source] and source_params = params.delete(:payment_source)[params[:payment][:payment_method_id]]
+      if params[:payment] && params[:payment_source] && (source_params = params.delete(:payment_source)[params[:payment][:payment_method_id]])
         params[:payment][:source_attributes] = source_params
       end
 
@@ -85,11 +87,11 @@ module Admin
     def load_data
       @amount = params[:amount] || load_order.total
       @payment_methods = PaymentMethod.all_active
-      if @payment and @payment.payment_method
-        @payment_method = @payment.payment_method
-      else
-        @payment_method = @payment_methods.first
-      end
+      @payment_method = if @payment&.payment_method
+                          @payment.payment_method
+                        else
+                          @payment_methods.first
+                        end
     end
 
     def load_order

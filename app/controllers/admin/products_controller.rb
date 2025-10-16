@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Admin
   class ProductsController < BaseController
-    before_action :set_product, only: [:edit, :show, :update, :destroy, :stock, :remove_review, :review, :approved]
+    before_action :set_product, only: %i[edit show update destroy stock remove_review review approved]
 
     def index
       @products = active_product.includes(:reviews).page(params[:page]).per(20)
       respond_to do |format|
-        format.html {  }
+        format.html {}
         format.json { @products = Product.master_active.search_by_name_or_code(params[:q][:term]) }
       end
     end
@@ -18,19 +20,16 @@ module Admin
       @product = Product.new(product_params)
       respond_to do |format|
         if @product.save
-          format.html {redirect_to edit_admin_product_path(@product), notice: 'Product created successfully.' }
+          format.html { redirect_to edit_admin_product_path(@product), notice: 'Product created successfully.' }
         else
           format.html { render :new }
         end
       end
     end
 
-    def edit
-    end
+    def edit; end
 
-    def show
-
-    end
+    def show; end
 
     def update
       respond_to do |format|
@@ -64,27 +63,22 @@ module Admin
     def stock
       @products = @product.variants_with_master
       @stock_locations = StockLocation.active.includes(:stock_items)
-      if @stock_locations.empty?
-        flash[:error] = t(:stock_management_requires_a_stock_location)
-        redirect_to admin_stock_locations_path
-      end
+      return unless @stock_locations.empty?
+
+      flash[:error] = t(:stock_management_requires_a_stock_location)
+      redirect_to admin_stock_locations_path
     end
 
-    def review
-
-    end
+    def review; end
 
     def approved
       @product_review = @product.reviews.find(params[:review_id])
       if @product_review
         @product_review.is_approved = true
-        if @product_review.save
-          redirect_to review_admin_product_path, notice: 'Review Approved Successfully'
-        end
+        redirect_to review_admin_product_path, notice: 'Review Approved Successfully' if @product_review.save
       else
-        redirect_to review_admin_product_path , notice: 'No review Found'
+        redirect_to review_admin_product_path, notice: 'No review Found'
       end
-
     end
 
     def inventory
@@ -94,14 +88,18 @@ module Admin
     def name_search
       products = []
       params[:per_page] = 10
-      products = Search.new(params).result.map{ |product| { id: product.id, text: product.name }} if params[:name].present?
+      if params[:name].present?
+        products = Search.new(params).result.map do |product|
+          { id: product.id, text: product.name }
+        end
+      end
       more = products.length >= params[:per_page]
 
       render json: {
-          results: products,
-          pagination: {
-              more: more
-          }
+        results: products,
+        pagination: {
+          more: more
+        }
       }
     end
 
@@ -134,15 +132,19 @@ module Admin
         products.where("lower(name) like '%#{query}%' or lower(code) like '%#{query}%' or lower(barcode) like '%#{query}%'")
       elsif params[:product].present?
         @search = Product.new(product_params)
-        products = products.where("lower(name) like '%#{params[:product][:name].downcase}%'") unless params[:product][:name].blank?
-        products = products.where("lower(code) like '%#{params[:product][:code].downcase}%'") unless params[:product][:code].blank?
-        products = products.where("lower(barcode) like '%#{params[:product][:barcode].downcase}%'") unless params[:product][:barcode].blank?
+        unless params[:product][:name].blank?
+          products = products.where("lower(name) like '%#{params[:product][:name].downcase}%'")
+        end
+        unless params[:product][:code].blank?
+          products = products.where("lower(code) like '%#{params[:product][:code].downcase}%'")
+        end
+        unless params[:product][:barcode].blank?
+          products = products.where("lower(barcode) like '%#{params[:product][:barcode].downcase}%'")
+        end
         products
       else
         products
       end
-
-
     end
   end
 end

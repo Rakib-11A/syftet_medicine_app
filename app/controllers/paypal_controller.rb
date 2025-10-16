@@ -1,5 +1,6 @@
-class PaypalController < ApplicationController
+# frozen_string_literal: true
 
+class PaypalController < ApplicationController
   def express
     order = current_order || raise(ActiveRecord::RecordNotFound)
     items = order.line_items.map(&method(:line_item))
@@ -31,8 +32,9 @@ class PaypalController < ApplicationController
       if pp_response.success?
         redirect_to provider.express_checkout_url(pp_response, useraction: 'commit')
       else
-        p pp_response.errors.map(&:long_message).join(" ")
-        flash[:error] = I18n.t('flash.generic_error', scope: 'paypal', reasons: pp_response.errors.map(&:long_message).join(" "))
+        p pp_response.errors.map(&:long_message).join(' ')
+        flash[:error] =
+          I18n.t('flash.generic_error', scope: 'paypal', reasons: pp_response.errors.map(&:long_message).join(' '))
         redirect_to checkout_state_path(:payment)
       end
     rescue SocketError
@@ -44,16 +46,16 @@ class PaypalController < ApplicationController
   def confirm
     order = current_order || raise(ActiveRecord::RecordNotFound)
     source = PaypalExpressCheckout.create({
-                                             token: params[:token],
-                                             payer_id: params[:PayerID]
-                                         })
+                                            token: params[:token],
+                                            payer_id: params[:PayerID]
+                                          })
     payment = order.payments.create!({
-                               source_id: source.id,
-                               source_type: source.class.to_s,
-                               state: 'completed',
-                               amount: order.total,
-                               payment_method: payment_method
-                           })
+                                       source_id: source.id,
+                                       source_type: source.class.to_s,
+                                       state: 'completed',
+                                       amount: order.total,
+                                       payment_method: payment_method
+                                     })
 
     unless payment.errors.any?
       order.completed_at = Time.now
@@ -65,7 +67,6 @@ class PaypalController < ApplicationController
         order.deliver_order_confirmation_email unless order.confirmation_delivered?
       end
     end
-
 
     if order.completed?
       flash.notice = I18n.t(:order_processed_successfully)
@@ -87,29 +88,29 @@ class PaypalController < ApplicationController
 
   def line_item(item)
     {
-        Name: item.product.name,
-        Number: item.product.code,
-        Quantity: item.quantity,
-        Amount: {
-            currencyID: 'USD',
-            value:(item.price / payment_method.preferences["preferred_conversion_rate"].to_f).round(2)
-        },
-        ItemCategory: "Physical"
+      Name: item.product.name,
+      Number: item.product.code,
+      Quantity: item.quantity,
+      Amount: {
+        currencyID: 'USD',
+        value: (item.price / payment_method.preferences['preferred_conversion_rate'].to_f).round(2)
+      },
+      ItemCategory: 'Physical'
     }
   end
 
-  def express_checkout_request_details order, items
-    {SetExpressCheckoutRequestDetails: {
-        InvoiceID: order.number,
-        BuyerEmail: order.email,
-        ReturnURL: confirm_paypal_url(payment_method_id: params[:payment_method_id], utm_nooverride: 1),
-        CancelURL: cancel_paypal_url,
-        SolutionType: payment_method.preferred_solution.present? ? payment_method.preferred_solution : "Mark",
-        LandingPage: payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : "Billing",
-        cppheaderimage: payment_method.preferred_logourl.present? ? payment_method.preferred_logourl : "",
-        NoShipping: 1,
-        PaymentDetails: [payment_details(items)]
-    }}
+  def express_checkout_request_details(order, items)
+    { SetExpressCheckoutRequestDetails: {
+      InvoiceID: order.number,
+      BuyerEmail: order.email,
+      ReturnURL: confirm_paypal_url(payment_method_id: params[:payment_method_id], utm_nooverride: 1),
+      CancelURL: cancel_paypal_url,
+      SolutionType: payment_method.preferred_solution.present? ? payment_method.preferred_solution : 'Mark',
+      LandingPage: payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : 'Billing',
+      cppheaderimage: payment_method.preferred_logourl.present? ? payment_method.preferred_logourl : '',
+      NoShipping: 1,
+      PaymentDetails: [payment_details(items)]
+    } }
   end
 
   def payment_method
@@ -120,11 +121,11 @@ class PaypalController < ApplicationController
     payment_method.provider
   end
 
-  def payment_details items
+  def payment_details(_items)
     # This retrieves the cost of shipping after promotions are applied
     # For example, if shippng costs $10, and is free with a promotion, shipment_sum is now $10
     shipment_sum = current_order.shipment.promo_total
-    adjustment_total =  current_order.shipment.adjustment_total
+    current_order.shipment.adjustment_total
 
     # This calculates the item sum based upon what is in the order total, but not for shipping
     # or tax.  This is the easiest way to determine what the items should cost, as that
@@ -135,29 +136,29 @@ class PaypalController < ApplicationController
       # Paypal does not support no items or a zero dollar ItemTotal
       # This results in the order summary being simply "Current purchase"
       {
-          OrderTotal: {
-              currencyID: Syftet.config.paypal_currency,
-              value: current_order.display_total.exchange_to(Syftet.config.paypal_currency)
-          }
+        OrderTotal: {
+          currencyID: Syftet.config.paypal_currency,
+          value: current_order.display_total.exchange_to(Syftet.config.paypal_currency)
+        }
       }
     else
       {
-          OrderTotal: {
-              currencyID: 'USD',
-              value: (current_order.net_total / payment_method.preferences["preferred_conversion_rate"].to_f).round(2)
-          },
-          ItemTotal: {
-              currencyID: 'USD',
-              value: (item_sum / payment_method.preferences["preferred_conversion_rate"].to_f).round(2)
-          },
-          ShippingTotal: {
-              currencyID: 'USD',
-              value: (shipment_sum / payment_method.preferences["preferred_conversion_rate"].to_f).round(2)
-          },
-          ShipToAddress: address_options,
-          # PaymentDetailsItem: items,
-          ShippingMethod: "Shipping Method Name Goes Here",
-          PaymentAction: "Sale"
+        OrderTotal: {
+          currencyID: 'USD',
+          value: (current_order.net_total / payment_method.preferences['preferred_conversion_rate'].to_f).round(2)
+        },
+        ItemTotal: {
+          currencyID: 'USD',
+          value: (item_sum / payment_method.preferences['preferred_conversion_rate'].to_f).round(2)
+        },
+        ShippingTotal: {
+          currencyID: 'USD',
+          value: (shipment_sum / payment_method.preferences['preferred_conversion_rate'].to_f).round(2)
+        },
+        ShipToAddress: address_options,
+        # PaymentDetailsItem: items,
+        ShippingMethod: 'Shipping Method Name Goes Here',
+        PaymentAction: 'Sale'
       }
     end
   end
@@ -166,14 +167,14 @@ class PaypalController < ApplicationController
     return {} unless address_required?
 
     {
-        Name: current_order.bill_address.try(:full_name),
-        Street1: current_order.bill_address.address1,
-        Street2: current_order.bill_address.address2,
-        CityName: current_order.bill_address.city,
-        Phone: current_order.bill_address.phone,
-        StateOrProvince: current_order.bill_address.state_text,
-        Country: current_order.bill_address.country.iso,
-        PostalCode: current_order.bill_address.zipcode
+      Name: current_order.bill_address.try(:full_name),
+      Street1: current_order.bill_address.address1,
+      Street2: current_order.bill_address.address2,
+      CityName: current_order.bill_address.city,
+      Phone: current_order.bill_address.phone,
+      StateOrProvince: current_order.bill_address.state_text,
+      Country: current_order.bill_address.country.iso,
+      PostalCode: current_order.bill_address.zipcode
     }
   end
 

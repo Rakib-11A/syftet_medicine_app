@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: orders
@@ -41,7 +43,7 @@
 class Order < ApplicationRecord
   PAYMENT_STATES = %w[balance_due credit_owed failed paid void].freeze
   SHIPMENT_STATES = %w[backorder canceled partial processing pending ready shipped delivered canceled refunded].freeze
-  PREFIX = 'OR-'.freeze
+  PREFIX = 'OR-'
   ORDER_SHIPMENT_STATE = {
     processing: 'Processing',
     payment_failed: 'Payment failed',
@@ -87,7 +89,7 @@ class Order < ApplicationRecord
   friendly_id :number, slug_column: :number, use: :slugged
 
   belongs_to :user, optional: true
-  belongs_to :canceler , class_name: 'User', optional: true
+  belongs_to :canceler, class_name: 'User', optional: true
   belongs_to :admin, class_name: 'User', optional: true
   belongs_to :ship_address, foreign_key: :ship_address_id, class_name: 'Address', optional: true
   belongs_to :store, class_name: 'StockLocation'
@@ -96,22 +98,20 @@ class Order < ApplicationRecord
   # has_many :shipments
   has_many :payments
   has_many :customer_returns
-  belongs_to :admin_coupon, :class_name => 'Admin::Coupon', optional: true
-  belongs_to :product, :class_name => 'Product', optional: true
-
+  belongs_to :admin_coupon, class_name: 'Admin::Coupon', optional: true
+  belongs_to :product, class_name: 'Product', optional: true
 
   accepts_nested_attributes_for :line_items
   accepts_nested_attributes_for :ship_address
   accepts_nested_attributes_for :payments
   # accepts_nested_attributes_for :shipments
 
-
   attr_accessor :shipping_method
-  scope :complete, -> { where.not(completed_at: nil).where(approved_at: nil).where(canceled_at: nil) }
-  scope :approved, -> { where.not(approved_at: nil).where(canceled_at: nil)}
-  scope :canceled, -> { where.not(canceled_at: nil).where(approved_at: nil)}
-  scope :shipped, -> { where(shipment_state: :shipped )}
 
+  scope :complete, -> { where.not(completed_at: nil).where(approved_at: nil).where(canceled_at: nil) }
+  scope :approved, -> { where.not(approved_at: nil).where(canceled_at: nil) }
+  scope :canceled, -> { where.not(canceled_at: nil).where(approved_at: nil) }
+  scope :shipped, -> { where(shipment_state: :shipped) }
 
   def self.incomplete
     where(completed_at: nil)
@@ -152,23 +152,21 @@ class Order < ApplicationRecord
   def net_total
     if shipment.present?
       ((total || 0) + (shipment.cost || 0)) - (adjustment_total || 0)
+    elsif adjustment_total.present?
+      total - adjustment_total
     else
-      if adjustment_total.present?
-        total - adjustment_total
-      else
-        total
-      end
+      total
     end
   end
 
   def adjustment_total_value
-    if adjustment_total.present?
-      adjustment_total
-    end
+    return unless adjustment_total.present?
+
+    adjustment_total
   end
 
   def checkout_allowed?
-    line_items.count > 0
+    line_items.count.positive?
   end
 
   def shipment_cost
@@ -198,16 +196,16 @@ class Order < ApplicationRecord
 
   def update_with_payment(payment_params)
     payment = make_payment(payment_params)
-    unless payment.errors.any?
-      self.completed_at = Time.now
-      self.state = 'completed'
-      self.shipment_state = 'shipped'
-      self.payment_state = 'paid'
-      self.payment_total = payment.amount
-      if save
-        remove_stock_from_inverntory
-      end
-    end
+    return if payment.errors.any?
+
+    self.completed_at = Time.now
+    self.state = 'completed'
+    self.shipment_state = 'shipped'
+    self.payment_state = 'paid'
+    self.payment_total = payment.amount
+    return unless save
+
+    remove_stock_from_inverntory
   end
 
   def approved_order(current_user)
@@ -217,20 +215,20 @@ class Order < ApplicationRecord
     self.shipment_date = Date.today
     self.shipped_at = Time.now
     self.state = 'approved'
-    self.save!
+    save!
   end
 
-
   def update_with_params(params, permitted_params)
-    if params[:state] == 'address'
-      status = update!(permitted_params.merge({state: 'address'}))
+    case params[:state]
+    when 'address'
+      status = update!(permitted_params.merge({ state: 'address' }))
       add_ship_id_to_user if status
       status
-    elsif params[:state] == 'delivery'
+    when 'delivery'
       if init_shipment(permitted_params.delete(:shipping_method))
         update(permitted_params.merge(shipment_state: 'pending'))
       end
-    elsif params[:state] == 'payment'
+    when 'payment'
       payment = build_payment(permitted_params)
       unless payment.errors.any?
         self.completed_at = Time.now
@@ -246,11 +244,11 @@ class Order < ApplicationRecord
   end
 
   def remove_stock_from_inverntory
-    if shipment.stock_location.present?
-      stock_location = shipment.stock_location
-      line_items.each do |line_item|
-        stock_location.unstock(line_item.product,line_item.quantity, shipment)
-      end
+    return unless shipment.stock_location.present?
+
+    stock_location = shipment.stock_location
+    line_items.each do |line_item|
+      stock_location.unstock(line_item.product, line_item.quantity, shipment)
     end
   end
 
@@ -264,9 +262,7 @@ class Order < ApplicationRecord
 
   def self.get_incomplete_order(token, user)
     order = where('guest_token = ? and completed_at IS NULL', token).last
-    if user.present? && !order.present?
-      order = user.orders.where('completed_at IS NULL').last
-    end
+    order = user.orders.where('completed_at IS NULL').last if user.present? && !order.present?
     order
   end
 
@@ -319,16 +315,15 @@ class Order < ApplicationRecord
         orders = orders.where(shipment_state: 'completed')
       end
     end
-    result = { orders: orders, params_hash: params_hash }
-    result
+    { orders: orders, params_hash: params_hash }
   end
 
   def collect_rewards_point
-    if user.present? && approved_at.present?
-      reward_point = user.rewards_points.find_or_initialize_by(order_id: id, user_id: user_id, reason: 'Checkout')
-      reward_point.points = line_items.sum(&:credit_point)
-      reward_point.save
-    end
+    return unless user.present? && approved_at.present?
+
+    reward_point = user.rewards_points.find_or_initialize_by(order_id: id, user_id: user_id, reason: 'Checkout')
+    reward_point.points = line_items.sum(&:credit_point)
+    reward_point.save
   end
 
   def init_shipment(shipping_method)
@@ -347,38 +342,36 @@ class Order < ApplicationRecord
     payment_method_id = payments_attributes[:payments_attributes][:payment_method_id]
     payment_method = PaymentMethod.find_by_id(payment_method_id)
     return false unless payment_method.present?
+
     payment_params = payment_method.process
     payment_params[:amount] = net_total
     payment_params[:payment_method_id] = payment_method_id
     payment = payments.build(payment_params)
-    if payment.save
-      if payment_method.type == 'PaymentMethod::CreditPoint'
-        RewardsPoint.create(order_id: id, points: net_total * -1, reason: "Purchased", user_id: user.id)
-      end
+    if payment.save && (payment_method.type == 'PaymentMethod::CreditPoint')
+      RewardsPoint.create(order_id: id, points: net_total * -1, reason: 'Purchased', user_id: user.id)
     end
 
     payment
   end
 
   def approved_by(user)
-    update(approver_id: user.id, approved_at: Time.current, canceled_at: nil, canceler_id: nil )
+    update(approver_id: user.id, approved_at: Time.current, canceled_at: nil, canceler_id: nil)
   end
 
-
   def canceled_by(user)
-    update(canceler_id: user.id,  	canceled_at: Time.current, state: 'canceled', approved_at: nil, approver_id: nil )
+    update(canceler_id: user.id,	canceled_at: Time.current, state: 'canceled', approved_at: nil, approver_id: nil)
   end
 
   def credit_rewards_point
     points = line_items.collect { |item| item.product.reward_point }.sum
-    if points > 0
-      reward_point = RewardsPoint.where(order_id: id, user_id: user_id).first
-      if reward_point.present?
-        reward_point.points = points
-        reward_point.save
-      else
-        RewardsPoint.create(order_id: id, user_id: user_id, points: points, reason: 'Order Checkout Credit Points')
-      end
+    return unless points.positive?
+
+    reward_point = RewardsPoint.where(order_id: id, user_id: user_id).first
+    if reward_point.present?
+      reward_point.points = points
+      reward_point.save
+    else
+      RewardsPoint.create(order_id: id, user_id: user_id, points: points, reason: 'Order Checkout Credit Points')
     end
   end
 
@@ -386,42 +379,39 @@ class Order < ApplicationRecord
     payment_method_id = payments_params[:payment_method_id]
     payment_method = PaymentMethod.find_by_id(payment_method_id)
     return false unless payment_method.present?
+
     payment_params = payment_method.payment_process
     payment_params[:amount] = net_total
     payment_params[:payment_method_id] = payment_method_id
     payment = payments.build(payment_params)
-    if payment.save
-      if payment_method.type == 'PaymentMethod::CreditPoint'
-        RewardsPoint.create(order_id: id, points: net_total * -1, reason: "Purchased", user_id: user.id)
-      end
+    if payment.save && (payment_method.type == 'PaymentMethod::CreditPoint')
+      RewardsPoint.create(order_id: id, points: net_total * -1, reason: 'Purchased', user_id: user.id)
     end
     payment
   end
 
   def empty!
-    if completed?
-      raise t(:cannot_empty_completed_order)
-    else
-      updater = OrderUpdater.new(self)
-      line_items.destroy_all
-      updater.update_item_count
-      shipment.destroy if shipment.present?
+    raise t(:cannot_empty_completed_order) if completed?
 
-      updater.update_totals
-      updater.persist_totals
-      # restart_checkout_flow
-    end
+    updater = OrderUpdater.new(self)
+    line_items.destroy_all
+    updater.update_item_count
+    shipment.destroy if shipment.present?
+
+    updater.update_totals
+    updater.persist_totals
+    # restart_checkout_flow
   end
 
   def add_ship_id_to_user
-    if !user.nil? && !ship_address.nil?
-      user.ship_address_id = ship_address.id
-      user.save
-    end
+    return unless !user.nil? && !ship_address.nil?
+
+    user.ship_address_id = ship_address.id
+    user.save
   end
 
   def check_shipment_status_for_send_mail
-    ShipmentMailer.shipped_email(shipment).deliver_now if self.shipment_state == 'shipped'
+    ShipmentMailer.shipped_email(shipment).deliver_now if shipment_state == 'shipped'
   end
 
   # Add missing methods for OrderUpdater
@@ -438,12 +428,12 @@ class Order < ApplicationRecord
   end
 
   def outstanding_balance?
-    outstanding_balance == 0
+    outstanding_balance.zero?
   end
 
   def backordered?
     # Check if any line items are backordered
-    line_items.any? { |item| item.backordered? }
+    line_items.any?(&:backordered?)
   end
 
   def state_changed(attribute)

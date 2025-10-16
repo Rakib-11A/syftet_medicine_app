@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAdminBrands < ActiveRecord::Migration[5.2]
   def change
     create_table :admin_brands do |t|

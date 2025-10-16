@@ -1,5 +1,6 @@
-class ContactsController < ApplicationController
+# frozen_string_literal: true
 
+class ContactsController < ApplicationController
   def new
     @contact_us = Contact.new
   end
@@ -10,11 +11,10 @@ class ContactsController < ApplicationController
       if @contact_us.save
         format.html { redirect_to root_path, notice: 'Thank you for contacting with us. We will get back to you soon!' }
       else
-        format.html { render :new, notice: "Sorry. You should try again." }
+        format.html { render :new, notice: 'Sorry. You should try again.' }
       end
     end
   end
-
 
   private
 
@@ -25,6 +25,4 @@ class ContactsController < ApplicationController
       {}
     end
   end
-
-
 end

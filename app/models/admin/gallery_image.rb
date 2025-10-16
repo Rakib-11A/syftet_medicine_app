@@ -1,7 +1,11 @@
-class Admin::GalleryImage < ApplicationRecord
-  self.table_name = 'admin_gallery_images'
+# frozen_string_literal: true
 
-  mount_uploader :image, Admin::HomeSliderUploader
+module Admin
+  class GalleryImage < ApplicationRecord
+    self.table_name = 'admin_gallery_images'
 
-  validates :image, presence: true
+    mount_uploader :image, Admin::HomeSliderUploader
+
+    validates :image, presence: true
+  end
 end

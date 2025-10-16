@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: shipments
@@ -55,7 +57,7 @@ class Shipment < ApplicationRecord
   end
 
   def shipped?
-    self.with_state('shipped')
+    with_state('shipped')
   end
 
   def add_shipping_method(shipping_method, selected = false)
@@ -71,13 +73,12 @@ class Shipment < ApplicationRecord
   end
 
   def backordered?
-    inventory_units.any? { |inventory_unit| inventory_unit.backordered? }
+    inventory_units.any?(&:backordered?)
   end
 
   def currency
     order ? order.currency : Config[:currency]
   end
-
 
   private
 
@@ -90,13 +91,12 @@ class Shipment < ApplicationRecord
   end
 
   def set_cost_zero_when_nil
-    self.cost = 0 unless self.cost
+    self.cost = 0 unless cost
   end
 
   def update_adjustments
-    if cost_changed? && state != 'shipped'
-      recalculate_adjustments
-    end
-  end
+    return unless cost_changed? && state != 'shipped'
 
+    recalculate_adjustments
+  end
 end

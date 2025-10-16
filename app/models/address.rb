@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: addresses
@@ -17,7 +19,6 @@
 #
 
 class Address < ApplicationRecord
-
   with_options presence: true do
     validates :firstname, :lastname, :address, :city, :country
     validates :zipcode
@@ -44,10 +45,10 @@ class Address < ApplicationRecord
   end
 
   def clone
-    self.class.new(self.attributes.except('id', 'updated_at', 'created_at'))
+    self.class.new(attributes.except('id', 'updated_at', 'created_at'))
   end
 
   def not_provided?
-    firstname == 'N/A' && lastname == 'N/A' && address == 'N/A' && city == 'N/A' && zipcode == 'N/A' && phone == 'N/A' && state  == 'N/A' && company == 'N/A' && country  == 'N/A'
+    firstname == 'N/A' && lastname == 'N/A' && address == 'N/A' && city == 'N/A' && zipcode == 'N/A' && phone == 'N/A' && state == 'N/A' && company == 'N/A' && country == 'N/A'
   end
 end

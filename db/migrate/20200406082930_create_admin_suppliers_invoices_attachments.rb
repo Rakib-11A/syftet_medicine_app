@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAdminSuppliersInvoicesAttachments < ActiveRecord::Migration[5.2]
   def change
     create_table :admin_suppliers_invoices_attachments do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: reviews
@@ -16,12 +18,12 @@
 
 class Review < ApplicationRecord
   RATING_REVIEW = {
-      1 => 'Poor :(',
-      2 => 'Fair',
-      3 => 'Average',
-      4 => 'Good :)',
-      5 => 'Excellent!',
-  }
+    1 => 'Poor :(',
+    2 => 'Fair',
+    3 => 'Average',
+    4 => 'Good :)',
+    5 => 'Excellent!'
+  }.freeze
   belongs_to :product
   belongs_to :user
   validates_presence_of :name, :email, :rating
@@ -29,8 +31,8 @@ class Review < ApplicationRecord
   before_save :set_review
 
   def set_review
-    unless self.text.present?
-      self.text = RATING_REVIEW[self.rating]
-    end
+    return if text.present?
+
+    self.text = RATING_REVIEW[rating]
   end
 end

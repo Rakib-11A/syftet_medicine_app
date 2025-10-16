@@ -1,26 +1,26 @@
+# frozen_string_literal: true
+
 module Admin
   class CategoriesController < BaseController
-    before_action :set_admin_category, only: [:show, :edit, :update, :destroy]
+    before_action :set_admin_category, only: %i[show edit update destroy]
 
     # GET /admin/categories
     # GET /admin/categories.json
     def index
-      @admin_categories = Admin::Category.where("parent_id IS NULL")
+      @admin_categories = Admin::Category.where('parent_id IS NULL')
     end
 
     # GET /admin/categories/1
     # GET /admin/categories/1.json
-    def show
-    end
+    def show; end
 
     # GET /admin/categories/new
     def new
-      @admin_category = Admin::Category.new({parent_id: params[:parent_id]})
+      @admin_category = Admin::Category.new({ parent_id: params[:parent_id] })
     end
 
     # GET /admin/categories/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /admin/categories
     # POST /admin/categories.json
@@ -63,6 +63,7 @@ module Admin
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_admin_category
       @admin_category = Admin::Category.friendly.find(params[:id])
@@ -70,7 +71,8 @@ module Admin
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def admin_category_params
-      params.require(:admin_category).permit(:name, :slug, :description, :permalink, :meta_title, :meta_desc, :keywords, :parent_id, :image)
+      params.require(:admin_category).permit(:name, :slug, :description, :permalink, :meta_title, :meta_desc,
+                                             :keywords, :parent_id, :image)
     end
   end
 end

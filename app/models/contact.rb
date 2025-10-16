@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: contacts
@@ -17,12 +19,12 @@ class Contact < ApplicationRecord
   belongs_to :checked_by, class_name: 'User', foreign_key: 'user_id'
   # after_create :send_email_notification
 
-
   def checked(user)
     self.is_checked = true
     self.checked_by = user
     save!
   end
+
   def send_email_notification
     NotificationMailer.send_contact_notification(self).deliver_now
   end

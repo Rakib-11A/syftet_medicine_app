@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UserReporting
   def lifetime_value
     orders.complete.sum(:total)
@@ -8,10 +10,10 @@ module UserReporting
   end
 
   def average_order_value
-    if order_count.to_i > 0
+    if order_count.to_i.positive?
       lifetime_value / order_count
     else
-      BigDecimal("0.00")
+      BigDecimal('0.00')
     end
   end
 end

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module Admin
   class CommentsController < Admin::BaseController
-    before_action :set_comment, only: [:edit, :update, :destroy]
+    before_action :set_comment, only: %i[edit update destroy]
 
-    def edit
-    end
+    def edit; end
 
     def update
       blog = Blog.friendly.find(params[:blog_id])
@@ -27,6 +28,7 @@ module Admin
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])

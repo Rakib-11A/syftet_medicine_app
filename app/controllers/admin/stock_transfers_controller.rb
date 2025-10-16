@@ -1,17 +1,17 @@
+# frozen_string_literal: true
+
 module Admin
   class StockTransfersController < BaseController
-    before_action :set_stock_transfer, only: [:show, :edit, :update, :destroy]
+    before_action :set_stock_transfer, only: %i[show edit update destroy]
 
     def index
       @stock_transfers = StockTransfer.all.order(created_at: :desc)
       @stock_transfers = @stock_transfers.page(params[:page]).per(20)
     end
 
-    def show
-    end
+    def show; end
 
-    def new
-    end
+    def new; end
 
     def create
       products = Hash.new(0)
@@ -26,8 +26,7 @@ module Admin
       redirect_to admin_stock_transfer_path(stock_transfer)
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       respond_to do |format|

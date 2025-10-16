@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: newsletter_subscriptions
@@ -14,6 +16,6 @@ class NewsletterSubscription < ApplicationRecord
   # after_create :send_notification  # Disabled for seed data
 
   def send_notification
-    NotificationMailer.send_subscription_notification(self.email).deliver_now
+    NotificationMailer.send_subscription_notification(email).deliver_now
   end
 end

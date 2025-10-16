@@ -1,69 +1,75 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Armoiar | Quality Product</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
-  <meta property="og:locale" content="en_US">
-  <meta property="keywords" content="beauty product, skin care, original">
-  <meta name="facebook-domain-verification" content="">
-  <meta property="og:url" content="https://armoiar.com">
-  <meta property="twitter:url" content="https://armoiar.com">
-  <meta property="og:type" content="website">
-  <meta property="fb:app_id" content="">
-  <meta name="twitter:title" content="Armoiar | Beauty Product">
-  <meta property="og:title" content="Armoiar | Quality Product">
-  <meta name="image" content="<%= image_url('trends.jpg') %>">
-  <meta name="twitter:image:src" content="<%= image_url('trends.jpg') %>">
-  <meta name="twitter:image" content="<%= image_url('trends.jpg') %>">
-  <meta property="og:image" content="<%= image_url('trends.jpg')%>">
-  <meta name="twitter:description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
-  <meta property="og:description" content="Armoiar brings you thousands of grocery items in over several different major categories.">
-  <meta name="twitter:creator" content="@armoiar">
-  <meta name="twitter:site" content="@armoiar_products">
-  <meta property="og:site_name" content="Armoiar">
-  <meta name="twitter:card" content="summary">
-  <%= csrf_meta_tags %>
-  <%= favicon_link_tag 'favicon.ico' %>
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <%= render 'shared/cdn_resources' %>
-  <%= yield :social_share_meta %>
+    <title>Syfmate | Quality Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Syfmate brings you thousands of medical items in over several different major categories.">
+    <meta property="og:locale" content="en_US">
+    <meta property="keywords" content="beauty product, skin care, original">
+    <meta name="facebook-domain-verification" content="">
+    <meta property="og:url" content="https://armoiar.com">
+    <meta property="twitter:url" content="https://armoiar.com">
+    <meta property="og:type" content="website">
+    <meta property="fb:app_id" content="">
+    <meta name="twitter:title" content="Syfmate | Beauty Product">
+    <meta property="og:title" content="Syfmate | Quality Product">
+    <meta name="image" content="<%= image_url('products/trends.jpg') %>">
+    <meta name="twitter:image:src" content="<%= image_url('products/trends.jpg') %>">
+    <meta name="twitter:image" content="<%= image_url('products/trends.jpg') %>">
+    <meta property="og:image" content="<%= image_url('products/trends.jpg')%>">
+    <meta name="twitter:description" content="Your Safe Mate for Health & Wellness & Home Essentials">
+    <meta property="og:description" content="Your Safe Mate for Health & Wellness & Home Essentials">
+    <meta name="twitter:creator" content="@armoiar">
+    <meta name="twitter:site" content="@armoiar_products">
+    <meta property="og:site_name" content="Armoiar">
+    <meta name="twitter:card" content="summary">
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <%= render 'shared/cdn_resources' %>
+    <%= yield :social_share_meta %>
 </head>
 
 <body>
-<div id="page">
-  <%= render 'shared/notification' %>
-  <%= render 'shared/custom_flash' %>
-  <%= render 'products/shared/quickview_modal' %>
-  <div class="container">
-    <%= render 'shared/main_menu' %>
-    <%= yield :breadcrumb %>
-    <div class="container">
-      <%= yield :sidebar %>
-      <%= yield %>
-    </div>
-    <%= render 'products/compare_modal' %>
-    <footer id="syftet-footer" class="syftet-footer" role="contentinfo">
-      <%= render 'shared/footer' %>
-      <%= render 'shared/public_footer' %>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGX09C5SGC"></script>
-      <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+    <div id="page">
+        <%= render 'shared/notification' %>
+        <%= render 'shared/custom_flash' %>
+        <%= render 'products/shared/quickview_modal' %>
+      <div id="navbar-spacer" class="navbar-spacer"></div>
+        <%= render 'products/shared/product_navbar' %>
+        <div class="">
+            <%= yield :breadcrumb %>
+            <div class="container">
+                <%= yield :sidebar %>
+                <%= yield %>
+            </div>
+            <%= render 'products/compare_modal' %>
+            <footer id="syftet-footer" class="syftet-footer" role="contentinfo">
+                <%= render 'shared/footer' %>
+                <%= render 'shared/public_footer' %>
+                <!-- Global site tag (gtag.js) - Google Analytics -->
+                <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGX09C5SGC"></script>
+                <script>
+                    window.dataLayer = window.dataLayer || [];
 
-          gtag('config', 'G-KGX09C5SGC');
-      </script>
-    </footer>
-  </div>
-</div>
-<a onclick="topFunction()" id="btn-scroll-top" title="Go to top">
-  <i class="fa fa-angle-up fa-2x"></i>
-</a>
-<a id="btn-contact-top" href="<%= contact_us_path %>" title="Contact us">
-  <i class="fa fa-envelope"></i>
-</a>
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-KGX09C5SGC');
+                </script>
+            </footer>
+        </div>
+    </div>
+    <a onclick="topFunction()" id="btn-scroll-top" title="Go to top">
+        <i class="fa fa-angle-up fa-2x"></i>
+    </a>
+    <a id="btn-contact-top" href="<%= contact_us_path %>" title="Contact us">
+        <i class="fa fa-envelope"></i>
+    </a>
 </body>
+
 </html>

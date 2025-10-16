@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Admin
   class ImagesController < BaseController
     before_action :set_product
-    before_action :set_image, only: [:edit, :update, :destroy]
+    before_action :set_image, only: %i[edit update destroy]
 
     def index
       @images = @product.images
@@ -15,15 +17,16 @@ module Admin
       @image = @product.images.build(image_params)
       respond_to do |format|
         if @image.save
-          format.html { redirect_to admin_product_images_path(@product), notice: 'Image added to product successfully.' }
+          format.html do
+            redirect_to admin_product_images_path(@product), notice: 'Image added to product successfully.'
+          end
         else
           format.html { render :new }
         end
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       respond_to do |format|

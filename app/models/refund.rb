@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: refunds
@@ -14,20 +16,18 @@ class Refund < ApplicationRecord
   belongs_to :payment
   before_create :check_payment_amount
 
-
-
   private
 
   def check_payment_amount
-    p "<<<<<<<<<<<<<<<<<<<<<<<<<<<<,"
-    p self.inspect
-    p "<<<<<<<<<<<<<<<<<<<<<<<<<<<<,"
+    p '<<<<<<<<<<<<<<<<<<<<<<<<<<<<,'
+    p inspect
+    p '<<<<<<<<<<<<<<<<<<<<<<<<<<<<,'
     payment = Payment.find_by_id(payment_id)
     refund = payment.refunds.sum(:amount)
     total_refund = refund + amount
-    if payment.amount < total_refund
-      errors[:base] << "Refund amount must be less than or equal payment amount"
-      raise ActiveRecord::RecordInvalid.new(self)
-    end
+    return unless payment.amount < total_refund
+
+    errors[:base] << 'Refund amount must be less than or equal payment amount'
+    raise ActiveRecord::RecordInvalid, self
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: customer_returns
@@ -12,19 +14,17 @@
 
 class CustomerReturn < ApplicationRecord
   belongs_to :order
-  PREFIX = 'RT-'.freeze
+  PREFIX = 'RT-'
   has_many :return_items
   belongs_to :stock_location
   include GenerateNumber
-  accepts_nested_attributes_for :return_items, reject_if: lambda { |item| item[:returned] == "0" }
+  accepts_nested_attributes_for :return_items, reject_if: ->(item) { item[:returned] == '0' }
 
   after_create :create_refund
-
 
   def prefix
     CustomerReturn::PREFIX
   end
-
 
   def create_refund
     order.payments.first.refunds.create(amount: total_refund_amount, reason: 'Customer Returns')
@@ -33,7 +33,7 @@ class CustomerReturn < ApplicationRecord
   def total_refund_amount
     sum = 0
     return_items.each do |va|
-      sum =  sum + va.line_item.price
+      sum += va.line_item.price
     end
     sum
   end

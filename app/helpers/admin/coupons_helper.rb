@@ -1,2 +1,6 @@
-module Admin::CouponsHelper
+# frozen_string_literal: true
+
+module Admin
+  module CouponsHelper
+  end
 end

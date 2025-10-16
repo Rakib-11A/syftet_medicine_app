@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePaypalExpressCheckouts < ActiveRecord::Migration[5.2]
   def change
     create_table :paypal_express_checkouts do |t|

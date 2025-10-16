@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Admin
   module Suppliers
     class InvoicesController < BaseController
-        before_action :set_admin_suppliers_invoice, only: [:show, :edit, :update, :destroy]
+      before_action :set_admin_suppliers_invoice, only: %i[show edit update destroy]
 
       # GET /admin/suppliers/invoices
       # GET /admin/suppliers/invoices.json
@@ -12,8 +14,7 @@ module Admin
 
       # GET /admin/suppliers/invoices/1
       # GET /admin/suppliers/invoices/1.json
-      def show
-      end
+      def show; end
 
       # GET /admin/suppliers/invoices/new
       def new
@@ -22,8 +23,7 @@ module Admin
       end
 
       # GET /admin/suppliers/invoices/1/edit
-      def edit
-      end
+      def edit; end
 
       # POST /admin/suppliers/invoices
       # POST /admin/suppliers/invoices.json
@@ -73,7 +73,9 @@ module Admin
         @invoice = Admin::Suppliers::Invoice.find_by_id(params[:invoice_id])
         render layout: false
       end
+
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_admin_suppliers_invoice
         @suppliers_invoice = Admin::Suppliers::Invoice.find(params[:id])
@@ -81,9 +83,9 @@ module Admin
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def admin_suppliers_invoice_params
-        params.require(:admin_suppliers_invoice).permit(:supplier_id, :no, :amount, :date, :transport_cost, attachments_attributes: [:id, :picture, :_destroy])
+        params.require(:admin_suppliers_invoice).permit(:supplier_id, :no, :amount, :date, :transport_cost,
+                                                        attachments_attributes: %i[id picture _destroy])
       end
     end
   end
 end
-

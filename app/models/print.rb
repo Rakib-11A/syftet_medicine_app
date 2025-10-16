@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: prints
@@ -10,8 +12,7 @@
 class Print < ApplicationRecord
   has_many :print_barcodes, dependent: :destroy
 
-
-  def add_product(product,quantity)
+  def add_product(product, quantity)
     current_print_barcodes = print_barcodes.find_by(product_id: product.id)
     if current_print_barcodes
       current_print_barcodes.quantity += quantity.to_i

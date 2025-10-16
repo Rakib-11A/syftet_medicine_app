@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: images
@@ -24,5 +26,5 @@ class Image < ApplicationRecord
   belongs_to :viewable, polymorphic: true
 
   mount_uploader :file, Admin::ImageUploader
-   validates_presence_of :file
+  validates_presence_of :file
 end

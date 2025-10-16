@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'backend/action_callbacks'
 module Backend
   module Callbacks
     extend ActiveSupport::Concern
 
     module ClassMethods
-
       attr_accessor :callbacks
 
       protected
@@ -36,15 +37,15 @@ module Backend
     def invoke_callbacks(action, callback_type)
       callbacks = self.class.callbacks || {}
       return if callbacks[action].nil?
+
       case callback_type.to_sym
-        when :before then
-          callbacks[action].before_methods.each { |method| send method }
-        when :after then
-          callbacks[action].after_methods.each { |method| send method }
-        when :fails then
-          callbacks[action].fails_methods.each { |method| send method }
+      when :before
+        callbacks[action].before_methods.each { |method| send method }
+      when :after
+        callbacks[action].after_methods.each { |method| send method }
+      when :fails
+        callbacks[action].fails_methods.each { |method| send method }
       end
     end
-
   end
 end
