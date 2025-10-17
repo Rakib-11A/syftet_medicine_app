@@ -12,9 +12,8 @@
   margin-bottom: 0;
 
   /* Font Layout */
-  color: var(--White, var(--color-white-solid, rgba(255, 255, 255, 1)));
+  color: rgba(255, 255, 255, 1);
 
-  font-family: var(--fontfamily-Font1, Roboto);
   font-size: 14px;
   font-weight: 400;
   line-height: var(--fontsize-20, 20px);
@@ -23,10 +22,6 @@
   
   /* Top nav will scroll away normally - no sticky positioning */
   transition: transform 0.3s ease-in-out;
-  
-  /* Ensure top nav scrolls away with content */
-  position: relative;
-  z-index: 999;
 }
 /* Main navigation - fixed to avoid ancestor overflow/transform issues */
 .navbar-default {
@@ -36,15 +31,15 @@
   right: 0;
   width: 100%;
   z-index: 1000;
-  background-color: #fff;
+  //background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
   
   /* Enhanced sticky behavior */
   &.navbar-scrolled {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    //box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    //background-color: rgba(255, 255, 255, 0.95);
+    //backdrop-filter: blur(10px);
   }
   
   /* Smooth transitions for navbar hide/show */

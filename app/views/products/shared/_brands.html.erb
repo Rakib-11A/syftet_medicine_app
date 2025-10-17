@@ -9,8 +9,13 @@
 
     <% @brands.each do |brand| %>
       <li class="menu-item">
-        <%= link_to brands_path(brand.permalink) do %>
-          <%= brand.name %>
+        <%= link_to brands_path(brand.permalink), class: 'category-link' do %>
+          <% if brand.image.present? %>
+            <%= image_tag brand.image.url, class: 'category-icon', alt: brand.name %>
+          <% else %>
+            <i class="fa fa-tag category-icon-fallback"></i>
+          <% end %>
+          <span class="category-name"><%= brand.name %></span>
         <% end %>
       </li>
     <% end %>

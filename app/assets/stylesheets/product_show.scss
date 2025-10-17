@@ -1,0 +1,150 @@
+/* ====================================
+   Modern Product Show Page Styles
+   ==================================== */
+
+.product-layout-container {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.product-details-section {
+  flex: 1;
+  min-width: 300px;
+  order: 1;
+}
+
+.product-image-section {
+  flex: 1;
+  min-width: 300px;
+  order: 2;
+}
+
+//#product-thumb-image {
+//  //background: #ffffff;
+//  padding: 20px;
+//  border-radius: 12px;
+//  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+//  position: sticky;
+//  top: 20px;
+//}
+
+.product-big-image-wrapper {
+  margin-bottom: 15px;
+}
+
+.product-details-image {
+  text-align: center;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.product-gallery-wrapper {
+  margin-top: 15px;
+}
+
+.product-thumb-wrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  .selection {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: #007bff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    }
+    
+    &.active,
+    a.product-active {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+    }
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.social-share-btn {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 10px;
+  }
+}
+
+/* ====================================
+   Responsive Design
+   ==================================== */
+
+@media (max-width: 768px) {
+  .product-layout-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .product-details-section {
+    order: 2;
+  }
+  
+  .product-image-section {
+    order: 1;
+  }
+  
+  #product-thumb-image {
+    position: static;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-thumb-wrapper .selection {
+    width: 60px;
+    height: 60px;
+  }
+  
+  #product-thumb-image {
+    padding: 10px;
+  }
+  
+  .product-details-image {
+    padding: 15px;
+  }
+}
+

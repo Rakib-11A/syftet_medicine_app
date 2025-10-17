@@ -15,37 +15,42 @@
   <%= render 'shared/breadscrumb', breadscrumb: generate_breadscrumb(@product.name, '', '', { products: products_path}) %>
 <% end %>
 
-<div class="mt10 clearfix">
-  <div class="col-sm-6 col-md-6 clearfix data-parent">
-    <div class="clearfix">
-      <div class="clearfix" id="product-thumb-image">
-        <div class="product-gallery-wrapper">
-          <div id="product-gallery" class="product-thumb-wrapper">
-            <% get_additional_images(@product).each do |image| %>
-              <div class="selection">
-                <a href="#" class="addtional-image" data-image="<%= image.file.url %>" data-zoom-image="<%= image.file.url %>">
-                  <%= image_tag image.file.url(:large) || no_image, class: "img-fluid" %>
-                </a>
-              </div>
-            <% end %>
-          </div>
-        </div>
-        <div class="product-big-image-wrapper">
-          <div class="product-details-image text-xs-center">
-            <img src="<%= product_preview_image(@product, true) %>" alt="product image" id="product-zoom" class="img-fluid d-inline-block">
-            <span class="zoom-init-image"></span>
-          </div>
-        </div>
-      </div>
-      <div class="social-share-btn">
-        <label> Share "<%= @product.name %>" </label>
-        <%= render 'shared/social_share' %>
-      </div>
-    </div>
+<div class="product-layout-container">
+  <!-- Product Details (Left) -->
+  <div class="product-details-section">
+    <%= render 'products/details' %>
   </div>
 
-  <div class="col-sm-6 col-md-6">
-    <%= render 'products/details' %>
+  <!-- Product Images (Right) -->
+  <div class="product-image-section">
+    <div id="product-thumb-image">
+      <!-- Main Product Image -->
+      <div class="product-big-image-wrapper">
+        <div class="product-details-image">
+          <img src="<%= product_preview_image(@product, true) %>" alt="<%= @product.name %>" id="product-zoom" class="img-fluid d-inline-block">
+          <span class="zoom-init-image"></span>
+        </div>
+      </div>
+      
+      <!-- Thumbnail Gallery -->
+      <div class="product-gallery-wrapper">
+        <div id="product-gallery" class="product-thumb-wrapper">
+          <% get_additional_images(@product).each do |image| %>
+            <div class="selection">
+              <a href="#" class="addtional-image" data-image="<%= image.file.url %>" data-zoom-image="<%= image.file.url %>">
+                <%= image_tag image.file.url(:large) || no_image, class: "img-fluid" %>
+              </a>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <!-- Social Share -->
+<!--      <div class="social-share-btn">-->
+<!--        <label>Share "<%#= @product.name %>"</label>-->
+        <%#= render 'shared/social_share' %>
+<!--      </div>-->
+    </div>
   </div>
 </div>
 

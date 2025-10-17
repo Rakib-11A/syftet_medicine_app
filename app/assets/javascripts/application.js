@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require rails-ujs
+//= require query-object
+//= require ion.rangeSlider.min
 //= require momentjs
 //= require lightgallery.min
 //= require bootstrap-datepicker

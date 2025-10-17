@@ -1,0 +1,125 @@
+/* ====================================
+   Modern Display Filter Styles
+   ==================================== */
+
+.products-top-wrap {
+  background: #ffffff;
+  padding: 10px;
+//   border-radius: 10px;
+//   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.display-mode {
+  display: flex;
+  gap: 8px;
+  background: #f8f9fa;
+  padding: 4px;
+  border-radius: 8px;
+  
+  .btn {
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    
+    &:hover {
+      background: #e9ecef;
+      color: #495057;
+    }
+    
+    &.active {
+      background: #007bff;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+    }
+  }
+}
+
+.filter-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+}
+
+.custom-select {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 35px 8px 12px;
+  font-size: 14px;
+  color: #495057;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  min-width: 140px;
+  
+  &:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+  }
+  
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0,123,255,0.15);
+  }
+}
+
+/* ====================================
+   Responsive Design
+   ==================================== */
+
+@media (max-width: 768px) {
+  .products-top-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-select-wrapper {
+    width: 100%;
+    
+    form {
+      flex: 1;
+    }
+  }
+  
+  .custom-select {
+    width: 100%;
+  }
+  
+  .display-mode {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-top-wrap {
+    padding: 15px;
+  }
+  
+  .filter-label {
+    font-size: 12px;
+  }
+  
+  .custom-select {
+    font-size: 13px;
+    padding: 6px 30px 6px 10px;
+  }
+}
+

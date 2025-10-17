@@ -1,10 +1,21 @@
 <ul id="top-cat-taxm-<%= category.id %>">
   <% subcategories.each do |sub| %>
       <li>
-        <%= link_to sub.name, categories_path(sub.permalink), class: (selected && selected.id == sub.id ? 'active' : '') %>
-        <% if sub.sub_categories.any? %>
-            <span data-ref='top-cat-taxm-<%= sub.id %>' class='pull-right collapse-ref'> <i class='fa fa-plus'></i> </span>
-        <% end %>
+        <div class="category-row">
+          <%= link_to categories_path(sub.permalink), class: "category-link #{selected && selected.id == sub.id ? 'active' : ''}" do %>
+            <% if sub.image.present? %>
+              <%= image_tag sub.image.url, class: 'category-icon', alt: sub.name %>
+            <% else %>
+              <i class="fa fa-folder category-icon-fallback"></i>
+            <% end %>
+            <span class="category-name"><%= sub.name %></span>
+          <% end %>
+          <% if sub.sub_categories.any? %>
+            <span data-ref='top-cat-taxm-<%= sub.id %>' class='collapse-ref'> 
+              <i class='fa fa-plus'></i> 
+            </span>
+          <% end %>
+        </div>
         <%= render partial: 'products/shared/sub_category', locals: { subcategories: sub.sub_categories, selected: @category, category: sub } if sub.sub_categories.present? %>
       </li>
   <% end %>

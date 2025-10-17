@@ -1,3 +1,77 @@
+<style>
+  .dual-range-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    outline: none;
+    pointer-events: none;
+  }
+  
+  .dual-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border: 3px solid #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .dual-range-slider::-webkit-slider-thumb:hover {
+    border-color: #0056b3;
+    transform: scale(1.15);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  }
+  
+  .dual-range-slider::-webkit-slider-thumb:active {
+    transform: scale(1.1);
+    background: #007bff;
+  }
+  
+  .dual-range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border: 3px solid #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .dual-range-slider::-moz-range-thumb:hover {
+    border-color: #0056b3;
+    transform: scale(1.15);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  }
+  
+  .dual-range-slider::-moz-range-thumb:active {
+    transform: scale(1.1);
+    background: #007bff;
+  }
+  
+  .dual-range-slider::-moz-range-track {
+    background: transparent;
+  }
+  
+  .slider-track {
+    z-index: 1;
+  }
+  
+  .slider-range {
+    z-index: 2;
+  }
+</style>
+
 <aside class="widget clearfix">
   <div class="widget widget-off">
     <h3 class="widget-title">
@@ -6,8 +80,51 @@
 
     <div class="widget-filter-wrapper">
       <div class="woof_redraw_zone">
-        <div class="price-slider">
-          <input class="range-slider hidden" value=''>
+        <!-- Price Range Slider -->
+        <div class="price-filter-container" style="margin-bottom: 20px;">
+          <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #333;">Price Range</h4>
+          
+          <!-- Price Display -->
+          <div class="price-display" style="display: flex; justify-content: space-between; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+            <span style="font-size: 14px; color: #666;">Min: <strong id="min-price-display" style="color: #007bff;">৳<%= params[:min] || 0 %></strong></span>
+            <span style="font-size: 14px; color: #666;">Max: <strong id="max-price-display" style="color: #007bff;">৳<%= params[:max] || 5000 %></strong></span>
+          </div>
+          
+          <!-- Double Range Slider Container -->
+          <div class="double-slider-container" style="position: relative; height: 40px; margin: 20px 0;">
+            <!-- Track -->
+            <div class="slider-track" style="position: absolute; width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; top: 17px;"></div>
+            
+            <!-- Active Range -->
+            <div id="slider-range" class="slider-range" style="position: absolute; height: 6px; background: #007bff; border-radius: 3px; top: 17px;"></div>
+            
+            <!-- Min Slider -->
+            <input type="range" 
+                   id="min-price-slider" 
+                   class="dual-range-slider" 
+                   min="0" 
+                   max="5000" 
+                   step="100" 
+                   value="<%= params[:min] || 0 %>"
+                   style="position: absolute; width: 100%; pointer-events: none; background: transparent; -webkit-appearance: none;">
+            
+            <!-- Max Slider -->
+            <input type="range" 
+                   id="max-price-slider" 
+                   class="dual-range-slider" 
+                   min="0" 
+                   max="5000" 
+                   step="100" 
+                   value="<%= params[:max] || 5000 %>"
+                   style="position: absolute; width: 100%; pointer-events: none; background: transparent; -webkit-appearance: none;">
+          </div>
+          
+          <button type="button" 
+                  id="apply-price-filter" 
+                  class="btn btn-primary btn-sm" 
+                  style="width: 100%; margin-top: 15px; padding: 8px;">
+            <i class="fa fa-filter"></i> Apply Filter
+          </button>
         </div>
 
 <!--        <div class="container-inner-filter color-filter-option">-->
@@ -50,8 +167,10 @@
 <!--          </div>-->
 <!--        </div>-->
 
-        <div class="woof_submit_search_form_container" style="margin-top: 30px">
-          <a style="float: right;" href="<%= @taxon.present? ? categories_path(@taxon) : products_path %>" class="btn btn-warning reset-border-radius" data-link="">Reset</a>
+        <div class="woof_submit_search_form_container" style="margin-top: 30px;">
+          <a href="<%= @taxon.present? ? categories_path(@taxon) : products_path %>" class="btn btn-warning reset-border-radius" style="width: 100%; text-align: center;">
+            <i class="fa fa-refresh"></i> Reset Filter
+          </a>
         </div>
       </div>
     </div>
@@ -59,65 +178,123 @@
 </aside>
 
 <script type="text/javascript">
-    $(function () {
-        data_query = $.query;
-        if (data_query.get('color') != '') {
-            $('.clear-color-filter').show();
+    $(document).ready(function () {
+        var minSlider = $('#min-price-slider');
+        var maxSlider = $('#max-price-slider');
+        var minDisplay = $('#min-price-display');
+        var maxDisplay = $('#max-price-display');
+        var sliderRange = $('#slider-range');
+        var applyButton = $('#apply-price-filter');
+        
+        var minPrice = parseInt(minSlider.val());
+        var maxPrice = parseInt(maxSlider.val());
+        var sliderMax = 5000;
+        
+        // Function to update the visual range bar
+        function updateSliderRange() {
+            var minVal = parseInt(minSlider.val());
+            var maxVal = parseInt(maxSlider.val());
+            
+            var percentMin = (minVal / sliderMax) * 100;
+            var percentMax = (maxVal / sliderMax) * 100;
+            
+            sliderRange.css({
+                'left': percentMin + '%',
+                'width': (percentMax - percentMin) + '%'
+            });
         }
-        if (data_query.get('size') != '') {
-            $('.clear-size-filter').show();
-        }
-        $(".range-slider").ionRangeSlider({
-            type: "double",
-            grid: true,
-            min: 0,
-            max: 5000,
-            from: <%= params[:min] || 0 %>,
-            to: <%= params[:max] || 5000 %>,
-            prefix: "৳",
-            onFinish: function (data) {
-                new_url = data_query.SET('min', data.from).SET('max', data.to);
+        
+        // Initialize the range bar
+        updateSliderRange();
+        
+        // Update display and range when min slider moves
+        minSlider.on('input', function() {
+            var minValue = parseInt($(this).val());
+            var maxValue = parseInt(maxSlider.val());
+            
+            // Ensure min doesn't exceed max
+            if (minValue > maxValue) {
+                minValue = maxValue;
+                $(this).val(minValue);
+            }
+            
+            minDisplay.text('৳' + minValue);
+            updateSliderRange();
+        });
+        
+        // Update display and range when max slider moves
+        maxSlider.on('input', function() {
+            var minValue = parseInt(minSlider.val());
+            var maxValue = parseInt($(this).val());
+            
+            // Ensure max doesn't go below min
+            if (maxValue < minValue) {
+                maxValue = minValue;
+                $(this).val(maxValue);
+            }
+            
+            maxDisplay.text('৳' + maxValue);
+            updateSliderRange();
+        });
+        
+        // Apply filter when button is clicked
+        applyButton.on('click', function() {
+            var minPrice = minSlider.val();
+            var maxPrice = maxSlider.val();
+            
+            if (typeof $.query !== 'undefined') {
+                var new_url = $.query.SET('min', minPrice).SET('max', maxPrice);
                 loadProducts(new_url);
+            } else {
+                // Fallback: redirect with parameters
+                var currentUrl = window.location.href.split('?')[0];
+                window.location.href = currentUrl + '?min=' + minPrice + '&max=' + maxPrice;
             }
         });
+        
+        // Helper function to load products via AJAX
+        function loadProducts(url) {
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'script',
+                error: function (e) {
+                    console.error('Failed to load products:', e);
+                    if (typeof popupMessage === 'function') {
+                        popupMessage('Unable to load products!', 'alert alert-error');
+                    }
+                },
+                success: function () {
+                    window.history.pushState('', 'Products', url);
+                }
+            });
+        }
 
+        // Color filter functionality (if enabled)
         $('.color-section-ul-style label').click(function () {
-            color = $(this).parent().find("input[type='radio']").val();
-            if (typeof color != undefined) {
-                new_url = data_query.SET('color', color);
+            var color = $(this).parent().find("input[type='radio']").val();
+            if (typeof color != 'undefined') {
+                var new_url = data_query.SET('color', color);
                 loadProducts(new_url);
                 $('.clear-color-filter').show();
             }
         });
 
+        // Clear filters functionality
         $('.clear-color-filter, .clear-size-filter').click(function () {
             $(this).parent().find("input[type='radio']:checked").prop('checked', false);
-            filter = $(this).attr('data-filter');
-            new_url = data_query.REMOVE(filter);
+            var filter = $(this).attr('data-filter');
+            var new_url = data_query.REMOVE(filter);
             loadProducts(new_url);
             $(this).hide();
         });
 
+        // Size filter functionality (if enabled)
         $("input[name='size']").click(function () {
-            size = $("input[name='size']:checked").val();
-            new_url = data_query.SET('size', size);
+            var size = $("input[name='size']:checked").val();
+            var new_url = data_query.SET('size', size);
             loadProducts(new_url);
             $('.clear-size-filter').show();
         });
     });
-
-    function loadProducts(url) {
-        $.ajax({
-            url: url,
-            type: 'get',
-            dataType: 'script',
-            error: function (e) {
-                console.log(e);
-                popupMessage('Unable to load product!', 'alert alert-error');
-            },
-            success: function () {
-                window.history.pushState('', 'Products', url);
-            }
-        })
-    }
 </script>
